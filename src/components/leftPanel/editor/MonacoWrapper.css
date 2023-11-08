@@ -1,0 +1,4 @@
+.monaco-wrapper-container,
+.monaco-wrapper-container > div {
+  min-height: 80vh;
+}

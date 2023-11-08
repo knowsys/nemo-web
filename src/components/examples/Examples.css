@@ -1,0 +1,4 @@
+.examples-editor-container {
+  height: 65vh;
+  overflow: scroll;
+}

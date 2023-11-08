@@ -1,0 +1,19 @@
+.predicate-results-row {
+  white-space: pre;
+  table-layout: fixed;
+  display: flex;
+}
+
+.predicate-results-row span {
+  margin-right: 0.5rem;
+}
+
+.predicate-results-row span:first-child {
+  display: inline-block;
+}
+
+.predicate-results-row span:not(:first-child) {
+  overflow-x: auto;
+  flex-basis: 100%;
+  margin-right: 0.5rem;
+}

@@ -1,0 +1,5 @@
+.execution-panel-code-display {
+  white-space: pre;
+  display: block;
+  overflow: auto;
+}

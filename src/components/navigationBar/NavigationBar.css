@@ -1,0 +1,4 @@
+#navigation-bar-nav .btn-check:not(:checked) + .btn-outline-dark:hover {
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--bs-dark);
+}

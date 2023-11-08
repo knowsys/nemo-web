@@ -1,0 +1,32 @@
+{
+  "common": {
+    "giveFeedback": "Give feedback!",
+    "closeModal": "Close"
+  },
+  "editor": {
+    "examples": "Examples",
+    "codeEditor": "Code editor",
+    "runProgram": "Next: Run program"
+  },
+  "navigationBar": {
+    "openFile": "Open file",
+    "downloadFile": "Save file",
+    "sourceCode": "Source code",
+    "documentation": "Docs"
+  },
+  "executionPanel": {
+    "panelExplanation": "You can use this panel to run the program.",
+    "cardTitle": "Program execution",
+    "stopExecution": "Stop"
+  },
+  "examples": {
+    "names": {},
+    "introduction": "The following examples illustrate how Nemo can be used:",
+    "title": "Example programs"
+  },
+  "footer": {
+    "sourceCode": "Source code",
+    "legalNotice": "Legal notice",
+    "thirdPartyLicenses": "Open source licenses"
+  }
+}

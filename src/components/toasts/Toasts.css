@@ -1,0 +1,5 @@
+.toasts-toast-container {
+  z-index: 1;
+  padding: 1.5rem;
+  padding-top: 4rem;
+}
