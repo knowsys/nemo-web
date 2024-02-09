@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import wasm from "vite-plugin-wasm";
 import topLevelAwait from "vite-plugin-top-level-await";
 import monacoEditorPlugin from "vite-plugin-monaco-editor";
+import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -27,6 +28,12 @@ export default defineConfig({
       },
       mangle: {
         toplevel: true,
+      },
+    },
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        evonne: resolve(__dirname, "evonne.html"),
       },
     },
   },

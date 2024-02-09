@@ -69,7 +69,7 @@ export class NemoRunner {
 
     const resourceBlobs = { ...initialResourceBlobs };
 
-    for (const resource of this.program.getSourceResources()) {
+    for (const resource of this.program.getResourcesUsedInImports()) {
       if (resource in resourceBlobs) {
         continue;
       }
