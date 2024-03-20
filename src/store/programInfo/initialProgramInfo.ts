@@ -9,12 +9,14 @@ export const initialProgramInfo: ProgramInfo = {
 % find old trees. It can be modified to use a different species or genus of
 % plant, and by changing the required age.
 
-@source tree[string,string,integer,integer]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/dresden-trees-ages-heights.csv") . % location URL, species, age, height in m
-@source taxon[string,string,string]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/wikidata-taxon-name-parent.csv.gz") . % Wikidata ID, taxon name, Wikidata ID of parent taxon
+@import tree :- csv{format=(string, string, int, int), resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/dresden-trees-ages-heights.csv"} . % location URL, species, age, height in m
+@import taxon :- csv{format=(string, string, string), resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/wikidata-taxon-name-parent.csv.gz"} . % location URL, species, age, height in m
 
 limeSpecies(?X, "Tilia") :- taxon(?X, "Tilia", ?P).
 limeSpecies(?X, ?Name) :- taxon(?X, ?Name, ?Y), limeSpecies(?Y, ?N).
 
 oldLime(?location,?species,?age) :- tree(?location,?species,?age,?heightInMeters), ?age > 200, limeSpecies(?id,?species) .
+
+@output oldLime.
 `,
 };

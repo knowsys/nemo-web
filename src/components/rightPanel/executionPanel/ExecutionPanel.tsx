@@ -94,6 +94,9 @@ export function ExecutionPanel() {
       console.debug("[ExecutionPanel] Created Nemo worker", worker);
 
       setProgramInfo(await worker.parseProgram(programText));
+
+      await worker.markDefaultExports();
+
       const info = await worker.start(
         Object.fromEntries(
           inputs
@@ -351,9 +354,7 @@ export function ExecutionPanel() {
                           key={predicate}
                           eventKey={"predicate-" + predicate}
                           title={tabTitle}
-                          disabled={
-                            initializationDuration + reasoningDuration === 0
-                          }
+                          disabled={factCounts === undefined}
                         >
                           {activeKey !== "predicate-" + predicate ? (
                             <></>
