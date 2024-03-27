@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   Card,
   Button,
@@ -65,12 +65,6 @@ export function ExecutionPanel() {
   const [tracingResult, setTracingResult] = useState<string | undefined>(
     undefined,
   );
-
-  useEffect(() => {
-    if (tracingResult) {
-      console.log(tracingResult);
-    }
-  }, [tracingResult]);
 
   const [isTracingModalShown, setIsTracingModalShown] = useState(false);
 
