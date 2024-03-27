@@ -298,10 +298,6 @@ export function Evonne({ data }: EvonneProps) {
   });
 
   return (
-    <iframe
-      ref={evonneFrame}
-      className="evonne-iframe"
-      src="./evonne.html"
-    />
+    <iframe ref={evonneFrame} className="evonne-iframe" src="./evonne.html" />
   );
 }

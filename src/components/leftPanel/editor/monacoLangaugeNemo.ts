@@ -36,7 +36,14 @@ export function registerNemoLanguage() {
   monaco.languages.setMonarchTokensProvider("nemo", {
     defaultToken: "invalid",
 
-    declarations: ["@declare", "@import", "@output", "@prefix", "@base", "@source"],
+    declarations: [
+      "@declare",
+      "@import",
+      "@output",
+      "@prefix",
+      "@base",
+      "@source",
+    ],
 
     operators: [
       ":-",
