@@ -31,7 +31,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 % Read data from NT file:
-@source TRIPLE[3]: load-rdf("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-owl-rdf/galen-el.nt.gz") .
+@import TRIPLE :- rdf{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-owl-rdf/galen-el.nt.gz"} .
 
 %%% Mark classes:
 ClassObject(owl:someValuesFrom) .

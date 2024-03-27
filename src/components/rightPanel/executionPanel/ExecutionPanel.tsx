@@ -27,6 +27,7 @@ import "./ExecutionPanel.css";
 import { chooseFile } from "../../../chooseFile";
 import { downloadPredicate } from "./downloadPredicate";
 import { toastsSlice } from "../../../store/toasts";
+import { Evonne } from "./evonne/Evonne";
 
 function convertFileSize(size: number) {
   let index = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1000));
@@ -64,6 +65,7 @@ export function ExecutionPanel() {
   const [tracingResult, setTracingResult] = useState<string | undefined>(
     undefined,
   );
+
   const [isTracingModalShown, setIsTracingModalShown] = useState(false);
 
   const programText = useAppSelector(selectProgramText);
@@ -460,11 +462,7 @@ export function ExecutionPanel() {
           {tracingResult === undefined ? (
             <>No results</>
           ) : (
-            <>
-              <code className="execution-panel-code-display">
-                {tracingResult}
-              </code>
-            </>
+            <Evonne data={tracingResult} />
           )}
         </Modal.Body>
         <Modal.Footer>
