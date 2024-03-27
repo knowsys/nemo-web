@@ -65,15 +65,12 @@ export function ExecutionPanel() {
   const [tracingResult, setTracingResult] = useState<string | undefined>(
     undefined,
   );
-  
-  useEffect(
-    () => {
-      if (!!tracingResult) {
-        console.log(tracingResult);
-      }
-    },
-    [tracingResult],
-  );
+
+  useEffect(() => {
+    if (tracingResult) {
+      console.log(tracingResult);
+    }
+  }, [tracingResult]);
 
   const [isTracingModalShown, setIsTracingModalShown] = useState(false);
 

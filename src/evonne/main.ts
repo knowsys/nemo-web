@@ -1,10 +1,6 @@
 async function init() {
   console.info("[Evonne main.ts] Initializing");
 
-  if (window.origin !== "null") {
-    throw new Error("This script may only be run in sandboxed iframes");
-  }
-
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   window.io = () => {

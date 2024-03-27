@@ -301,8 +301,7 @@ export function Evonne({ data }: EvonneProps) {
     <iframe
       ref={evonneFrame}
       className="evonne-iframe"
-      src="/evonne.html"
-      sandbox="allow-scripts"
+      src="./evonne.html"
     />
   );
 }
