@@ -16,13 +16,13 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix genid: <https://rulewerk.semantic-web.org/.well-known/genid/> .
 
-@source nf:isMainClass[any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/isMainClass.csv.gz") .
-@source nf:isSubClass[any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/isSubClass.csv.gz") .
-@source nf:conj[any,any,any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/conj.csv.gz") .
-@source nf:exists[any,any,any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/exists.csv.gz") .
-@source nf:subClassOf[any,any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subClassOf.csv.gz") .
-@source nf:subPropChain[any,any,any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subPropChain.csv.gz") .
-@source nf:subProp[any,any]: load-csv("https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subProp.csv.gz") .
+@import nf:isMainClass :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/isMainClass.csv.gz"} .
+@import nf:isSubClass :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/isSubClass.csv.gz"} .
+@import nf:conj :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/conj.csv.gz"} .
+@import nf:exists :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/exists.csv.gz"} .
+@import nf:subClassOf :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subClassOf.csv.gz"} .
+@import nf:subPropChain :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subPropChain.csv.gz"} .
+@import nf:subProp :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subProp.csv.gz"} .
 
 %%% Start classification for all named classes:
 
