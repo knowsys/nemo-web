@@ -10,12 +10,14 @@ export interface PredicateResultsProps {
   workerRef: MutableRefObject<NemoWorker | undefined>;
   predicate: string;
   numberOfRows: number;
+  onClickRow: (row: number[]) => void;
 }
 
 export function PredicateResults({
   workerRef,
   predicate,
   numberOfRows,
+  onClickRow,
 }: PredicateResultsProps) {
   const rowStoreRef = useRef<RowStore | undefined>(undefined);
   const [initialized, setInitialized] = useState(false);
@@ -85,7 +87,11 @@ export function PredicateResults({
               itemCount={rows.length}
               itemSize={40}
               width="100%"
-              itemData={{ results: rows, indexColumnWidth }}
+              itemData={{
+                results: rows,
+                indexColumnWidth,
+                onClick: onClickRow,
+              }}
               onItemsRendered={onItemsRendered}
               ref={ref}
             >

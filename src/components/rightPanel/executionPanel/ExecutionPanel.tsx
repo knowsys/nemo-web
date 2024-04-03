@@ -407,6 +407,14 @@ export function ExecutionPanel() {
                                   numberOfRows={
                                     factCounts.outputPredicates[predicate]
                                   }
+                                  onClickRow={(row) => {
+                                    if (!isTracingCurrentlyAllowed()) return;
+
+                                    setIsTracingModalShown(true);
+                                    setTracingFactText(
+                                      `${predicate}(${row.join(",")})`,
+                                    );
+                                  }}
                                 />
                               ) : undefined}
                             </>
