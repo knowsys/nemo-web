@@ -171,8 +171,12 @@ export class NemoRunner {
     this.engine.savePredicate(predicate, syncAccessHandle);
   }
 
-  public async parseAndTraceFact(fact: string) {
-    return this.engine.parseAndTraceFact(fact);
+  public async parseAndTraceFactAscii(fact: string) {
+    return this.engine.parseAndTraceFactAscii(fact);
+  }
+
+  public async parseAndTraceFactGraphML(fact: string) {
+    return this.engine.parseAndTraceFactGraphML(fact);
   }
 
   public async getNemoVersion() {

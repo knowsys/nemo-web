@@ -41,6 +41,12 @@ function convertFileSize(size: number) {
   );
 }
 
+enum TracingFormat {
+  NONE,
+  ASCII,
+  EVONNE,
+}
+
 export function ExecutionPanel() {
   const { t } = useTranslation("executionPanel");
 
@@ -65,6 +71,7 @@ export function ExecutionPanel() {
   const [tracingResult, setTracingResult] = useState<string | undefined>(
     undefined,
   );
+  const [tracingFormat, setTracingFormat] = useState(TracingFormat.NONE);
 
   const [isTracingModalShown, setIsTracingModalShown] = useState(false);
 
@@ -125,17 +132,36 @@ export function ExecutionPanel() {
     return programInfo !== undefined && !isWorkerActive;
   };
 
-  const traceFact = async () => {
+  const traceFactAscii = async () => {
     if (!isTracingCurrentlyAllowed() || workerRef.current === undefined) {
       return;
     }
 
     try {
       const tracingResult =
-        await workerRef.current.parseAndTraceFact(tracingFactText);
+        await workerRef.current.parseAndTraceFactAscii(tracingFactText);
 
+      setTracingFormat(TracingFormat.ASCII);
       setTracingResult(tracingResult);
     } catch (error) {
+      setTracingFormat(TracingFormat.NONE);
+      setTracingResult((error as any).toString());
+    }
+  };
+
+  const traceFactEvonne = async () => {
+    if (!isTracingCurrentlyAllowed() || workerRef.current === undefined) {
+      return;
+    }
+
+    try {
+      const tracingResult =
+        await workerRef.current.parseAndTraceFactGraphML(tracingFactText);
+
+      setTracingFormat(TracingFormat.EVONNE);
+      setTracingResult(tracingResult);
+    } catch (error) {
+      setTracingFormat(TracingFormat.NONE);
       setTracingResult((error as any).toString());
     }
   };
@@ -450,27 +476,34 @@ export function ExecutionPanel() {
                 type="text"
                 value={tracingFactText}
                 onChange={(event) => setTracingFactText(event.target.value)}
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    traceFact();
-                  }
-                }}
                 placeholder="example: a(1)"
               />
               <Button
                 variant="primary"
                 disabled={!isTracingCurrentlyAllowed()}
-                onClick={traceFact}
+                onClick={traceFactAscii}
               >
-                Start tracing
+                ASCII Trace
+              </Button>
+              <Button
+                variant="primary"
+                disabled={!isTracingCurrentlyAllowed()}
+                onClick={traceFactEvonne}
+              >
+                Evonne Trace
               </Button>
             </InputGroup>
           </Form.Group>
           <h4>Tracing results</h4>
-          {tracingResult === undefined ? (
+          {tracingResult === undefined ||
+          tracingFormat === TracingFormat.NONE ? (
             <>No results</>
-          ) : (
+          ) : tracingFormat === TracingFormat.EVONNE ? (
             <Evonne data={tracingResult} />
+          ) : (
+            /* tracingFormat === TracingFormat.ASCII */ <code className="execution-panel-code-display">
+              {tracingResult}
+            </code>
           )}
         </Modal.Body>
         <Modal.Footer>
