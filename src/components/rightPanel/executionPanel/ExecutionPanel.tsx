@@ -193,12 +193,12 @@ export function ExecutionPanel() {
           </span>
         </Card.Header>
         <Card.Body>
-          <h4>Add inputs:</h4>
+          <h4>Local inputs</h4>
           {inputs.map((input, inputIndex) => (
             <div key={inputIndex} className="mb-2">
               <InputGroup>
                 <TextTooltip
-                  text={`@source pred[3]: load-csv("${input.resource}")`}
+                  text={`@import myPredName :- csv{resource="${input.resource}"} .`}
                   tooltipID={"execution-panel-input-tooltip-" + inputIndex}
                 >
                   <Form.Control
@@ -275,8 +275,6 @@ export function ExecutionPanel() {
           </Button>
 
           <hr />
-          <h4>Run:</h4>
-
           {isProgramRunning ? (
             <>
               <Button className="me-1 my-1" onClick={runProgram}>
@@ -327,7 +325,7 @@ export function ExecutionPanel() {
           ) : (
             <>
               <hr />
-              <h4>Errors:</h4>
+              <h4>Errors</h4>
               <br />
               <code className="execution-panel-code-display">{parseError}</code>
             </>
@@ -337,7 +335,7 @@ export function ExecutionPanel() {
           ) : (
             <>
               <hr />
-              <h4>Outputs:</h4>
+              <h4>Outputs</h4>
               <Tabs
                 activeKey={activeKey}
                 onSelect={async (newActiveKey) => {
