@@ -102,9 +102,10 @@ export function ExecutionPanel() {
       workerRef.current = worker;
       console.debug("[ExecutionPanel] Created Nemo worker", worker);
 
-      setProgramInfo(await worker.parseProgram(programText));
-
-      await worker.markDefaultExports();
+      const programInfo = await worker.parseProgram(programText);
+      await worker.markDefaultOutputs();
+      programInfo.outputPredicates = await worker.getOutputPredicates();
+      setProgramInfo(programInfo);
 
       const info = await worker.start(
         Object.fromEntries(

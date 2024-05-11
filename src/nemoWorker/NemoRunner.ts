@@ -125,9 +125,9 @@ export class NemoRunner {
       await Promise.all(
         this.program
           .getOutputPredicates()
-          .map(async (predicate) => [
+          .map((predicate) => [
             predicate,
-            await this.engine.countFactsOfPredicate(predicate),
+            this.engine.countFactsOfPredicate(predicate),
           ]),
       ),
     );
@@ -183,8 +183,12 @@ export class NemoRunner {
     return getNemoVersion();
   }
 
-  public async markDefaultExports() {
-    return this.program.markDefaultExports();
+  public async markDefaultOutputs() {
+    return this.program.markDefaultOutputs();
+  }
+
+  public async getOutputPredicates() {
+    return this.program.getOutputPredicates();
   }
 
   /*
