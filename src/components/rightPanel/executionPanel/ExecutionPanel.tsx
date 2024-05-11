@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Card,
   Button,
@@ -67,6 +67,8 @@ export function ExecutionPanel() {
   );
   const [isProgramRunning, setIsProgramRunning] = useState(false);
   const [isWorkerActive, setIsWorkerActive] = useState(false);
+
+  const [tracingInputData, setTracingInputData] = useState<{predicate: string, rowIndex: number, row: any[]}>();
   const [tracingFactText, setTracingFactText] = useState("");
   const [tracingResult, setTracingResult] = useState<string | undefined>(
     undefined,
@@ -130,7 +132,7 @@ export function ExecutionPanel() {
   };
 
   const isTracingCurrentlyAllowed = () => {
-    return programInfo !== undefined && !isWorkerActive;
+    return programInfo !== undefined && !isWorkerActive && (tracingFactText.length > 0 || !!tracingInputData);
   };
 
   const traceFactAscii = async () => {
@@ -139,8 +141,9 @@ export function ExecutionPanel() {
     }
 
     try {
-      const tracingResult =
-        await workerRef.current.parseAndTraceFactAscii(tracingFactText);
+      const tracingResult = !!tracingFactText 
+        ? await workerRef.current.parseAndTraceFactAscii(tracingFactText)
+        : await workerRef.current.traceFactAtIndexAscii(tracingInputData!.predicate, tracingInputData!.rowIndex);
 
       setTracingFormat(TracingFormat.ASCII);
       setTracingResult(tracingResult);
@@ -156,8 +159,9 @@ export function ExecutionPanel() {
     }
 
     try {
-      const tracingResult =
-        await workerRef.current.parseAndTraceFactGraphML(tracingFactText);
+      const tracingResult = !!tracingFactText 
+        ? await workerRef.current.parseAndTraceFactGraphML(tracingFactText)
+        : await workerRef.current.traceFactAtIndexGraphML(tracingInputData!.predicate, tracingInputData!.rowIndex);
 
       setTracingFormat(TracingFormat.EVONNE);
       setTracingResult(tracingResult);
@@ -166,6 +170,17 @@ export function ExecutionPanel() {
       setTracingResult((error as any).toString());
     }
   };
+
+  useEffect(
+    () => {
+      if (!isTracingModalShown) {
+        return;
+      }
+
+      traceFactAscii();
+    },
+    [isTracingModalShown],
+  );
 
   return (
     <>
@@ -312,7 +327,6 @@ export function ExecutionPanel() {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     onClick={() => setIsTracingModalShown(true)}
-                    disabled={!isTracingCurrentlyAllowed()}
                   >
                     Open tracing panel
                   </Dropdown.Item>
@@ -432,13 +446,10 @@ export function ExecutionPanel() {
                                   numberOfRows={
                                     factCounts.outputPredicates[predicate]
                                   }
-                                  onClickRow={(row) => {
-                                    if (!isTracingCurrentlyAllowed()) return;
-
+                                  onClickRow={(predicate, rowIndex, row) => {
                                     setIsTracingModalShown(true);
-                                    setTracingFactText(
-                                      `${predicate}(${row.join(",")})`,
-                                    );
+                                    setTracingInputData({ predicate, rowIndex, row });
+                                    setTracingFactText('');
                                   }}
                                 />
                               ) : undefined}
@@ -469,13 +480,13 @@ export function ExecutionPanel() {
           <hr />
           <h4>Input</h4>
           <Form.Group>
-            <Form.Label>Fact that should be traced:</Form.Label>
+            <Form.Label>Fact that should be traced. The placeholder shows the fact you have chosen from the table, which will be traced by default. You can use the input to override this with a fact of your choice.</Form.Label>
             <InputGroup className="mb-3">
               <Form.Control
                 type="text"
                 value={tracingFactText}
                 onChange={(event) => setTracingFactText(event.target.value)}
-                placeholder="example: a(1)"
+                placeholder={!!tracingInputData ? `${tracingInputData.predicate}(${tracingInputData.row.join(',')})` : 'No fact chosen from table. Input your own, e.g.: a(1)'}
               />
               <Button
                 variant="primary"

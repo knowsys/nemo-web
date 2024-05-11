@@ -10,7 +10,7 @@ export interface PredicateResultsProps {
   workerRef: MutableRefObject<NemoWorker | undefined>;
   predicate: string;
   numberOfRows: number;
-  onClickRow: (row: number[]) => void;
+  onClickRow: (predicate: string, rowIndex: number, row: any[]) => void;
 }
 
 export function PredicateResults({
@@ -90,7 +90,7 @@ export function PredicateResults({
               itemData={{
                 results: rows,
                 indexColumnWidth,
-                onClick: onClickRow,
+                onClick: (rowIndex, row) => onClickRow(predicate, rowIndex, row),
               }}
               onItemsRendered={onItemsRendered}
               ref={ref}

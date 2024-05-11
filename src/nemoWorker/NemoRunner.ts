@@ -171,6 +171,14 @@ export class NemoRunner {
     this.engine.savePredicate(predicate, syncAccessHandle);
   }
 
+  public async traceFactAtIndexAscii(predicate: string, rowIndex: number) {
+    return this.engine.traceFactAtIndexAscii(predicate, rowIndex);
+  }
+
+  public async traceFactAtIndexGraphML(predicate: string, rowIndex: number) {
+    return this.engine.traceFactAtIndexGraphML(predicate, rowIndex);
+  }
+
   public async parseAndTraceFactAscii(fact: string) {
     return this.engine.parseAndTraceFactAscii(fact);
   }

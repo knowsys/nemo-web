@@ -1,3 +1,6 @@
+import {
+  Button,
+} from "react-bootstrap";
 import "./Row.css";
 
 export interface RowProps {
@@ -6,7 +9,7 @@ export interface RowProps {
   data: {
     results: any[][];
     indexColumnWidth: number;
-    onClick: (row: number[]) => void;
+    onClick: (rowIndex: number, row: any[]) => void;
   };
 }
 
@@ -16,7 +19,6 @@ export function Row({ style, index, data }: RowProps) {
     <div
       style={{ ...style, cursor: "pointer" }}
       className="predicate-results-row"
-      onClick={() => data.onClick(row)}
       title="Click to Trace!"
     >
       <span style={{ minWidth: data.indexColumnWidth }} className="text-muted">
@@ -25,6 +27,11 @@ export function Row({ style, index, data }: RowProps) {
       {row.map((value, index) => (
         <span key={index}>{value.toString()}</span>
       ))}
+      <span>
+        <Button className="me-1 my-1" size="sm" onClick={() => data.onClick(index, row)}>
+          Trace
+        </Button>
+      </span>
     </div>
   );
 }
