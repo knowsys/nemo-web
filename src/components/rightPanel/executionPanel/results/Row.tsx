@@ -1,6 +1,4 @@
-import {
-  Button,
-} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "./Row.css";
 
 export interface RowProps {
@@ -28,7 +26,11 @@ export function Row({ style, index, data }: RowProps) {
         <span key={index}>{value.toString()}</span>
       ))}
       <span>
-        <Button className="me-1 my-1" size="sm" onClick={() => data.onClick(index, row)}>
+        <Button
+          className="me-1 my-1"
+          size="sm"
+          onClick={() => data.onClick(index, row)}
+        >
           Trace
         </Button>
       </span>

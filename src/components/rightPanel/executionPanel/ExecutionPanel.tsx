@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   Card,
   Button,
@@ -68,7 +68,11 @@ export function ExecutionPanel() {
   const [isProgramRunning, setIsProgramRunning] = useState(false);
   const [isWorkerActive, setIsWorkerActive] = useState(false);
 
-  const [tracingInputData, setTracingInputData] = useState<{predicate: string, rowIndex: number, row: any[]}>();
+  const [tracingInputData, setTracingInputData] = useState<{
+    predicate: string;
+    rowIndex: number;
+    row: any[];
+  }>();
   const [tracingFactText, setTracingFactText] = useState("");
   const [tracingResult, setTracingResult] = useState<string | undefined>(
     undefined,
@@ -131,19 +135,39 @@ export function ExecutionPanel() {
     setIsProgramRunning(false);
   };
 
-  const isTracingCurrentlyAllowed = () => {
-    return programInfo !== undefined && !isWorkerActive && (tracingFactText.length > 0 || !!tracingInputData);
+  const isTracingCurrentlyAllowed = (
+    tracingFactText: string,
+    tracingInputData:
+      | { predicate: string; rowIndex: number; row: any[] }
+      | undefined,
+  ) => {
+    return (
+      programInfo !== undefined &&
+      !isWorkerActive &&
+      (tracingFactText.length > 0 || !!tracingInputData)
+    );
   };
 
-  const traceFactAscii = async () => {
-    if (!isTracingCurrentlyAllowed() || workerRef.current === undefined) {
+  const traceFactAscii = async (
+    tracingFactText: string,
+    tracingInputData:
+      | { predicate: string; rowIndex: number; row: any[] }
+      | undefined,
+  ) => {
+    if (
+      !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
+      workerRef.current === undefined
+    ) {
       return;
     }
 
     try {
-      const tracingResult = !!tracingFactText 
+      const tracingResult = tracingFactText
         ? await workerRef.current.parseAndTraceFactAscii(tracingFactText)
-        : await workerRef.current.traceFactAtIndexAscii(tracingInputData!.predicate, tracingInputData!.rowIndex);
+        : await workerRef.current.traceFactAtIndexAscii(
+            tracingInputData!.predicate,
+            tracingInputData!.rowIndex,
+          );
 
       setTracingFormat(TracingFormat.ASCII);
       setTracingResult(tracingResult);
@@ -153,15 +177,26 @@ export function ExecutionPanel() {
     }
   };
 
-  const traceFactEvonne = async () => {
-    if (!isTracingCurrentlyAllowed() || workerRef.current === undefined) {
+  const traceFactEvonne = async (
+    tracingFactText: string,
+    tracingInputData:
+      | { predicate: string; rowIndex: number; row: any[] }
+      | undefined,
+  ) => {
+    if (
+      !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
+      workerRef.current === undefined
+    ) {
       return;
     }
 
     try {
-      const tracingResult = !!tracingFactText 
+      const tracingResult = tracingFactText
         ? await workerRef.current.parseAndTraceFactGraphML(tracingFactText)
-        : await workerRef.current.traceFactAtIndexGraphML(tracingInputData!.predicate, tracingInputData!.rowIndex);
+        : await workerRef.current.traceFactAtIndexGraphML(
+            tracingInputData!.predicate,
+            tracingInputData!.rowIndex,
+          );
 
       setTracingFormat(TracingFormat.EVONNE);
       setTracingResult(tracingResult);
@@ -170,17 +205,6 @@ export function ExecutionPanel() {
       setTracingResult((error as any).toString());
     }
   };
-
-  useEffect(
-    () => {
-      if (!isTracingModalShown) {
-        return;
-      }
-
-      traceFactAscii();
-    },
-    [isTracingModalShown],
-  );
 
   return (
     <>
@@ -325,9 +349,7 @@ export function ExecutionPanel() {
                 />
 
                 <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={() => setIsTracingModalShown(true)}
-                  >
+                  <Dropdown.Item onClick={() => setIsTracingModalShown(true)}>
                     Open tracing panel
                   </Dropdown.Item>
                 </Dropdown.Menu>
@@ -448,8 +470,17 @@ export function ExecutionPanel() {
                                   }
                                   onClickRow={(predicate, rowIndex, row) => {
                                     setIsTracingModalShown(true);
-                                    setTracingInputData({ predicate, rowIndex, row });
-                                    setTracingFactText('');
+                                    setTracingInputData({
+                                      predicate,
+                                      rowIndex,
+                                      row,
+                                    });
+                                    setTracingFactText("");
+                                    traceFactAscii("", {
+                                      predicate,
+                                      rowIndex,
+                                      row,
+                                    });
                                   }}
                                 />
                               ) : undefined}
@@ -480,25 +511,43 @@ export function ExecutionPanel() {
           <hr />
           <h4>Input</h4>
           <Form.Group>
-            <Form.Label>Fact that should be traced. The placeholder shows the fact you have chosen from the table, which will be traced by default. You can use the input to override this with a fact of your choice.</Form.Label>
+            <Form.Label>
+              Fact that should be traced. The placeholder shows the fact you
+              have chosen from the table, which will be traced by default. You
+              can use the input to override this with a fact of your choice.
+            </Form.Label>
             <InputGroup className="mb-3">
               <Form.Control
                 type="text"
                 value={tracingFactText}
                 onChange={(event) => setTracingFactText(event.target.value)}
-                placeholder={!!tracingInputData ? `${tracingInputData.predicate}(${tracingInputData.row.join(',')})` : 'No fact chosen from table. Input your own, e.g.: a(1)'}
+                placeholder={
+                  tracingInputData
+                    ? `${
+                        tracingInputData.predicate
+                      }(${tracingInputData.row.join(",")})`
+                    : "No fact chosen from table. Input your own, e.g.: a(1)"
+                }
               />
               <Button
                 variant="primary"
-                disabled={!isTracingCurrentlyAllowed()}
-                onClick={traceFactAscii}
+                disabled={
+                  !isTracingCurrentlyAllowed(tracingFactText, tracingInputData)
+                }
+                onClick={() =>
+                  traceFactAscii(tracingFactText, tracingInputData)
+                }
               >
                 ASCII Trace
               </Button>
               <Button
                 variant="primary"
-                disabled={!isTracingCurrentlyAllowed()}
-                onClick={traceFactEvonne}
+                disabled={
+                  !isTracingCurrentlyAllowed(tracingFactText, tracingInputData)
+                }
+                onClick={() =>
+                  traceFactEvonne(tracingFactText, tracingInputData)
+                }
               >
                 Evonne Trace
               </Button>
