@@ -17,7 +17,6 @@ export function Row({ style, index, data }: RowProps) {
     <div
       style={{ ...style, cursor: "pointer" }}
       className="predicate-results-row"
-      title="Click to Trace!"
     >
       <span style={{ minWidth: data.indexColumnWidth }} className="text-muted">
         {index + 1}
@@ -29,6 +28,7 @@ export function Row({ style, index, data }: RowProps) {
         <Button
           className="me-1 my-1"
           size="sm"
+          title="Click to trace the introduction of this fact."
           onClick={() => data.onClick(index, row)}
         >
           Trace

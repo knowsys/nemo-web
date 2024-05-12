@@ -11,7 +11,8 @@
   "navigationBar": {
     "openFile": "Open file",
     "downloadFile": "Save file",
-    "sourceCode": "Source code",
+    "sourceCodeNemo": "Nemo on Github",
+    "sourceCodeNemoWeb": "Web Interface on Github",
     "documentation": "Docs"
   },
   "executionPanel": {
@@ -25,7 +26,8 @@
     "title": "Example programs"
   },
   "footer": {
-    "sourceCode": "Source code",
+    "sourceCodeNemo": "Nemo on Github",
+    "sourceCodeNemoWeb": "Web Interface on Github",
     "legalNotice": "Legal notice",
     "thirdPartyLicenses": "Open source licenses"
   }

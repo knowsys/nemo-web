@@ -172,7 +172,7 @@ export function ExecutionPanel() {
       setTracingFormat(TracingFormat.ASCII);
       setTracingResult(tracingResult);
     } catch (error) {
-      setTracingFormat(TracingFormat.NONE);
+      setTracingFormat(TracingFormat.ASCII);
       setTracingResult((error as any).toString());
     }
   };
@@ -515,6 +515,8 @@ export function ExecutionPanel() {
               Fact that should be traced. The placeholder shows the fact you
               have chosen from the table, which will be traced by default. You
               can use the input to override this with a fact of your choice.
+              Be aware that tracing nulls (blank nodes), e.g. _:0, only works by clicking the trace button on the respective row. 
+              Manually entering a null value here will not yield any result.
             </Form.Label>
             <InputGroup className="mb-3">
               <Form.Control
@@ -538,8 +540,9 @@ export function ExecutionPanel() {
                   traceFactAscii(tracingFactText, tracingInputData)
                 }
               >
-                ASCII Trace
+                {/*ASCII */}Trace
               </Button>
+              {/*
               <Button
                 variant="primary"
                 disabled={
@@ -551,6 +554,7 @@ export function ExecutionPanel() {
               >
                 Evonne Trace
               </Button>
+              */}
             </InputGroup>
           </Form.Group>
           <h4>Tracing results</h4>

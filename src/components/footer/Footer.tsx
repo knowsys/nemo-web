@@ -49,8 +49,13 @@ export function Footer() {
                 </Link>
               </p>
               <p>
-                <Link href={links.sourceCode}>
-                  <>{t("sourceCode")}</>
+                <Link href={links.sourceCodeNemo}>
+                  <>{t("sourceCodeNemo")}</>
+                </Link>
+              </p>
+              <p>
+                <Link href={links.sourceCodeNemoWeb}>
+                  <>{t("sourceCodeNemoWeb")}</>
                 </Link>
               </p>
               <p>

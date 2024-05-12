@@ -35,8 +35,11 @@ export function NavigationBar() {
             >
               <Nav.Link className="me-2">{nemoVersion}</Nav.Link>
             </TextTooltip>
-            <Nav.Link href={links.sourceCode} target="_blank">
-              {t("sourceCode")}
+            <Nav.Link href={links.sourceCodeNemo} target="_blank">
+              {t("sourceCodeNemo")}
+            </Nav.Link>
+            <Nav.Link href={links.sourceCodeNemoWeb} target="_blank">
+              {t("sourceCodeNemoWeb")}
             </Nav.Link>
             <Nav.Link href={links.documentation} target="_blank">
               {t("documentation")}

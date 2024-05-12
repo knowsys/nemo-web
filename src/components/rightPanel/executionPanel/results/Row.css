@@ -2,6 +2,7 @@
   white-space: pre;
   table-layout: fixed;
   display: flex;
+  align-items: center;
 }
 
 .predicate-results-row span {
