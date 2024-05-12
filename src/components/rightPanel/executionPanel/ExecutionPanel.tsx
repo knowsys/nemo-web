@@ -177,34 +177,34 @@ export function ExecutionPanel() {
     }
   };
 
-  const traceFactEvonne = async (
-    tracingFactText: string,
-    tracingInputData:
-      | { predicate: string; rowIndex: number; row: any[] }
-      | undefined,
-  ) => {
-    if (
-      !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
-      workerRef.current === undefined
-    ) {
-      return;
-    }
-
-    try {
-      const tracingResult = tracingFactText
-        ? await workerRef.current.parseAndTraceFactGraphML(tracingFactText)
-        : await workerRef.current.traceFactAtIndexGraphML(
-            tracingInputData!.predicate,
-            tracingInputData!.rowIndex,
-          );
-
-      setTracingFormat(TracingFormat.EVONNE);
-      setTracingResult(tracingResult);
-    } catch (error) {
-      setTracingFormat(TracingFormat.NONE);
-      setTracingResult((error as any).toString());
-    }
-  };
+  // const traceFactEvonne = async (
+  //   tracingFactText: string,
+  //   tracingInputData:
+  //     | { predicate: string; rowIndex: number; row: any[] }
+  //     | undefined,
+  // ) => {
+  //   if (
+  //     !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
+  //     workerRef.current === undefined
+  //   ) {
+  //     return;
+  //   }
+  //
+  //   try {
+  //     const tracingResult = tracingFactText
+  //       ? await workerRef.current.parseAndTraceFactGraphML(tracingFactText)
+  //       : await workerRef.current.traceFactAtIndexGraphML(
+  //           tracingInputData!.predicate,
+  //           tracingInputData!.rowIndex,
+  //         );
+  //
+  //     setTracingFormat(TracingFormat.EVONNE);
+  //     setTracingResult(tracingResult);
+  //   } catch (error) {
+  //     setTracingFormat(TracingFormat.NONE);
+  //     setTracingResult((error as any).toString());
+  //   }
+  // };
 
   return (
     <>
@@ -514,9 +514,10 @@ export function ExecutionPanel() {
             <Form.Label>
               Fact that should be traced. The placeholder shows the fact you
               have chosen from the table, which will be traced by default. You
-              can use the input to override this with a fact of your choice.
-              Be aware that tracing nulls (blank nodes), e.g. _:0, only works by clicking the trace button on the respective row. 
-              Manually entering a null value here will not yield any result.
+              can use the input to override this with a fact of your choice. Be
+              aware that tracing nulls (blank nodes), e.g. _:0, only works by
+              clicking the trace button on the respective row. Manually entering
+              a null value here will not yield any result.
             </Form.Label>
             <InputGroup className="mb-3">
               <Form.Control
