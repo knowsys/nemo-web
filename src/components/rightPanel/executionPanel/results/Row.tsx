@@ -1,4 +1,5 @@
 import { Button } from "react-bootstrap";
+import { Icon } from "../../../Icon";
 import "./Row.css";
 
 export interface RowProps {
@@ -26,12 +27,12 @@ export function Row({ style, index, data }: RowProps) {
       ))}
       <span>
         <Button
-          className="me-1 my-1"
+          variant="outline-secondary"
           size="sm"
           title="Click to trace the introduction of this fact."
           onClick={() => data.onClick(index, row)}
         >
-          Trace
+          <Icon name="bar-chart-steps" />
         </Button>
       </span>
     </div>
