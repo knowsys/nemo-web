@@ -273,7 +273,7 @@ export function ExecutionPanel() {
                         file,
                       };
                       setInputs(newInputs);
-                    });
+                    }, false);
                   }}
                 >
                   <Icon name="file-earmark-spreadsheet"></Icon>
@@ -299,16 +299,15 @@ export function ExecutionPanel() {
                 if (fileList.length === 0) {
                   return;
                 }
-                const file = fileList[0];
                 setInputs(
-                  inputs.concat([
-                    {
+                  inputs.concat(
+                    Array.from(fileList).map((file) => ({
                       resource: file.name,
                       file: file,
-                    },
-                  ]),
+                    })),
+                  ),
                 );
-              });
+              }, true);
             }}
           >
             <Icon name="plus-square-dotted"></Icon> Add local file
