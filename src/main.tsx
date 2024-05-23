@@ -15,7 +15,7 @@ import { uiSettingsSlice } from "./store/uiSettings";
 import { LocalStorageAutoSaver } from "./components/LocalStorageAutoSaver";
 
 const store = createStore();
-console.debug("[Redux] Created store: ", store);
+console.info("[Redux] Created store: ", store);
 
 store.subscribe(() => console.info("[Redux] Store action dispatched"));
 

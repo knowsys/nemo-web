@@ -25,7 +25,7 @@ export function Row({ style, index, data }: RowProps) {
       {row.map((value, index) => (
         <span key={index}>{value.toString()}</span>
       ))}
-      <span>
+      <span style={{ maxWidth: "max-content" }}>
         <Button
           variant="outline-secondary"
           size="sm"

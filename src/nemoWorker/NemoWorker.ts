@@ -5,7 +5,7 @@ let doNotTryWebWorkersAgain = false;
 /**
  * Creates a {@link NemoWorker} using a web worker, if possible.
  *
- * Implements a TypeScript compatible remote procedure call if web workers are used. This is implemented by {@link WebWorkerWrapper}.
+ * If web workers are supported, implements a TypeScript-compatible remote procedure call, see {@link WebWorkerWrapper}.
  * If web workers are unsupported, a {@link NemoRunner} is returned directly.
  *
  * @param onStatusChange Function called when the status of the web worker changes from idle to working or the other way around. The web worker is seen as active whenever it has at least one pending promise. This function is never called if web workers are unavailable.

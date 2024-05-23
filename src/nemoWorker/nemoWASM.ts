@@ -1,1 +1,1 @@
-export * from "../../nemoWASM/nemo_wasm";
+export * from "../../nemoWASMBundler/nemo_wasm";

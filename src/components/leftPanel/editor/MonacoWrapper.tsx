@@ -1,9 +1,7 @@
 import * as monaco from "monaco-editor";
 import { useEffect, useRef } from "react";
 import "./MonacoWrapper.css";
-import { registerNemoLanguage } from "./monacoLangaugeNemo";
-
-registerNemoLanguage();
+import { createEditor } from "./createMonacoEditor";
 
 export interface MonacoWrapperProps {
   additionalMonacoOptions?: monaco.editor.IStandaloneEditorConstructionOptions;
@@ -32,34 +30,39 @@ export function MonacoWrapper({
     const child = document.createElement("div");
     containerRef.current.replaceChildren(child);
 
-    const editor = monaco.editor.create(child, {
-      value: programText,
-      language: "nemo",
-      automaticLayout: true,
-      minimap: {
-        autohide: true,
-        ...additionalMonacoOptions?.minimap,
-      },
-      ...additionalMonacoOptions,
-    });
+    let changeEvent: any | undefined;
+    let editor: monaco.editor.IStandaloneCodeEditor | undefined;
+    let cleanedUp = false;
 
-    console.debug("[Editor] Created Monaco editor");
+    const timeout = setTimeout(async function () {
+      console.debug("[Editor] Creating Monaco editor");
+      editor = await createEditor(child, programText, additionalMonacoOptions);
+      console.debug("[Editor] Created Monaco editor", editor);
 
-    editorRef.current = editor;
-
-    // Update Redux state when editor contents change
-    const changeEvent = editor.onDidChangeModelContent(() => {
-      if (onProgramTextChange !== undefined) {
-        onProgramTextChange(editor.getValue());
+      if (cleanedUp) {
+        editor.dispose();
+        return;
       }
-    });
+
+      editorRef.current = editor!;
+
+      // Update Redux state when editor contents change
+      changeEvent = editor!.onDidChangeModelContent(() => {
+        if (onProgramTextChange !== undefined) {
+          onProgramTextChange(editor!.getValue());
+        }
+      });
+    }, 0);
 
     return () => {
       // Clean up the editor
       console.debug("[Editor] Disposing Monaco editor");
 
-      changeEvent.dispose();
-      editor.dispose();
+      clearTimeout(timeout);
+      cleanedUp = true;
+      changeEvent?.dispose();
+      editor?.dispose();
+      editorRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
