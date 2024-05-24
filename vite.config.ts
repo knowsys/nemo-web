@@ -2,8 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import wasm from "vite-plugin-wasm";
 import topLevelAwait from "vite-plugin-top-level-await";
-import monacoEditorPlugin from "vite-plugin-monaco-editor";
 import { resolve } from "path";
+import vsixPlugin from "@codingame/monaco-vscode-rollup-vsix-plugin";
+import importMetaUrlPlugin from "@codingame/esbuild-import-meta-url-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,9 +13,7 @@ export default defineConfig({
     wasm(),
     topLevelAwait(),
     react(),
-    monacoEditorPlugin.default({
-      languageWorkers: ["editorWorkerService"],
-    }),
+    vsixPlugin(), // See https://github.com/CodinGame/monaco-vscode-api?tab=readme-ov-file#loading-vsix-file
   ],
   worker: {
     format: "es",
@@ -35,6 +34,11 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         evonne: resolve(__dirname, "evonne.html"),
       },
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      plugins: [importMetaUrlPlugin as any], // See https://github.com/CodinGame/monaco-vscode-api
     },
   },
 });

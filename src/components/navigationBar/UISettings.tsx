@@ -45,7 +45,6 @@ export function UISettings() {
           </ToggleButton>
         </TextTooltip>
       </ButtonGroup>{" "}
-      {/* TODO: <LanguageChooser />{" "} */}
       <TextTooltip text="Maximize" tooltipID="ui-settings-maximize-tooltip">
         <ToggleButton
           id="ui-settings-maximize-toggle"

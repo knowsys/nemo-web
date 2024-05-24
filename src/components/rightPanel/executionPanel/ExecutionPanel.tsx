@@ -53,7 +53,7 @@ export function ExecutionPanel() {
   const dispatch = useAppDispatch();
 
   const [inputs, setInputs] = useState<{ resource: string; file: File }[]>([]);
-  const [activeKey, setActiveKey] = useState("info");
+  const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
   const workerRef = useRef<NemoWorker | undefined>(undefined);
   const [programInfo, setProgramInfo] = useState<NemoProgramInfo | undefined>(
     undefined,
@@ -84,7 +84,6 @@ export function ExecutionPanel() {
   const programText = useAppSelector(selectProgramText);
 
   const stopProgram = () => {
-    setActiveKey("info");
     if (workerRef.current !== undefined) {
       // Terminate web worker
       workerRef.current.stop();
@@ -233,87 +232,6 @@ export function ExecutionPanel() {
           </span>
         </Card.Header>
         <Card.Body>
-          <h4>Local inputs</h4>
-          {inputs.map((input, inputIndex) => (
-            <div key={inputIndex} className="mb-2">
-              <InputGroup>
-                <TextTooltip
-                  text={`@import myPredName :- csv{resource="${input.resource}"} .`}
-                  tooltipID={"execution-panel-input-tooltip-" + inputIndex}
-                >
-                  <Form.Control
-                    type="text"
-                    size="sm"
-                    value={input.resource}
-                    onChange={(event) => {
-                      const newInputs = [...inputs];
-                      newInputs[inputIndex] = {
-                        ...inputs[inputIndex],
-                        resource: event.target.value,
-                      };
-                      setInputs(newInputs);
-                    }}
-                  />
-                </TextTooltip>
-                <Button size="sm" variant="outline-secondary" disabled>
-                  {convertFileSize(input.file.size)}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline-secondary"
-                  onClick={() => {
-                    chooseFile((fileList) => {
-                      if (fileList.length === 0) {
-                        return;
-                      }
-                      const file = fileList[0];
-                      const newInputs = [...inputs];
-                      newInputs[inputIndex] = {
-                        ...inputs[inputIndex],
-                        file,
-                      };
-                      setInputs(newInputs);
-                    }, false);
-                  }}
-                >
-                  <Icon name="file-earmark-spreadsheet"></Icon>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline-secondary"
-                  onClick={() => {
-                    const newInputs = [...inputs];
-                    newInputs.splice(inputIndex, 1);
-                    setInputs(newInputs);
-                  }}
-                >
-                  <Icon name="x"></Icon>
-                </Button>
-              </InputGroup>
-            </div>
-          ))}
-          <Button
-            variant="outline-secondary"
-            onClick={() => {
-              chooseFile((fileList) => {
-                if (fileList.length === 0) {
-                  return;
-                }
-                setInputs(
-                  inputs.concat(
-                    Array.from(fileList).map((file) => ({
-                      resource: file.name,
-                      file: file,
-                    })),
-                  ),
-                );
-              }, true);
-            }}
-          >
-            <Icon name="plus-square-dotted"></Icon> Add local file
-          </Button>
-
-          <hr />
           {isProgramRunning ? (
             <>
               <Button className="me-1 my-1" onClick={runProgram}>
@@ -356,6 +274,91 @@ export function ExecutionPanel() {
             </>
           )}
 
+          <Button
+            variant="outline-secondary"
+            onClick={() => {
+              chooseFile((fileList) => {
+                if (fileList.length === 0) {
+                  return;
+                }
+                setInputs(
+                  inputs.concat(
+                    Array.from(fileList).map((file) => ({
+                      resource: file.name,
+                      file: file,
+                    })),
+                  ),
+                );
+              }, true);
+            }}
+          >
+            <Icon name="plus-square-dotted"></Icon> Add local file as input
+          </Button>
+
+          {Object.keys(inputs).length === 0 ? undefined : (
+            <div>
+              Input files (local):
+              {inputs.map((input, inputIndex) => (
+                <div key={inputIndex} className="mb-2">
+                  <InputGroup>
+                    <TextTooltip
+                      text={`@import myPredName :- csv{resource="${input.resource}"} .`}
+                      tooltipID={"execution-panel-input-tooltip-" + inputIndex}
+                    >
+                      <Form.Control
+                        type="text"
+                        size="sm"
+                        value={input.resource}
+                        onChange={(event) => {
+                          const newInputs = [...inputs];
+                          newInputs[inputIndex] = {
+                            ...inputs[inputIndex],
+                            resource: event.target.value,
+                          };
+                          setInputs(newInputs);
+                        }}
+                      />
+                    </TextTooltip>
+                    <Button size="sm" variant="outline-secondary" disabled>
+                      {convertFileSize(input.file.size)}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline-secondary"
+                      onClick={() => {
+                        chooseFile((fileList) => {
+                          if (fileList.length === 0) {
+                            return;
+                          }
+                          const file = fileList[0];
+                          const newInputs = [...inputs];
+                          newInputs[inputIndex] = {
+                            ...inputs[inputIndex],
+                            file,
+                          };
+                          setInputs(newInputs);
+                        }, false);
+                      }}
+                    >
+                      <Icon name="file-earmark-spreadsheet"></Icon>
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline-secondary"
+                      onClick={() => {
+                        const newInputs = [...inputs];
+                        newInputs.splice(inputIndex, 1);
+                        setInputs(newInputs);
+                      }}
+                    >
+                      <Icon name="x"></Icon>
+                    </Button>
+                  </InputGroup>
+                </div>
+              ))}
+            </div>
+          )}
+
           {parseError === undefined ? (
             <></>
           ) : (
@@ -366,12 +369,36 @@ export function ExecutionPanel() {
               <code className="execution-panel-code-display">{parseError}</code>
             </>
           )}
+
           {programInfo === undefined ? (
             <></>
           ) : (
             <>
-              <hr />
-              <h4>Outputs</h4>
+              <br />
+              <h5>Results:</h5>
+              <div>
+                Derived{" "}
+                {factCounts === undefined
+                  ? "-"
+                  : factCounts?.factsOfDerivedPredicates}{" "}
+                facts in{" "}
+                {Math.ceil(
+                  (programInfo.parsingDuration +
+                    initializationDuration +
+                    reasoningDuration) /
+                    100,
+                ) / 10}{" "}
+                seconds{" "}
+                <span
+                  className="text-muted"
+                  title="parsing/initialization/reasoning durations"
+                >
+                  ({Math.ceil(programInfo.parsingDuration)}+
+                  {Math.ceil(initializationDuration)}+
+                  {Math.ceil(reasoningDuration)} ms)
+                </span>
+              </div>
+
               <Tabs
                 activeKey={activeKey}
                 onSelect={async (newActiveKey) => {
@@ -382,113 +409,90 @@ export function ExecutionPanel() {
                 }}
                 className="mb-3"
               >
-                <Tab eventKey="info" title="Program info">
-                  Parsing duration: {Math.ceil(programInfo.parsingDuration)} ms
-                  <br />
-                  Data loading/Reasoning duration:{" "}
-                  {Math.ceil(initializationDuration + reasoningDuration)} ms
-                  <br />
-                  EDB predicates:{" "}
-                  {Array.from(programInfo.edbPredicates).sort().join(", ")}
-                  <br />
-                  Output predicates:{" "}
-                  {programInfo.outputPredicates.sort().join(", ")}
-                  <br />
-                  Count of facts for derived predicates:{" "}
-                  {factCounts === undefined
-                    ? "-"
-                    : factCounts?.factsOfDerivedPredicates}
-                </Tab>
-                {programInfo === undefined ? (
-                  <></>
-                ) : (
-                  Array.from(programInfo.outputPredicates.sort()).map(
-                    (predicate) => {
-                      const tabTitle =
-                        predicate +
-                        (factCounts !== undefined &&
-                        predicate in factCounts.outputPredicates
-                          ? ` (${factCounts.outputPredicates[predicate]})`
-                          : "");
+                {Array.from(programInfo.outputPredicates.sort()).map(
+                  (predicate) => {
+                    const tabTitle =
+                      predicate +
+                      (factCounts !== undefined &&
+                      predicate in factCounts.outputPredicates
+                        ? ` (${factCounts.outputPredicates[predicate]})`
+                        : "");
 
-                      return (
-                        <Tab
-                          key={predicate}
-                          eventKey={"predicate-" + predicate}
-                          title={tabTitle}
-                          disabled={factCounts === undefined}
-                        >
-                          {activeKey !== "predicate-" + predicate ? (
-                            <></>
-                          ) : (
-                            <>
-                              <h5>
-                                Predicate results: <code>{predicate}</code>
-                              </h5>
-                              <div className="mb-2">
-                                <span className="text-muted">
-                                  {factCounts !== undefined &&
-                                  predicate in factCounts.outputPredicates
-                                    ? ` (${factCounts.outputPredicates[predicate]} rows)`
-                                    : ""}{" "}
-                                </span>
-                                <a
-                                  href="#"
-                                  className="fst-italic text-decoration-none"
-                                  onClick={async () => {
-                                    if (workerRef.current === undefined) {
-                                      return;
-                                    }
-                                    try {
-                                      await downloadPredicate(
-                                        workerRef.current,
-                                        predicate,
-                                      );
-                                    } catch (error: any) {
-                                      dispatch(
-                                        toastsSlice.actions.addToast({
-                                          title: "Error while downloading file",
-                                          description: error.toString(),
-                                          variant: "danger",
-                                        }),
-                                      );
-                                    }
-                                  }}
-                                >
-                                  <Icon name="file-earmark-arrow-down" />
-                                  Download all rows as CSV
-                                </a>
-                              </div>
-                              {factCounts !== undefined &&
-                              predicate in factCounts.outputPredicates ? (
-                                <PredicateResults
-                                  workerRef={workerRef}
-                                  predicate={predicate}
-                                  numberOfRows={
-                                    factCounts.outputPredicates[predicate]
+                    return (
+                      <Tab
+                        key={predicate}
+                        eventKey={"predicate-" + predicate}
+                        title={tabTitle}
+                        disabled={factCounts === undefined}
+                      >
+                        {activeKey !== "predicate-" + predicate ? (
+                          <></>
+                        ) : (
+                          <>
+                            <div className="mb-2">
+                              <code>{predicate}</code>
+                              <span className="text-muted">
+                                {factCounts !== undefined &&
+                                predicate in factCounts.outputPredicates
+                                  ? ` (${factCounts.outputPredicates[predicate]} rows)`
+                                  : ""}{" "}
+                              </span>
+                              <a
+                                href="#"
+                                className="fst-italic text-decoration-none"
+                                onClick={async () => {
+                                  if (workerRef.current === undefined) {
+                                    return;
                                   }
-                                  onClickRow={(predicate, rowIndex, row) => {
-                                    setIsTracingModalShown(true);
-                                    setTracingInputData({
+                                  try {
+                                    await downloadPredicate(
+                                      workerRef.current,
                                       predicate,
-                                      rowIndex,
-                                      row,
-                                    });
-                                    setTracingFactText("");
-                                    traceFactAscii("", {
-                                      predicate,
-                                      rowIndex,
-                                      row,
-                                    });
-                                  }}
-                                />
-                              ) : undefined}
-                            </>
-                          )}
-                        </Tab>
-                      );
-                    },
-                  )
+                                    );
+                                  } catch (error: any) {
+                                    dispatch(
+                                      toastsSlice.actions.addToast({
+                                        title: "Error while downloading file",
+                                        description: error.toString(),
+                                        variant: "danger",
+                                      }),
+                                    );
+                                  }
+                                }}
+                              >
+                                <Icon name="file-earmark-arrow-down" />
+                                Download all rows as CSV
+                              </a>
+                            </div>
+                            {factCounts !== undefined &&
+                            predicate in factCounts.outputPredicates ? (
+                              <PredicateResults
+                                workerRef={workerRef}
+                                predicate={predicate}
+                                numberOfRows={
+                                  factCounts.outputPredicates[predicate]
+                                }
+                                onClickRow={(predicate, rowIndex, row) => {
+                                  setIsTracingModalShown(true);
+                                  setTracingInputData({
+                                    predicate,
+                                    rowIndex,
+                                    row,
+                                  });
+                                  setTracingFactText("");
+                                  traceFactAscii("", {
+                                    predicate,
+                                    rowIndex,
+                                    row,
+                                  });
+                                }}
+                              />
+                            ) : undefined}
+                          </>
+                        )}
+                      </Tab>
+                    );
+                  },
                 )}
               </Tabs>
             </>
