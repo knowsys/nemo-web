@@ -391,7 +391,7 @@ export function ExecutionPanel() {
                 seconds{" "}
                 <span
                   className="text-muted"
-                  title="parsing/initialization/reasoning durations"
+                  title="parsing/initialization/reasoning and loading durations"
                 >
                   ({Math.ceil(programInfo.parsingDuration)}+
                   {Math.ceil(initializationDuration)}+
