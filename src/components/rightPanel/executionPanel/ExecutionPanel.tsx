@@ -176,34 +176,34 @@ export function ExecutionPanel() {
     }
   };
 
-  // const traceFactEvonne = async (
-  //   tracingFactText: string,
-  //   tracingInputData:
-  //     | { predicate: string; rowIndex: number; row: any[] }
-  //     | undefined,
-  // ) => {
-  //   if (
-  //     !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
-  //     workerRef.current === undefined
-  //   ) {
-  //     return;
-  //   }
-  //
-  //   try {
-  //     const tracingResult = tracingFactText
-  //       ? await workerRef.current.parseAndTraceFactGraphML(tracingFactText)
-  //       : await workerRef.current.traceFactAtIndexGraphML(
-  //           tracingInputData!.predicate,
-  //           tracingInputData!.rowIndex,
-  //         );
-  //
-  //     setTracingFormat(TracingFormat.EVONNE);
-  //     setTracingResult(tracingResult);
-  //   } catch (error) {
-  //     setTracingFormat(TracingFormat.NONE);
-  //     setTracingResult((error as any).toString());
-  //   }
-  // };
+  const traceFactEvonne = async (
+    tracingFactText: string,
+    tracingInputData:
+      | { predicate: string; rowIndex: number; row: any[] }
+      | undefined,
+  ) => {
+    if (
+      !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
+      workerRef.current === undefined
+    ) {
+      return;
+    }
+
+    try {
+      const tracingResult = tracingFactText
+        ? await workerRef.current.parseAndTraceFactGraphMlTree(tracingFactText)
+        : await workerRef.current.traceFactAtIndexGraphMlTree(
+            tracingInputData!.predicate,
+            tracingInputData!.rowIndex,
+          );
+
+      setTracingFormat(TracingFormat.EVONNE);
+      setTracingResult(tracingResult);
+    } catch (error) {
+      setTracingFormat(TracingFormat.NONE);
+      setTracingResult((error as any).toString());
+    }
+  };
 
   return (
     <>
@@ -546,7 +546,6 @@ export function ExecutionPanel() {
               >
                 {/*ASCII */}Trace
               </Button>
-              {/*
               <Button
                 variant="primary"
                 disabled={
@@ -558,7 +557,6 @@ export function ExecutionPanel() {
               >
                 Evonne Trace
               </Button>
-              */}
             </InputGroup>
           </Form.Group>
           <h4>Tracing results</h4>

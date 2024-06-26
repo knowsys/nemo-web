@@ -175,16 +175,27 @@ export class NemoRunner {
     return this.engine.traceFactAtIndexAscii(predicate, rowIndex);
   }
 
-  public async traceFactAtIndexGraphML(predicate: string, rowIndex: number) {
-    return this.engine.traceFactAtIndexGraphML(predicate, rowIndex);
+  public async traceFactAtIndexGraphMlTree(
+    predicate: string,
+    rowIndex: number,
+  ) {
+    return this.engine.traceFactAtIndexGraphMlTree(predicate, rowIndex);
+  }
+
+  public async traceFactAtIndexGraphMlDag(predicate: string, rowIndex: number) {
+    return this.engine.traceFactAtIndexGraphMlDag(predicate, rowIndex);
   }
 
   public async parseAndTraceFactAscii(fact: string) {
     return this.engine.parseAndTraceFactAscii(fact);
   }
 
-  public async parseAndTraceFactGraphML(fact: string) {
-    return this.engine.parseAndTraceFactGraphML(fact);
+  public async parseAndTraceFactGraphMlTree(fact: string) {
+    return this.engine.parseAndTraceFactGraphMlTree(fact);
+  }
+
+  public async parseAndTraceFactGraphMlDag(fact: string) {
+    return this.engine.parseAndTraceFactGraphMlDag(fact);
   }
 
   public async getNemoVersion() {
