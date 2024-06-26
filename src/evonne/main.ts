@@ -1,51 +1,45 @@
-async function init() {
-  console.info("[Evonne main.ts] Initializing");
+console.info("[Evonne main.ts] Initializing");
 
-  // @ts-ignore
-  window.io = () => {
-    return {
-      on: () => {},
-    };
-  };
-  // @ts-ignore
-  await import("materialize-css/dist/js/materialize.min.js");
-  // @ts-ignore
-  window.svgPanZoom = (await import("svg-pan-zoom")).default;
-  // @ts-ignore
-  window._ = await import("underscore/underscore-min.js");
-  // @ts-ignore
-  window.d3 = await import("d3");
+import "materialize-css/dist/js/materialize.min.js";
 
-  const { init_proof } = await import(
-    // @ts-ignore
-    "evonne/frontend/public/js/proof/proof.js"
-  );
+import svgPanZoom from "svg-pan-zoom";
+// @ts-ignore
+import * as underscore from "underscore/underscore-min.js";
+// @ts-ignore
+import * as d3 from "d3";
 
-  window.addEventListener("message", (event) => {
-    console.info("[Evonne main.ts] Received message", event);
+// @ts-ignore
+window.svgPanZoom = svgPanZoom;
+// @ts-ignore
+window._ = underscore;
+// @ts-ignore
+window.d3 = d3;
 
-    const { command, data } = event.data;
+// @ts-ignore
+import { init_proof } from "evonne/frontend/public/js/proof/proof.js";
 
-    if (command !== "show") {
-      throw new Error("Unknown command");
-    }
+window.addEventListener("message", (event) => {
+  console.info("[Evonne main.ts] Received message", event);
 
-    const blob = new Blob([data], {
-      type: "application/xml",
-    });
+  const { command, data } = event.data;
 
-    init_proof({
-      external: {
-        div: "root",
-        path: URL.createObjectURL(blob),
-        drawTime: 500,
-      },
-    });
+  if (command !== "show") {
+    throw new Error("Unknown command");
+  }
+
+  const blob = new Blob([data], {
+    type: "application/xml",
   });
 
-  console.info("[Evonne main.ts] Finished initialization");
+  init_proof({
+    external: {
+      div: "root",
+      path: URL.createObjectURL(blob),
+      drawTime: 500,
+    },
+  });
+});
 
-  window.parent.postMessage("", "*");
-}
+console.info("[Evonne main.ts] Finished initialization");
 
-init().catch(console.error);
+window.parent.postMessage("", "*");
