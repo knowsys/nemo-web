@@ -6,6 +6,7 @@ import { LeftPanel } from "./leftPanel/LeftPanel";
 import { Footer } from "./footer/Footer";
 import { Suspense } from "react";
 import { Toasts } from "./toasts/Toasts";
+import { MainArticle } from "./MainArticle";
 
 export function DefaultSpinner() {
   return (
@@ -36,21 +37,25 @@ export function App() {
         </div>
         <Container fluid={uiSettings.enableFullscreen}>
           <br />
-          <Row>
-            {uiSettings.showLeftPanel ? (
-              <Col sm={panelWidth}>
-                <LeftPanel />
+          <main>
+            <Row>
+              {uiSettings.showLeftPanel ? (
+                <Col sm={panelWidth}>
+                  <LeftPanel />
+                </Col>
+              ) : (
+                <></>
+              )}
+              <Col
+                sm={panelWidth}
+                className={uiSettings.showRightPanel ? "" : "d-none"}
+              >
+                <RightPanel />
               </Col>
-            ) : (
-              <></>
-            )}
-            <Col
-              sm={panelWidth}
-              className={uiSettings.showRightPanel ? "" : "d-none"}
-            >
-              <RightPanel />
-            </Col>
-          </Row>
+            </Row>
+            <hr />
+            <MainArticle />
+          </main>
         </Container>
         <br />
         <Footer></Footer>

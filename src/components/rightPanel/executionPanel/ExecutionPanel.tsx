@@ -461,7 +461,7 @@ export function ExecutionPanel() {
                                 }}
                               >
                                 <Icon name="file-earmark-arrow-down" />
-                                Download all rows as CSV
+                                Save all rows as CSV
                               </a>
                             </div>
                             {factCounts !== undefined &&
