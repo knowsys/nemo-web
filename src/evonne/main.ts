@@ -36,6 +36,11 @@ window.addEventListener("message", (event) => {
       div: "root",
       path: URL.createObjectURL(blob),
       drawTime: 500,
+      isLinear: true,
+      showRules: true,
+      isCompact: true,
+      trays: { upper:false, lower:false },
+      stepNavigator: false, 
     },
   });
 });

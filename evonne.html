@@ -24,62 +24,11 @@
     />
     <link
       rel="stylesheet"
-      href="node_modules/evonne/frontend/public/style/widgets/parallel-coords.css"
-    />
-    <link
-      rel="stylesheet"
       href="node_modules/evonne/frontend/public/style/proof.css"
     />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-
-    <!-- Evonne Advanced Settings Start -->
-    <!-- <div id="settingsModal" class="modal settings-modal"> -->
-    <!--   <div class="modal-content"> -->
-    <!--     <header> -->
-    <!--       <h2>Application Settings</h2> -->
-    <!--       <p>Adjust the settings of this application using the following options</p> -->
-    <!--     </header> -->
-    <!--      -->
-    <!--     <section id="settingsAppearance" class="modal-section"> -->
-    <!--       <h4>Compactness Configuration</h4> -->
-    <!--       <div class="modal-option modal-option-number"> -->
-    <!--         <div class="input-field"> -->
-    <!--           <input id="minHorizontalCompactness" type="number" value="0.5" min="0.01" max="0.99" step="0.01"> -->
-    <!--           <label for="minHorizontalCompactness">Horizontal Minimum</label> -->
-    <!--         </div> -->
-    <!--         <span>x Screen Width</span> -->
-    <!--       </div> -->
-    <!--       <div class="modal-option modal-option-number"> -->
-    <!--         <div class="input-field"> -->
-    <!--           <input id="maxHorizontalCompactness" type="number" value="2" min="1"> -->
-    <!--           <label for="maxHorizontalCompactness">Horizontal Maximum</label> -->
-    <!--         </div> -->
-    <!--         <span>x Screen Width</span> -->
-    <!--       </div> -->
-    <!--       <div class="modal-option modal-option-number"> -->
-    <!--         <div class="input-field"> -->
-    <!--           <input id="minVerticalCompactness" type="number" value="0.5" min="0.01" max="0.99" step="0.01"> -->
-    <!--           <label for="minVerticalCompactness">Vertical Minimum</label> -->
-    <!--         </div> -->
-    <!--         <span>x Screen Height</span> -->
-    <!--       </div> -->
-    <!--       <div class="modal-option modal-option-number"> -->
-    <!--         <div class="input-field"> -->
-    <!--           <input id="maxVerticalCompactness" type="number" value="2" min="1"> -->
-    <!--           <label for="maxVerticalCompactness">Vertical Maximum</label> -->
-    <!--         </div> -->
-    <!--         <span>x Screen Height</span> -->
-    <!--       </div> -->
-    <!--     </section> -->
-    <!---->
-    <!--     <footer class="modal-footer modal-section"> -->
-    <!--       <button class="modal-button waves-effect waves-purple btn-flat">close</button> -->
-    <!--     </footer> -->
-    <!--   </div> -->
-    <!-- </div> -->
-    <!-- Evonne Advanced Settings End -->
 
     <main id="root"></main>
 
@@ -92,68 +41,7 @@
         </span>
       </button>
 
-      <!-- TODO: this is invisible but needed to reuse the sidebar -->
-      <!-- <ul class="tabs settings-tabs"> -->
-      <!--   <li class="tab col s3"><a id="sidebarTabAppearance" class="active" href="#sidebarSettings">Appearance</a></li> -->
-      <!--   <li class="tab col s3"><a id="sidebarTabRepairs" href="#sidebarRepairs">Diagnoses</a></li> -->
-      <!-- </ul> -->
-
-      <!-- <div class="sidebar-content" id="sidebarRepairs"> -->
-      <!--   <header class="modal-section-header"> -->
-      <!--     <h3 class="modal-section-heading no-bottom-margin" id="diagnoses-title">Diagnoses </h3> -->
-      <!--     <br> -->
-      <!--      -->
-      <!--   </header> -->
-      <!--   <p id="diagnoses-axiom"></p>   -->
-      <!--   <div id="repairsDiv"> -->
-      <!--     <label id="closeRepairsMenuButton"></label> -->
-      <!--     <div id="notificationDiv"> -->
-      <!--       <text>Double click on an axiom in Proof-View, then select Show Diagnoses.</text> -->
-      <!--     </div> -->
-      <!--   </div> -->
-      <!--    -->
-      <!-- </div> -->
-
       <div class="sidebar-content" id="sidebarSettings">
-        <!-- <header class="modal-section-header toggles-content" target="general-settings"> -->
-        <!--   <h3 class="modal-section-heading">General Settings</h3> <i class="material-icons">arrow_drop_up</i> -->
-        <!-- </header> -->
-
-        <!-- <div class="slidering" id="general-settings"> -->
-        <!--   <fieldset> -->
-        <!--     <h4>Shortening</h4>       -->
-        <!--     <label>Method</label> -->
-        <!--     <div class="input-wrapper modal-option"> -->
-        <!--        -->
-        <!--       <div> -->
-        <!--         <select id="shorteningMode" class="browser-default"> -->
-        <!--         <option value="camel">Camel case shortening</option> -->
-        <!--         <option value="basic">Fixed length shortening</option> -->
-        <!--         </select> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!-- Slider for max length for fixed length shortening -->
-        <!--     <div class="input-wrapper input-range-wrapper modal-option modal-option-range"> -->
-        <!--       <label>Maximum concept name length</label> -->
-        <!--       <div> -->
-        <!--         <button class="btn btn-small btn-primary btn-range-reset waves-effect waves-light tooltipped" -->
-        <!--           data-position="right" data-tooltip="Reset Maximum Length" id="maximumLengthReset"> -->
-        <!--           <i class="material-icons">replay</i> -->
-        <!--         </button> -->
-        <!--         <form action="#"> -->
-        <!--           <span class="new badge" data-badge-caption="characters">4</span> -->
-        <!--           <p class="range-field"> -->
-        <!--             <input type="range" id="maximumLength" style="border-color: transparent" min="3" max="30" value="7" -->
-        <!--               step="1" /> -->
-        <!--           </p> -->
-        <!--         </form> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!--   </fieldset> -->
-        <!-- </div> -->
-
-        <!-- <div style="background-color:#a9a9a9; height:0.5px;"></div> -->
-        <!-- <br> -->
         <header
           class="modal-section-header toggles-content"
           target="proof-settings"
@@ -163,36 +51,6 @@
         </header>
 
         <div class="slidering" id="proof-settings">
-          <!-- <fieldset> -->
-          <!--   <h4> Shortening </h4> -->
-          <!-- Shortening option for rule names-->
-          <!--   <div class="modal-option"> -->
-          <!--     <label>Shorten Rules Names</label> -->
-          <!--     <div class="switch"> -->
-          <!--       <label> -->
-          <!--         <input id="toggleRuleNamesShortening" type="checkbox"> -->
-          <!--         <span class="lever"></span> -->
-          <!--       </label> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!--   <button class="btn-small btn-primary" id="shortenAllInProofBtn" title="Shorten all text in the proof"> -->
-          <!--     Shorten All -->
-          <!--   </button> -->
-          <!-- </fieldset> -->
-          <!---->
-          <!-- <fieldset> -->
-          <!--   <h4>Compactness</h4>  -->
-          <!---->
-          <!--   <div class="modal-option"> -->
-          <!--     <label class="label-toggle">Overlap Allowed</label> -->
-          <!--     <div class="switch"> -->
-          <!--       <label> -->
-          <!--         <input id="toggleAllowOverlap" type="checkbox"> -->
-          <!--         <span class="lever"></span> -->
-          <!--       </label> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!---->
           <div style="display: none">
             <!-- Magic mode messes with this so it breaks when this is not here -_-; just setting display to none so it does not actually show up-->
             <div class="modal-option" id="show-rules-div-wrapper">
@@ -205,78 +63,8 @@
               </div>
             </div>
           </div>
-          <!---->
-          <!--   <div class="modal-option" id="show-rules-div-wrapper"> -->
-          <!--     <label class="label-toggle">Show Sub-Proofs</label> -->
-          <!--     <div class="switch"> -->
-          <!--       <label> -->
-          <!--         <input id="toggleSubproofsDisplay" type="checkbox"> -->
-          <!--         <span class="lever"></span> -->
-          <!--       </label> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!---->
-          <!--   <div id="proof-overlap-allowing-settings"> -->
-          <!-- Proof width range-->
-          <!--     <div class="input-wrapper input-range-wrapper modal-option modal-option-range"> -->
-          <!--       <label>Horizontal</label> -->
-          <!--       <div> -->
-          <!--         <button class="btn btn-small btn-primary btn-range-reset waves-effect waves-light tooltipped" -->
-          <!--           data-position="right" data-tooltip="Reset Proof Width" id="proofWidthRangeReset"> -->
-          <!--           <i class="material-icons">replay</i> -->
-          <!--         </button> -->
-          <!--         <form action="#"> -->
-          <!--           <span class="new badge" data-badge-caption="px">4</span> -->
-          <!--           <p class="range-field"> -->
-          <!--             <input type="range" id="proofWidthRange" style="border-color: transparent" /> -->
-          <!--           </p> -->
-          <!--         </form> -->
-          <!--       </div> -->
-          <!---->
-          <!--     </div> -->
-          <!-- Proof height range-->
-          <!--     <div class="input-wrapper input-range-wrapper modal-option modal-option-range"> -->
-          <!--       <label>Vertical</label> -->
-          <!--       <div> -->
-          <!--         <button class="btn btn-small btn-primary btn-range-reset waves-effect waves-light tooltipped" -->
-          <!--           data-position="right" data-tooltip="Reset Proof Height" id="proofHeightRangeReset"> -->
-          <!--           <i class="material-icons">replay</i> -->
-          <!--         </button> -->
-          <!--         <form action="#"> -->
-          <!--           <span class="new badge" data-badge-caption="px">4</span> -->
-          <!--           <p class="range-field"> -->
-          <!--             <input type="range" id="proofHeightRange" style="border-color: transparent" /> -->
-          <!--           </p> -->
-          <!--         </form> -->
-          <!--       </div> -->
-          <!--     </div>   -->
-          <!--     <a class="modal-trigger advanced-settings-link" data-target="settingsModal" type="button"> -->
-          <!--       More settings... -->
-          <!--     </a> -->
-          <!--   </div> -->
-          <!-- </fieldset> -->
-
+          
           <fieldset>
-            <!-- <h4>Behavior -->
-            <!---->
-            <!--   <div class="modal-option"> -->
-            <!--     <button class="btn-small btn-primary" id="collapseAll" title="Collapse all nodes to show only proof root"> -->
-            <!--       Collapse All -->
-            <!--     </button> -->
-            <!--   </div> -->
-            <!-- </h4> -->
-            <!---->
-            <!-- Form for selecting the position of the rule explanation tooltip -->
-            <!-- <label>Tooltip Position</label> -->
-            <!-- <div class="modal-option modal-option-select"> -->
-            <!--   <select id="toolTipPosition" class="browser-default"> -->
-            <!--     <option value="leftBottom">Left Bottom Corner</option> -->
-            <!-- <option value="rightBottom">Right Bottom Corner</option>
-                 <option value="rightTop">Right Top Corner</option>
-                 <option value="leftTop">Left Top Corner</option> -->
-            <!--     <option value="mousePosition">Pointer Location</option> -->
-            <!--   </select> -->
-            <!-- </div> -->
 
             <div class="modal-option">
               <label class="label-toggle">Linear Mode</label>
@@ -301,117 +89,9 @@
               </div>
             </div>
 
-            <!-- Magic option -->
-            <!-- Magic mode is broken in our case, not sure why yet... -->
-            <!-- <div class="modal-option"> -->
-            <!--   <label class="label-toggle">Magic Mode</label> -->
-            <!--   <div class="switch"> -->
-            <!--     <label> -->
-            <!--       <input id="toggleMagicMode" type="checkbox"> -->
-            <!--       <span class="lever"></span> -->
-            <!--     </label> -->
-            <!--   </div> -->
-            <!-- </div> -->
           </fieldset>
         </div>
 
-        <!-- <div style="background-color:#a9a9a9; height:0.5px;"></div> -->
-        <!-- <br> -->
-        <!-- <header class="modal-section-header toggles-content" target="ontology-settings"> -->
-        <!--   <h3 class="modal-section-heading">Ontology Settings</h3> <i class="material-icons">arrow_drop_down</i> -->
-        <!-- </header> -->
-        <!---->
-        <!-- <div class="slidering closed" id="ontology-settings"> -->
-        <!--   <fieldset> -->
-        <!--     <h4>Diagnoses</h4> -->
-        <!--     <label>Reasoner</label> -->
-        <!--         <div class="input-wrapper modal-option"> -->
-        <!--           <select id="diagnosesReasoner" class="browser-default"> -->
-        <!--             <option value="elk" selected>Elk</option> -->
-        <!--             <option value="hermit">Hermit</option> -->
-        <!--           </select> -->
-        <!--         </div> -->
-        <!---->
-        <!--   </fieldset> -->
-        <!--   <fieldset> -->
-        <!--     <h4>Shortening</h4> -->
-        <!-- Line Breaks -->
-        <!--     <div class="modal-option"> -->
-        <!--       <label>Line Wrap</label> -->
-        <!--       <div class="switch"> -->
-        <!--         <label> -->
-        <!--           <input id="btnWrapLines" type="checkbox"> -->
-        <!--           <span class="lever"></span> -->
-        <!--         </label> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!--     <div class="input-wrapper input-range-wrapper modal-option modal-option-range"> -->
-        <!--       <label class="label-range">Line Length</label> -->
-        <!--       <div> -->
-        <!--         <button class="btn btn-small btn-primary btn-range-reset waves-effect waves-light tooltipped" -->
-        <!--           data-position="right" data-tooltip="Reset Line Length" id="lineLengthReset"> -->
-        <!--           <i class="material-icons">replay</i> -->
-        <!--         </button> -->
-        <!--         <form action="#"> -->
-        <!--           <span class="new badge" data-badge-caption="characters">4</span> -->
-        <!--           <p class="range-field"> -->
-        <!--             <input type="range" id="lineLength" style="border-color: transparent" min="3" max="30" value="7" -->
-        <!--               step="1" /> -->
-        <!--           </p> -->
-        <!--         </form> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!--     <div class="modal-option"> -->
-        <!--       <label>Signature</label> -->
-        <!--       <div class="switch"> -->
-        <!--         <label> -->
-        <!--           <input id="btnShowSignature" type="checkbox" checked> -->
-        <!--           <span class="lever"></span> -->
-        <!--         </label> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!--     <button class="btn-small btn-primary" id="shortenAllInOntologyBtn" title="Shorten all text in the ontology"> -->
-        <!--       Shorten All Nodes -->
-        <!--     </button> -->
-        <!--   </fieldset> -->
-        <!---->
-        <!--   <fieldset> -->
-        <!--     <h4>Layout Simulation Settings</h4> -->
-        <!--     <div class="modal-option"> -->
-        <!--       <label>Animation</label> -->
-        <!--       <div class="switch"> -->
-        <!--         <label> -->
-        <!--           <input id="btnAnimation" type="checkbox"> -->
-        <!--           <span class="lever"></span> -->
-        <!--         </label> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!--     <label>Flow Direction</label> -->
-        <!--     <div class="input-wrapper modal-option"> -->
-        <!--       <select id="flowDirection" class="browser-default"> -->
-        <!--         <option value="y">Vertical</option> -->
-        <!--         <option value="x" selected>Horizontal</option> -->
-        <!--       </select> -->
-        <!--     </div> -->
-        <!---->
-        <!--     <div class="input-wrapper input-range-wrapper modal-option modal-option-range"> -->
-        <!--       <label>Flow Separation</label> -->
-        <!--       <div> -->
-        <!--         <button class="btn btn-small btn-primary btn-range-reset waves-effect waves-light tooltipped" -->
-        <!--           data-position="right" data-tooltip="Reset Flow Strength" id="flowStrengthReset"> -->
-        <!--           <i class="material-icons">replay</i> -->
-        <!--         </button> -->
-        <!--         <form action="#"> -->
-        <!--           <span class="new badge" data-badge-caption="">4</span> -->
-        <!--           <p class="range-field"> -->
-        <!--             <input type="range" id="flowStrength" style="border-color: transparent" /> -->
-        <!--           </p> -->
-        <!--         </form> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!---->
-        <!--   </fieldset> -->
-        <!-- </div> -->
       </div>
     </aside>
 
