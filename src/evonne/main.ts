@@ -39,8 +39,8 @@ window.addEventListener("message", (event) => {
       isLinear: true,
       showRules: true,
       isCompact: true,
-      trays: { upper:false, lower:false },
-      stepNavigator: false, 
+      trays: { upper: false, lower: false },
+      stepNavigator: false,
     },
   });
 });
