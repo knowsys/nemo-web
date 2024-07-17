@@ -147,34 +147,34 @@ export function ExecutionPanel() {
     );
   };
 
-  const traceFactAscii = async (
-    tracingFactText: string,
-    tracingInputData:
-      | { predicate: string; rowIndex: number; row: any[] }
-      | undefined,
-  ) => {
-    if (
-      !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
-      workerRef.current === undefined
-    ) {
-      return;
-    }
-
-    try {
-      const tracingResult = tracingFactText
-        ? await workerRef.current.parseAndTraceFactAscii(tracingFactText)
-        : await workerRef.current.traceFactAtIndexAscii(
-            tracingInputData!.predicate,
-            tracingInputData!.rowIndex,
-          );
-
-      setTracingFormat(TracingFormat.ASCII);
-      setTracingResult(tracingResult);
-    } catch (error) {
-      setTracingFormat(TracingFormat.ASCII);
-      setTracingResult((error as any).toString());
-    }
-  };
+  // const traceFactAscii = async (
+  //   tracingFactText: string,
+  //   tracingInputData:
+  //     | { predicate: string; rowIndex: number; row: any[] }
+  //     | undefined,
+  // ) => {
+  //   if (
+  //     !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
+  //     workerRef.current === undefined
+  //   ) {
+  //     return;
+  //   }
+  //
+  //   try {
+  //     const tracingResult = tracingFactText
+  //       ? await workerRef.current.parseAndTraceFactAscii(tracingFactText)
+  //       : await workerRef.current.traceFactAtIndexAscii(
+  //           tracingInputData!.predicate,
+  //           tracingInputData!.rowIndex,
+  //         );
+  //
+  //     setTracingFormat(TracingFormat.ASCII);
+  //     setTracingResult(tracingResult);
+  //   } catch (error) {
+  //     setTracingFormat(TracingFormat.ASCII);
+  //     setTracingResult((error as any).toString());
+  //   }
+  // };
 
   const traceFactEvonne = async (
     tracingFactText: string,
@@ -480,7 +480,7 @@ export function ExecutionPanel() {
                                     row,
                                   });
                                   setTracingFactText("");
-                                  traceFactAscii("", {
+                                  traceFactEvonne("", {
                                     predicate,
                                     rowIndex,
                                     row,
@@ -535,6 +535,7 @@ export function ExecutionPanel() {
                     : "No fact chosen from table. Input your own, e.g.: a(1)"
                 }
               />
+              {/*
               <Button
                 variant="primary"
                 disabled={
@@ -544,8 +545,9 @@ export function ExecutionPanel() {
                   traceFactAscii(tracingFactText, tracingInputData)
                 }
               >
-                {/*ASCII */}Trace
+                ASCII Trace
               </Button>
+              */}
               <Button
                 variant="primary"
                 disabled={
@@ -555,7 +557,7 @@ export function ExecutionPanel() {
                   traceFactEvonne(tracingFactText, tracingInputData)
                 }
               >
-                Evonne Trace
+                {/*Evonne */}Trace
               </Button>
             </InputGroup>
           </Form.Group>
