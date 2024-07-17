@@ -1,0 +1,20 @@
+% This example finds common descendants of two persons 
+% based on given parent relations.
+
+parent(alice, bob).
+parent(alice, charlotte).
+parent(daniel, bob).
+parent(daniel, charlotte).
+parent(charlotte, edward).
+parent(edward, fabienne).
+parent(edward, gilbert).
+parent(fabienne, heinrich).
+parent(gilbert, isabelle).
+
+ancestor(?X, ?Y) :- parent(?X, ?Y).
+ancestor(?X, ?Z) :- ancestor(?X, ?Y), parent(?Y, ?Z).
+commonDescendant(?X, ?Y, ?Z) :- ancestor(?X, ?Y), ancestor(?X, ?Z).
+commonDescendantsOfIsabelleAndHeinrich(?X) :- commonDescendant(?X, isabelle, heinrich).
+
+@output commonDescendantsOfIsabelleAndHeinrich.
+
