@@ -21,7 +21,7 @@ import { init_proof } from "evonne/frontend/public/js/proof/proof.js";
 window.addEventListener("message", (event) => {
   console.info("[Evonne main.ts] Received message", event);
 
-  const { command, data } = event.data;
+  const { command, data, isFileBrowserLayout } = event.data;
 
   if (command !== "show") {
     throw new Error("Unknown command");
@@ -31,14 +31,23 @@ window.addEventListener("message", (event) => {
     type: "application/xml",
   });
 
+  const layoutOptions = isFileBrowserLayout
+    ? {
+        isLinear: true,
+        isCompact: true,
+      }
+    : {
+        isLinear: false,
+        isCompact: false,
+      };
+
   init_proof({
     external: {
+      ...layoutOptions,
       div: "root",
       path: URL.createObjectURL(blob),
       drawTime: 500,
-      isLinear: true,
       showRules: true,
-      isCompact: true,
       trays: { upper: false, lower: false },
       stepNavigator: false,
     },
