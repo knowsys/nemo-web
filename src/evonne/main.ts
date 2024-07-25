@@ -33,10 +33,16 @@ window.addEventListener("message", (event) => {
 
   const layoutOptions = isFileBrowserLayout
     ? {
+        drawTime: 0,
         isLinear: true,
+        isBreadthFirst: false,
+        bottomRoot: false,
         isCompact: true,
+        isZoomPan: false, 
+        compactInteraction: true,
       }
     : {
+        drawTime: 500,
         isLinear: false,
         isCompact: false,
       };
@@ -46,7 +52,6 @@ window.addEventListener("message", (event) => {
       ...layoutOptions,
       div: "root",
       path: URL.createObjectURL(blob),
-      drawTime: 500,
       showRules: true,
       trays: { upper: false, lower: false },
       stepNavigator: false,
