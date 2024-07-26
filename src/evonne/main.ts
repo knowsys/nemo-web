@@ -38,13 +38,17 @@ window.addEventListener("message", (event) => {
         isBreadthFirst: false,
         bottomRoot: false,
         isCompact: true,
-        isZoomPan: false, 
+        isZoomPan: true, // TODO: for some reason changing this when switching layout still does not allow panning so we keep it always enables
         compactInteraction: true,
       }
     : {
         drawTime: 500,
         isLinear: false,
+        isBreadthFirst: true,
+        bottomRoot: true,
         isCompact: false,
+        isZoomPan: true,
+        compactInteraction: false,
       };
 
   init_proof({
