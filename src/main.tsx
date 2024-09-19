@@ -21,7 +21,7 @@ console.info("[Redux] Created store: ", store);
 store.subscribe(() => console.info("[Redux] Store action dispatched"));
 
 let code = null;
-if (window.location.hash !== '') {
+if (window.location.hash !== "") {
   try {
     code = atob(window.location.hash.substring(1)); // first symbol is always # so we skip that
   } catch (e) {
@@ -30,9 +30,7 @@ if (window.location.hash !== '') {
 }
 
 if (!code) {
-  code = window.localStorage.getItem(
-    programTextLocalStorageKey,
-  );
+  code = window.localStorage.getItem(programTextLocalStorageKey);
 }
 
 if (code !== null && code !== "") {
@@ -44,7 +42,7 @@ store.subscribe(() => {
   const code = selectProgramText(state);
 
   window.location.hash = btoa(code);
-})
+});
 
 const savedUISettings =
   window.localStorage.getItem(uiSettingLocalStorageKey) || undefined;

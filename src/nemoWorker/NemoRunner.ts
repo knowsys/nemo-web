@@ -70,7 +70,9 @@ export class NemoRunner {
     const resourceBlobs = { ...initialResourceBlobs };
 
     // resources in programs are just Nemo Terms and transforming them to strings wraps the actual strings in quotes, that is why we we also add quotes here
-    const resourceBlobsKeysInQuotes = Object.keys(resourceBlobs).map(key => `"${key}"`);
+    const resourceBlobsKeysInQuotes = Object.keys(resourceBlobs).map(
+      (key) => `"${key}"`,
+    );
 
     for (const resource of this.program.getResourcesUsedInImports()) {
       if (resourceBlobsKeysInQuotes.includes(resource)) {
