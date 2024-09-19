@@ -6,6 +6,7 @@ import { App } from "./components/App";
 import { Provider } from "react-redux";
 import { createStore } from "./store";
 import { programInfoSlice } from "./store/programInfo";
+import { selectProgramText } from "./store/programInfo/selectors/selectProgramText";
 import "./i18n/i18n";
 import {
   programTextLocalStorageKey,
@@ -19,12 +20,32 @@ console.info("[Redux] Created store: ", store);
 
 store.subscribe(() => console.info("[Redux] Store action dispatched"));
 
-const savedProgramText = window.localStorage.getItem(
-  programTextLocalStorageKey,
-);
-if (savedProgramText !== null && savedProgramText !== "") {
-  store.dispatch(programInfoSlice.actions.setProgramText(savedProgramText));
+let code = null;
+if (window.location.hash !== '') {
+  try {
+    code = atob(window.location.hash.substring(1)); // first symbol is always # so we skip that
+  } catch (e) {
+    console.error(e);
+  }
 }
+
+if (!code) {
+  code = window.localStorage.getItem(
+    programTextLocalStorageKey,
+  );
+}
+
+if (code !== null && code !== "") {
+  store.dispatch(programInfoSlice.actions.setProgramText(code));
+}
+
+store.subscribe(() => {
+  const state = store.getState();
+  const code = selectProgramText(state);
+
+  window.location.hash = btoa(code);
+})
+
 const savedUISettings =
   window.localStorage.getItem(uiSettingLocalStorageKey) || undefined;
 if (savedUISettings !== undefined) {
