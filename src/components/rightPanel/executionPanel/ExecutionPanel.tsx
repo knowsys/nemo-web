@@ -147,35 +147,6 @@ export function ExecutionPanel() {
     );
   };
 
-  // const traceFactAscii = async (
-  //   tracingFactText: string,
-  //   tracingInputData:
-  //     | { predicate: string; rowIndex: number; row: any[] }
-  //     | undefined,
-  // ) => {
-  //   if (
-  //     !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
-  //     workerRef.current === undefined
-  //   ) {
-  //     return;
-  //   }
-  //
-  //   try {
-  //     const tracingResult = tracingFactText
-  //       ? await workerRef.current.parseAndTraceFactAscii(tracingFactText)
-  //       : await workerRef.current.traceFactAtIndexAscii(
-  //           tracingInputData!.predicate,
-  //           tracingInputData!.rowIndex,
-  //         );
-  //
-  //     setTracingFormat(TracingFormat.ASCII);
-  //     setTracingResult(tracingResult);
-  //   } catch (error) {
-  //     setTracingFormat(TracingFormat.ASCII);
-  //     setTracingResult((error as any).toString());
-  //   }
-  // };
-
   const traceFactEvonne = async (
     tracingFactText: string,
     tracingInputData:
@@ -535,19 +506,6 @@ export function ExecutionPanel() {
                     : "No fact chosen from table. Input your own, e.g.: a(1)"
                 }
               />
-              {/*
-              <Button
-                variant="primary"
-                disabled={
-                  !isTracingCurrentlyAllowed(tracingFactText, tracingInputData)
-                }
-                onClick={() =>
-                  traceFactAscii(tracingFactText, tracingInputData)
-                }
-              >
-                ASCII Trace
-              </Button>
-              */}
               <Button
                 variant="primary"
                 disabled={
@@ -557,7 +515,7 @@ export function ExecutionPanel() {
                   traceFactEvonne(tracingFactText, tracingInputData)
                 }
               >
-                {/*Evonne */}Trace
+                Trace
               </Button>
             </InputGroup>
           </Form.Group>
@@ -568,7 +526,8 @@ export function ExecutionPanel() {
           ) : tracingFormat === TracingFormat.EVONNE ? (
             <Evonne data={tracingResult} />
           ) : (
-            /* tracingFormat === TracingFormat.ASCII */ <code className="execution-panel-code-display">
+            /* tracingFormat === TracingFormat.ASCII */
+            <code className="execution-panel-code-display">
               {tracingResult}
             </code>
           )}
