@@ -69,7 +69,9 @@ export class NemoRunner {
 
     const resourceBlobs = { ...initialResourceBlobs };
 
-    for (const resource of this.program.getResourcesUsedInImports()) {
+    // resources in programs are just Nemo Terms and transforming them to strings wraps the actual strings in quotes, that is why we remove quotes here
+    for (const resource_with_quotes of this.program.getResourcesUsedInImports()) {
+      const resource = resource_with_quotes.slice(1, -1);
       if (resource in resourceBlobs) {
         continue;
       }
@@ -175,16 +177,27 @@ export class NemoRunner {
     return this.engine.traceFactAtIndexAscii(predicate, rowIndex);
   }
 
-  public async traceFactAtIndexGraphML(predicate: string, rowIndex: number) {
-    return this.engine.traceFactAtIndexGraphML(predicate, rowIndex);
+  public async traceFactAtIndexGraphMlTree(
+    predicate: string,
+    rowIndex: number,
+  ) {
+    return this.engine.traceFactAtIndexGraphMlTree(predicate, rowIndex);
+  }
+
+  public async traceFactAtIndexGraphMlDag(predicate: string, rowIndex: number) {
+    return this.engine.traceFactAtIndexGraphMlDag(predicate, rowIndex);
   }
 
   public async parseAndTraceFactAscii(fact: string) {
     return this.engine.parseAndTraceFactAscii(fact);
   }
 
-  public async parseAndTraceFactGraphML(fact: string) {
-    return this.engine.parseAndTraceFactGraphML(fact);
+  public async parseAndTraceFactGraphMlTree(fact: string) {
+    return this.engine.parseAndTraceFactGraphMlTree(fact);
+  }
+
+  public async parseAndTraceFactGraphMlDag(fact: string) {
+    return this.engine.parseAndTraceFactGraphMlDag(fact);
   }
 
   public async getNemoVersion() {

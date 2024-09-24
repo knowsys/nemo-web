@@ -67,7 +67,7 @@
   "//optionalDependencies": "we abuse this filed for dependencies that are used only by Evonne",
   "optionalDependencies": {
     "d3": "^7.8.5",
-    "evonne": "^0.0.5",
+    "evonne": "^0.0.7",
     "hack-font": "^3.3.0",
     "material-icons": "^1.13.12",
     "materialize-css": "^1.0.0",

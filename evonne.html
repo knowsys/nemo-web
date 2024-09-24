@@ -24,16 +24,22 @@
     />
     <link
       rel="stylesheet"
-      href="node_modules/evonne/frontend/public/style/widgets/parallel-coords.css"
-    />
-    <link
-      rel="stylesheet"
       href="node_modules/evonne/frontend/public/style/proof.css"
     />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
     <main id="root"></main>
+
+    <script>
+      <!-- mocking io function since evonne code expects one and otherwise crashes -->
+      window.io = () => {
+        return {
+          on: () => {},
+        };
+      };
+    </script>
     <script type="module" src="/src/evonne/main.ts"></script>
   </body>
 </html>
