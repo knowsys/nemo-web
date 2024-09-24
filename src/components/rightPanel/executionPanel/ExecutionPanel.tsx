@@ -109,8 +109,15 @@ export function ExecutionPanel() {
 
       const programInfo = await worker.parseProgram(programText);
       await worker.markDefaultOutputs();
-      programInfo.outputPredicates = await worker.getOutputPredicates();
+      programInfo.outputPredicates = (
+        await worker.getOutputPredicates()
+      ).sort();
       setProgramInfo(programInfo);
+      setActiveKey(
+        programInfo.outputPredicates[0]
+          ? `predicate-${programInfo.outputPredicates[0]}`
+          : undefined,
+      );
 
       const info = await worker.start(
         Object.fromEntries(
@@ -380,91 +387,89 @@ export function ExecutionPanel() {
                 }}
                 className="mb-3"
               >
-                {Array.from(programInfo.outputPredicates.sort()).map(
-                  (predicate) => {
-                    const tabTitle =
-                      predicate +
-                      (factCounts !== undefined &&
-                      predicate in factCounts.outputPredicates
-                        ? ` (${factCounts.outputPredicates[predicate]})`
-                        : "");
+                {Array.from(programInfo.outputPredicates).map((predicate) => {
+                  const tabTitle =
+                    predicate +
+                    (factCounts !== undefined &&
+                    predicate in factCounts.outputPredicates
+                      ? ` (${factCounts.outputPredicates[predicate]})`
+                      : "");
 
-                    return (
-                      <Tab
-                        key={predicate}
-                        eventKey={"predicate-" + predicate}
-                        title={tabTitle}
-                        disabled={factCounts === undefined}
-                      >
-                        {activeKey !== "predicate-" + predicate ? (
-                          <></>
-                        ) : (
-                          <>
-                            <div className="mb-2">
-                              <code>{predicate}</code>
-                              <span className="text-muted">
-                                {factCounts !== undefined &&
-                                predicate in factCounts.outputPredicates
-                                  ? ` (${factCounts.outputPredicates[predicate]} rows)`
-                                  : ""}{" "}
-                              </span>
-                              <a
-                                href="#"
-                                className="fst-italic text-decoration-none"
-                                onClick={async () => {
-                                  if (workerRef.current === undefined) {
-                                    return;
-                                  }
-                                  try {
-                                    await downloadPredicate(
-                                      workerRef.current,
-                                      predicate,
-                                    );
-                                  } catch (error: any) {
-                                    dispatch(
-                                      toastsSlice.actions.addToast({
-                                        title: "Error while downloading file",
-                                        description: error.toString(),
-                                        variant: "danger",
-                                      }),
-                                    );
-                                  }
-                                }}
-                              >
-                                <Icon name="file-earmark-arrow-down" />
-                                Save all rows as CSV
-                              </a>
-                            </div>
-                            {factCounts !== undefined &&
-                            predicate in factCounts.outputPredicates ? (
-                              <PredicateResults
-                                workerRef={workerRef}
-                                predicate={predicate}
-                                numberOfRows={
-                                  factCounts.outputPredicates[predicate]
+                  return (
+                    <Tab
+                      key={predicate}
+                      eventKey={"predicate-" + predicate}
+                      title={tabTitle}
+                      disabled={factCounts === undefined}
+                    >
+                      {activeKey !== "predicate-" + predicate ? (
+                        <></>
+                      ) : (
+                        <>
+                          <div className="mb-2">
+                            <code>{predicate}</code>
+                            <span className="text-muted">
+                              {factCounts !== undefined &&
+                              predicate in factCounts.outputPredicates
+                                ? ` (${factCounts.outputPredicates[predicate]} rows)`
+                                : ""}{" "}
+                            </span>
+                            <a
+                              href="#"
+                              className="fst-italic text-decoration-none"
+                              onClick={async () => {
+                                if (workerRef.current === undefined) {
+                                  return;
                                 }
-                                onClickRow={(predicate, rowIndex, row) => {
-                                  setIsTracingModalShown(true);
-                                  setTracingInputData({
+                                try {
+                                  await downloadPredicate(
+                                    workerRef.current,
                                     predicate,
-                                    rowIndex,
-                                    row,
-                                  });
-                                  setTracingFactText("");
-                                  traceFactEvonne("", {
-                                    predicate,
-                                    rowIndex,
-                                    row,
-                                  });
-                                }}
-                              />
-                            ) : undefined}
-                          </>
-                        )}
-                      </Tab>
-                    );
-                  },
-                )}
+                                  );
+                                } catch (error: any) {
+                                  dispatch(
+                                    toastsSlice.actions.addToast({
+                                      title: "Error while downloading file",
+                                      description: error.toString(),
+                                      variant: "danger",
+                                    }),
+                                  );
+                                }
+                              }}
+                            >
+                              <Icon name="file-earmark-arrow-down" />
+                              Save all rows as CSV
+                            </a>
+                          </div>
+                          {factCounts !== undefined &&
+                          predicate in factCounts.outputPredicates ? (
+                            <PredicateResults
+                              workerRef={workerRef}
+                              predicate={predicate}
+                              numberOfRows={
+                                factCounts.outputPredicates[predicate]
+                              }
+                              onClickRow={(predicate, rowIndex, row) => {
+                                setIsTracingModalShown(true);
+                                setTracingInputData({
+                                  predicate,
+                                  rowIndex,
+                                  row,
+                                });
+                                setTracingFactText("");
+                                traceFactEvonne("", {
+                                  predicate,
+                                  rowIndex,
+                                  row,
+                                });
+                              }}
+                            />
+                          ) : undefined}
+                        </>
+                      )}
+                    </Tab>
+                  );
+                })}
               </Tabs>
             </>
           )}
