@@ -14,7 +14,7 @@ export function Footer() {
 
   return (
     <footer>
-      <div className="mt-auto py-3" style={{ backgroundColor: "#e3f2fd" }}>
+      <div className="mt-auto py-3" style={{ borderTop: "1px solid #eeeeee" }}>
         <Container>
           <Row>
             <Col md={2}>

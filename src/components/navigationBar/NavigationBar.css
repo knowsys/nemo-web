@@ -2,3 +2,7 @@
   background-color: rgba(0, 0, 0, 0);
   color: var(--bs-dark);
 }
+
+.logo-nemo {
+  max-height: 3em;
+}

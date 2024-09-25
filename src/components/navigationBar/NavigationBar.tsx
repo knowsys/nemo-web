@@ -6,6 +6,7 @@ import { links } from "../links";
 import { useEffect, useState } from "react";
 import { createNemoWorker } from "../../nemoWorker/NemoWorker";
 import { TextTooltip } from "../TextTooltip";
+import logoNemo from "./nemo-logo-rusty.svg";
 
 export function NavigationBar() {
   const { t } = useTranslation("navigationBar");
@@ -23,9 +24,19 @@ export function NavigationBar() {
   });
 
   return (
-    <Navbar variant="light" expand="lg" style={{ backgroundColor: "#e3f2fd" }}>
+    <Navbar
+      variant="light"
+      expand="lg"
+      style={{ borderBottom: "1px solid #dddddd" }}
+    >
       <Container>
-        <Navbar.Brand className="me-0">Nemo Rule Engine</Navbar.Brand>
+        <Navbar.Brand className="me-0">
+          <img
+            src={logoNemo}
+            alt="Nemo - Graph Rule Engine"
+            className="logo-nemo"
+          />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navigation-bar-nav" />
         <Navbar.Collapse id="navigation-bar-nav">
           <Nav className="me-auto">
