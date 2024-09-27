@@ -7,5 +7,5 @@ export const links = {
   sourceCodeNemo: "https://github.com/knowsys/nemo",
   sourceCodeNemoWeb: "https://github.com/knowsys/nemo-web",
   contributors: "https://github.com/knowsys/nemo/graphs/contributors",
-  documentation: "https://github.com/knowsys/nemo/wiki",
+  documentation: "https://knowsys.github.io/nemo-doc/",
 };
