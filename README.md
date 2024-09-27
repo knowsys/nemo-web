@@ -17,7 +17,7 @@ After building the [Nemo WASM library](https://github.com/knowsys/nemo/tree/main
 ```bash
 # Copy nemo VSIX extension to the correct location
 mkdir nemoVSIX
-cp $PATH_TO_NEMO_VSIX nemoVSIX/nemo.vsix
+cp $PATH_TO_NEMO_VSIX/nemo-X.X.X.vsix nemoVSIX/nemo.vsix
 # Copy nemo-wasm library to the correct location
 cp -r $PATH_TO_NEMO_WASM/nemoWASMBundler ./nemoWASMBundler
 
@@ -53,10 +53,15 @@ Useful starting points for hacking on the code:
 After building the [Nemo WASM library](https://github.com/knowsys/nemo/tree/main/nemo-wasm), create a production build in the `dist` folder that can be served by a static web server:
 
 ```bash
+# Copy nemo VSIX extension to the correct location
+mkdir nemoVSIX
+cp $PATH_TO_NEMO_VSIX/nemo-X.X.X.vsix nemoVSIX/nemo.vsix
 # Copy nemo-wasm library to the correct location
-cp -r $PATH_TO_NEMO_WASM ./nemoWASM
+cp -r $PATH_TO_NEMO_WASM/nemoWASMBundler ./nemoWASMBundler
 
 npm install
-npm run build
+NODE_OPTIONS=--max_old_space_size=4096 npm run build
+
+# for local preview of the production build
 npm preview
 ```
