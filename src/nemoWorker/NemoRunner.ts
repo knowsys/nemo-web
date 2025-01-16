@@ -69,40 +69,46 @@ export class NemoRunner {
 
     const resourceBlobs = { ...initialResourceBlobs };
 
-    // resources in programs are just Nemo Terms and transforming them to strings wraps the actual strings in quotes, that is why we remove quotes here
-    for (const resource_with_quotes of this.program.getResourcesUsedInImports()) {
-      const resource = resource_with_quotes.slice(1, -1);
-      if (resource in resourceBlobs) {
+    for (const resourceWasmObject of this.program.getResourcesUsedInImports()) {
+      const acceptHeader = resourceWasmObject.accept();
+      // resource urls in programs are just Nemo Terms and transforming them to strings wraps the actual strings in quotes, that is why we remove quotes here
+      const resourceUrl = resourceWasmObject.url().slice(1, -1);
+      if (resourceUrl in resourceBlobs) {
         continue;
       }
 
       let url: URL;
       try {
-        url = new URL(resource);
+        url = new URL(resourceUrl);
       } catch (error) {
-        throw new Error(`Could not parse resource \`${resource}\` as URL`);
+        throw new Error(`Could not parse resource \`${resourceUrl}\` as URL`);
       }
       if (!["http:", "https:"].includes(url.protocol)) {
-        throw new Error(`Invalid protocol in resource \`${resource}\``);
+        throw new Error(`Invalid protocol in resource \`${resourceUrl}\``);
       }
 
       try {
-        const response = await fetch(resource, { mode: "cors" });
+        const response = await fetch(resourceUrl, {
+          mode: "cors",
+          headers: {
+            Accept: acceptHeader,
+          },
+        });
 
         if (!response.ok) {
           throw new Error(
-            `Request for resource \`${resource}\` failed with status code \`${response.status}\``,
+            `Request for resource \`${resourceUrl}\` failed with status code \`${response.status}\``,
           );
         }
 
-        resourceBlobs[resource] = await response.blob();
+        resourceBlobs[resourceUrl] = await response.blob();
       } catch (error) {
         console.warn("[NemoRunner] Error while fetching resource", {
-          resource,
+          resourceUrl,
           error,
         });
         throw new Error(
-          `Request for resource \`${resource}\` failed due to a network error (e.g. a DNS/TLS error or missing CORS headers).`,
+          `Request for resource \`${resourceUrl}\` failed due to a network error (e.g. a DNS/TLS error or missing CORS headers).`,
         );
       }
     }
