@@ -27,3 +27,9 @@ dist-ssr
 
 /nemoWASM
 /nemoVSIX
+
+/.direnv
+/result
+#*#
+*~
+/.dream2nix/
