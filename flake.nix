@@ -152,14 +152,11 @@ rec {
                   ];
 
                   text = ''
-                    TMPDIR="$(mktemp --directory)"
-                    trap 'rm -rf -- "$TMPDIR"' EXIT
-                    cd "$TMPDIR"
+                    cd "$(mktemp --directory)"
                     cp -R ${self.packages.${pkgs.system}.nemo-web}/lib/node_modules/nemo-web/* .
                     mkdir wrapper
                     ln -s ../node_modules/vite/bin/vite.js wrapper/vite
                     export PATH="''${PATH}:wrapper"
-                    chmod -R o+w .
                     npm run preview
                   '';
                 };
