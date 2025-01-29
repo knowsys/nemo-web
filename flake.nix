@@ -71,12 +71,14 @@ rec {
             homepage = npmMeta.repository.url;
           };
 
-          nemo-web-source = pkgs.runCommandLocal "nemo-web-source" { } ''
-            mkdir -p $out/nemoVSIX
-            cp -R ${pkgs.lib.cleanSource ./.}/* $out
-            cp -R ${pkgs.nemo-wasm-bundler}/lib/node_modules/nemo-wasm/ $out/nemoWASMBundler
-            cp ${pkgs.nemo-vscode-extension-vsix}/nemo-*.vsix $out/nemoVSIX/nemo.vsix
-          '';
+          nemo-web-source =
+            config:
+            pkgs.runCommandLocal "nemo-web-source" { } ''
+              mkdir -p $out/nemoVSIX
+              cp -R ${pkgs.lib.cleanSource ./.}/* $out
+              cp -R ${config.deps.nemo-wasm-bundler}/lib/node_modules/nemo-wasm/ $out/nemoWASMBundler
+              cp ${config.deps.nemo-vscode-extension-vsix}/nemo-*.vsix $out/nemoVSIX/nemo.vsix
+            '';
 
           nemo-web = dream2nix.lib.evalModules {
             packageSets.nixpkgs = pkgs;
@@ -92,6 +94,7 @@ rec {
 
               (
                 {
+                  lib,
                   config,
                   dream2nix,
                   ...
@@ -106,7 +109,7 @@ rec {
                   ];
 
                   mkDerivation = {
-                    src = nemo-web-source;
+                    src = nemo-web-source config;
 
                     installPhase = ''
                       runHook preInstall
@@ -119,9 +122,22 @@ rec {
 
                   deps =
                     { nixpkgs, ... }:
-                    {
-                      inherit (nixpkgs) stdenv;
-                    };
+                    let
+                      inherit (nixpkgs) system;
+                    in
+                    lib.mkMerge [
+                      {
+                        inherit (nixpkgs) stdenv;
+                        nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
+                        nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
+                        nemo-vscode-extension-vsix =
+                          lib.mkDefault
+                            nemo-vscode-extension.packages.${system}.nemo-vscode-extension-vsix;
+                      }
+                      {
+                        deps.nemo-vscode-extension-vsix.deps.nemo-wasm-web = config.deps.nemo-wasm-web;
+                      }
+                    ];
 
                   nodejs-package-lock-v3 = {
                     packageLockFile = "${config.mkDerivation.src}/package-lock.json";
@@ -178,9 +194,9 @@ rec {
                   package = ./.;
                 };
               }
-
               (
                 {
+                  lib,
                   config,
                   dream2nix,
                   ...
@@ -195,7 +211,7 @@ rec {
                   ];
 
                   mkDerivation = {
-                    src = nemo-web-source;
+                    src = nemo-web-source config;
 
                     nativeBuildInputs = [
                       pkgs.nodejs
@@ -206,9 +222,22 @@ rec {
 
                   deps =
                     { nixpkgs, ... }:
-                    {
-                      inherit (nixpkgs) stdenv;
-                    };
+                    let
+                      inherit (nixpkgs) system;
+                    in
+                    lib.mkMerge [
+                      {
+                        inherit (nixpkgs) stdenv;
+                        nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
+                        nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
+                        nemo-vscode-extension-vsix =
+                          lib.mkDefault
+                            nemo-vscode-extension.packages.${system}.nemo-vscode-extension-vsix;
+                      }
+                      {
+                        deps.nemo-vscode-extension-vsix.deps.nemo-wasm-web = config.deps.nemo-wasm-web;
+                      }
+                    ];
 
                   nodejs-package-lock-v3 = {
                     packageLockFile = "${config.mkDerivation.src}/package-lock.json";
