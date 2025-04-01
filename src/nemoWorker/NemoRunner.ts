@@ -7,6 +7,16 @@ import {
   setPanicHook,
 } from "./nemoWASM";
 import { Timer } from "../Timer";
+import {
+  TableEntriesForTreeNodesQuery,
+  TableEntriesForTreeNodesQueryToJSON,
+  TableEntriesForTreeNodesResponseInner,
+  TableEntriesForTreeNodesResponseInnerFromJSON,
+  TreeForTableQuery,
+  TreeForTableQueryToJSON,
+  TreeForTableResponse,
+  TreeForTableResponseFromJSON,
+} from "./models";
 
 setPanicHook();
 setAllocErrorHook();
@@ -216,6 +226,26 @@ export class NemoRunner {
 
   public async getOutputPredicates() {
     return this.program.getOutputPredicates();
+  }
+
+  public static experimentalNewTracingTreeForTableMock(
+    tree_for_table_query: TreeForTableQuery,
+  ): TreeForTableResponse {
+    return TreeForTableResponseFromJSON(
+      NemoEngine.experimentalNewTracingTreeForTableMock(
+        TreeForTableQueryToJSON(tree_for_table_query),
+      ),
+    );
+  }
+
+  public static experimentalNewTracingTableEntriesForTreeNodesMock(
+    table_entries_for_tree_nodes: TableEntriesForTreeNodesQuery,
+  ): TableEntriesForTreeNodesResponseInner[] {
+    const response =
+      NemoEngine.experimentalNewTracingTableEntriesForTreeNodesMock(
+        TableEntriesForTreeNodesQueryToJSON(table_entries_for_tree_nodes),
+      );
+    return response.map(TableEntriesForTreeNodesResponseInnerFromJSON);
   }
 
   /*

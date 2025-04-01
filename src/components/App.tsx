@@ -7,6 +7,7 @@ import { Footer } from "./footer/Footer";
 import { Suspense } from "react";
 import { Toasts } from "./toasts/Toasts";
 import { MainArticle } from "./MainArticle";
+import { NemoRunner } from "../nemoWorker/NemoRunner";
 
 export function DefaultSpinner() {
   return (
@@ -55,6 +56,26 @@ export function App() {
             </Row>
             <hr />
             <MainArticle />
+            <hr />
+            <h2>The new tracing API mocks</h2>
+            <h3>First Query type</h3>
+            <pre>
+              {JSON.stringify(
+                NemoRunner.experimentalNewTracingTreeForTableMock({}),
+                undefined,
+                2,
+              )}
+            </pre>
+            <h3>Second Query Type</h3>
+            <pre>
+              {JSON.stringify(
+                NemoRunner.experimentalNewTracingTableEntriesForTreeNodesMock(
+                  {},
+                ),
+                undefined,
+                2,
+              )}
+            </pre>
           </main>
         </Container>
         <br />
