@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* tslint:disable */
+/* eslint-disable */
 export * from "./InnerTableQuery";
 export * from "./InnerTableQueryChildInformation";
 export * from "./TableEntriesForTreeNodesQuery";
