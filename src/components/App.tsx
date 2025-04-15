@@ -61,7 +61,9 @@ export function App() {
             <h3>First Query type</h3>
             <pre>
               {JSON.stringify(
-                NemoRunner.experimentalNewTracingTreeForTableMock({}),
+                NemoRunner.experimentalNewTracingTreeForTableMock({
+                  predicate: "Test"
+                }),
                 undefined,
                 2,
               )}
@@ -69,9 +71,9 @@ export function App() {
             <h3>Second Query Type</h3>
             <pre>
               {JSON.stringify(
-                NemoRunner.experimentalNewTracingTableEntriesForTreeNodesMock(
-                  {},
-                ),
+                NemoRunner.experimentalNewTracingTableEntriesForTreeNodesMock({
+                  predicate: "Test",
+                }),
                 undefined,
                 2,
               )}
