@@ -72,7 +72,7 @@ export class NemoRunner {
     for (const resourceWasmObject of this.program.getResourcesUsedInImports()) {
       const acceptHeader = resourceWasmObject.accept();
       // resource urls in programs are just Nemo Terms and transforming them to strings wraps the actual strings in quotes, that is why we remove quotes here
-      const resourceUrl = resourceWasmObject.url().slice(1, -1);
+      const resourceUrl = resourceWasmObject.url();
       if (resourceUrl in resourceBlobs) {
         continue;
       }
