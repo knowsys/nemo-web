@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Card,
   Button,
@@ -182,6 +182,53 @@ export function ExecutionPanel() {
       setTracingResult((error as any).toString());
     }
   };
+
+  useEffect(
+    () => {
+      const bc = new BroadcastChannel("NemoVisualization");
+
+      const onMessage = async (event: MessageEvent) => {
+        if (!!event.data.error || !!event.data.responseType) {
+          return; // don't listen on own messages (which might be filtered by default by the channel, I did not check this...)
+        }
+
+        if (workerRef.current === undefined) {
+          bc.postMessage({ error: "Cannot process message. Reasoning was not performed."})
+          return;
+        }
+
+        if (!event.data.queryType || !event.data.payload) {
+          bc.postMessage({ error: "Expected an object with queryType and payload."})
+          return;
+        }
+
+        const { queryType, payload } = event.data; // data should consist of queryType and payload
+        
+        let response;
+        switch (queryType) {
+          case "treeForTable":
+            response = await workerRef.current.experimentalNewTracingTreeForTable(payload);
+            bc.postMessage({ responseType: "treeForTable", payload: response });
+            break;
+          case "tableEntriesForTreeNodes":
+            response = await workerRef.current.experimentalNewTracingTableEntriesForTreeNodes(payload);
+            bc.postMessage({ responseType: "tableEntriesForTreeNodes", payload: response });
+            break;
+          default:
+            bc.postMessage({ error: "Invalid Query Type, expected treeForTable or tableEntriesForTreeNodes."})
+            break;
+        } 
+      };
+
+      bc.addEventListener("message", onMessage);
+
+      return () => {
+        bc.removeEventListener("message", onMessage);
+        bc.close();
+      };
+    },
+    [],
+  );
 
   return (
     <>

@@ -28,30 +28,11 @@ export function TableEntryQueryFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): TableEntryQuery {
-  if (json == null) {
-    return json;
-  }
-  if (instanceOfnumber(json)) {
-    return numberFromJSONTyped(json, true);
-  }
-  if (instanceOfstring(json)) {
-    return stringFromJSONTyped(json, true);
-  }
-
-  return {} as any;
+  // TODO: number | string was probably not a good type for this, adjust the spec!
+  return json;
 }
 
 export function TableEntryQueryToJSON(value?: TableEntryQuery | null): any {
-  if (value == null) {
-    return value;
-  }
-
-  if (instanceOfnumber(value)) {
-    return numberToJSON(value as number);
-  }
-  if (instanceOfstring(value)) {
-    return stringToJSON(value as string);
-  }
-
-  return {};
+  // TODO: number | string was probably not a good type for this, adjust the spec!
+  return value;
 }
