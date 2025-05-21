@@ -228,6 +228,26 @@ export class NemoRunner {
     return this.program.getOutputPredicates();
   }
 
+  public async experimentalNewTracingTreeForTable(
+    tree_for_table_query: TreeForTableQuery,
+  ): Promise<TreeForTableResponse> {
+    return TreeForTableResponseFromJSON(
+      this.engine.experimentalNewTracingTreeForTable(
+        TreeForTableQueryToJSON(tree_for_table_query),
+      ),
+    );
+  }
+
+  public async experimentalNewTracingTableEntriesForTreeNodes(
+    table_entries_for_tree_nodes: TableEntriesForTreeNodesQuery,
+  ): Promise<TableEntriesForTreeNodesResponseInner[]> {
+    const response =
+      this.engine.experimentalNewTracingTableEntriesForTreeNodes(
+        TableEntriesForTreeNodesQueryToJSON(table_entries_for_tree_nodes),
+      );
+    return response.map(TableEntriesForTreeNodesResponseInnerFromJSON);
+  }
+
   public static experimentalNewTracingTreeForTableMock(
     tree_for_table_query: TreeForTableQuery,
   ): TreeForTableResponse {
