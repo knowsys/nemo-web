@@ -134,12 +134,13 @@ export class NemoRunner {
           .getOutputPredicates()
           .map((predicate) => [
             predicate,
-            this.engine.countFactsOfPredicate(predicate),
+            this.engine.countFactsInMemoryForPredicate(predicate),
           ]),
       ),
     );
     return {
-      factsOfDerivedPredicates: this.engine.countFactsOfDerivedPredicates(),
+      factsOfDerivedPredicates:
+        this.engine.countFactsInMemoryForDerivedPredicates(),
       outputPredicates: outputPredicateCounts,
     };
   }
