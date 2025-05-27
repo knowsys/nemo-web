@@ -2,7 +2,7 @@ rec {
   description = "Web frontend for the Nemo rule engine";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
     dream2nix = {
       url = "github:nix-community/dream2nix";
