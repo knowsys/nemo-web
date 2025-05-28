@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@rollup/pluginutils": "^5.1.0",
-    "@types/node": "^20.8.9",
+    "@types/node": "^22.14.0",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
     "@types/vscode": "^1.89.0",
