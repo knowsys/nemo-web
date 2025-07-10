@@ -36,6 +36,12 @@ export interface InnerTableQueryChildInformation {
   rule: number;
   /**
    *
+   * @type {number}
+   * @memberof InnerTableQueryChildInformation
+   */
+  headIndex: number;
+  /**
+   *
    * @type {Array<InnerTableQuery>}
    * @memberof InnerTableQueryChildInformation
    */
@@ -49,6 +55,7 @@ export function instanceOfInnerTableQueryChildInformation(
   value: object,
 ): value is InnerTableQueryChildInformation {
   if (!("rule" in value) || value["rule"] === undefined) return false;
+  if (!("headIndex" in value) || value["headIndex"] === undefined) return false;
   if (!("children" in value) || value["children"] === undefined) return false;
   return true;
 }
@@ -68,6 +75,7 @@ export function InnerTableQueryChildInformationFromJSONTyped(
   }
   return {
     rule: json["rule"],
+    headIndex: json["headIndex"],
     children: (json["children"] as Array<any>).map(InnerTableQueryFromJSON),
   };
 }
@@ -88,6 +96,7 @@ export function InnerTableQueryChildInformationToJSONTyped(
 
   return {
     rule: value["rule"],
+    headIndex: value["headIndex"],
     children: (value["children"] as Array<any>).map(InnerTableQueryToJSON),
   };
 }

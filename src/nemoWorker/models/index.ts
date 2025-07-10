@@ -3,6 +3,8 @@
 /* eslint-disable */
 export * from "./InnerTableQuery";
 export * from "./InnerTableQueryChildInformation";
+export * from "./PredicateWithParameters";
+export * from "./Rule";
 export * from "./TableEntriesForTreeNodesQuery";
 export * from "./TableEntriesForTreeNodesResponseInner";
 export * from "./TableEntryQuery";

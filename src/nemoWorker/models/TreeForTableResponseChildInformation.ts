@@ -21,6 +21,13 @@ import {
   TreeForTableResponseToJSON,
   TreeForTableResponseToJSONTyped,
 } from "./TreeForTableResponse";
+import type { Rule } from "./Rule";
+import {
+  RuleFromJSON,
+  RuleFromJSONTyped,
+  RuleToJSON,
+  RuleToJSONTyped,
+} from "./Rule";
 
 /**
  *
@@ -30,10 +37,10 @@ import {
 export interface TreeForTableResponseChildInformation {
   /**
    *
-   * @type {number}
+   * @type {Rule}
    * @memberof TreeForTableResponseChildInformation
    */
-  rule: number;
+  rule: Rule;
   /**
    *
    * @type {Array<TreeForTableResponse>}
@@ -67,7 +74,7 @@ export function TreeForTableResponseChildInformationFromJSONTyped(
     return json;
   }
   return {
-    rule: json["rule"],
+    rule: RuleFromJSON(json["rule"]),
     children: (json["children"] as Array<any>).map(
       TreeForTableResponseFromJSON,
     ),
@@ -89,7 +96,7 @@ export function TreeForTableResponseChildInformationToJSONTyped(
   }
 
   return {
-    rule: value["rule"],
+    rule: RuleToJSON(value["rule"]),
     children: (value["children"] as Array<any>).map(TreeForTableResponseToJSON),
   };
 }

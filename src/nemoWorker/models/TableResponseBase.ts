@@ -21,6 +21,13 @@ import {
   TableResponseBaseTableEntriesToJSON,
   TableResponseBaseTableEntriesToJSONTyped,
 } from "./TableResponseBaseTableEntries";
+import type { Rule } from "./Rule";
+import {
+  RuleFromJSON,
+  RuleFromJSONTyped,
+  RuleToJSON,
+  RuleToJSONTyped,
+} from "./Rule";
 
 /**
  *
@@ -42,16 +49,16 @@ export interface TableResponseBase {
   tableEntries: TableResponseBaseTableEntries;
   /**
    *
-   * @type {Array<number>}
+   * @type {Array<Rule>}
    * @memberof TableResponseBase
    */
-  possibleRulesAbove: Array<number>;
+  possibleRulesAbove: Array<Rule>;
   /**
    *
-   * @type {Array<number>}
+   * @type {Array<Rule>}
    * @memberof TableResponseBase
    */
-  possibleRulesBelow: Array<number>;
+  possibleRulesBelow: Array<Rule>;
 }
 
 /**
@@ -90,8 +97,12 @@ export function TableResponseBaseFromJSONTyped(
   return {
     predicate: json["predicate"],
     tableEntries: TableResponseBaseTableEntriesFromJSON(json["tableEntries"]),
-    possibleRulesAbove: json["possibleRulesAbove"],
-    possibleRulesBelow: json["possibleRulesBelow"],
+    possibleRulesAbove: (json["possibleRulesAbove"] as Array<any>).map(
+      RuleFromJSON,
+    ),
+    possibleRulesBelow: (json["possibleRulesBelow"] as Array<any>).map(
+      RuleFromJSON,
+    ),
   };
 }
 
@@ -110,7 +121,11 @@ export function TableResponseBaseToJSONTyped(
   return {
     predicate: value["predicate"],
     tableEntries: TableResponseBaseTableEntriesToJSON(value["tableEntries"]),
-    possibleRulesAbove: value["possibleRulesAbove"],
-    possibleRulesBelow: value["possibleRulesBelow"],
+    possibleRulesAbove: (value["possibleRulesAbove"] as Array<any>).map(
+      RuleToJSON,
+    ),
+    possibleRulesBelow: (value["possibleRulesBelow"] as Array<any>).map(
+      RuleToJSON,
+    ),
   };
 }
