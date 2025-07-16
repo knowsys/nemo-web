@@ -241,10 +241,9 @@ export class NemoRunner {
   public async experimentalNewTracingTableEntriesForTreeNodes(
     table_entries_for_tree_nodes: TableEntriesForTreeNodesQuery,
   ): Promise<TableEntriesForTreeNodesResponseInner[]> {
-    const response =
-      this.engine.experimentalNewTracingTableEntriesForTreeNodes(
-        TableEntriesForTreeNodesQueryToJSON(table_entries_for_tree_nodes),
-      );
+    const response = this.engine.experimentalNewTracingTableEntriesForTreeNodes(
+      TableEntriesForTreeNodesQueryToJSON(table_entries_for_tree_nodes),
+    );
     return response.map(TableEntriesForTreeNodesResponseInnerFromJSON);
   }
 

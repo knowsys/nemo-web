@@ -62,7 +62,7 @@ export function App() {
             <pre>
               {JSON.stringify(
                 NemoRunner.experimentalNewTracingTreeForTableMock({
-                  predicate: "Test"
+                  predicate: "Test",
                 }),
                 undefined,
                 2,

@@ -92,6 +92,7 @@ export function PredicateResults({
                 indexColumnWidth,
                 onClick: (rowIndex, row) =>
                   onClickRow(predicate, rowIndex, row),
+                predicate,
               }}
               onItemsRendered={onItemsRendered}
               ref={ref}

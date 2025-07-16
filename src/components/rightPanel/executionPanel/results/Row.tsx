@@ -9,11 +9,13 @@ export interface RowProps {
     results: any[][];
     indexColumnWidth: number;
     onClick: (rowIndex: number, row: any[]) => void;
+    predicate: string;
   };
 }
 
 export function Row({ style, index, data }: RowProps) {
   const row = data.results[index];
+  const predicate = data.predicate;
   return (
     <div
       style={{ ...style, cursor: "pointer" }}
@@ -31,6 +33,16 @@ export function Row({ style, index, data }: RowProps) {
           size="sm"
           title="Click to trace the introduction of this fact."
           onClick={() => data.onClick(index, row)}
+        >
+          <Icon name="bar-chart-steps" />
+        </Button>
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          title="Click for new tracing."
+          // TODO: The link should support taking a fact id!!!
+          href={`./ev/?predicate=${predicate}&query=[[${row.map((v) => `"${v.toString()}"`).join(",")}]]&code=[same_as_nemo]`}
+          target="_blank"
         >
           <Icon name="bar-chart-steps" />
         </Button>
