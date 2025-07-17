@@ -40,8 +40,7 @@ export function Row({ style, index, data }: RowProps) {
           variant="outline-secondary"
           size="sm"
           title="Click for new tracing."
-          // TODO: The link should support taking a fact id!!!
-          href={`./ev/?predicate=${predicate}&query=[[${row.map((v) => `"${v.toString()}"`).join(",")}]]&code=[same_as_nemo]`}
+          href={`./ev/?predicate=${predicate}&query=[${index}]&code=[same_as_nemo]`}
           target="_blank"
         >
           <Icon name="bar-chart-steps" />
