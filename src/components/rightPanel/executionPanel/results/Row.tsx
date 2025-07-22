@@ -40,7 +40,7 @@ export function Row({ style, index, data }: RowProps) {
           variant="outline-secondary"
           size="sm"
           title="Click for new tracing."
-          href={`./ev/?predicate=${predicate}&query=[${index}]&code=[same_as_nemo]`}
+          href={`./ev/?predicate=${predicate}&query=[${index}]`}
           target="_blank"
         >
           <Icon name="bar-chart-steps" />
