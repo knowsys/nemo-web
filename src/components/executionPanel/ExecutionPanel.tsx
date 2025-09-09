@@ -194,7 +194,7 @@ export function ExecutionPanel() {
             variant="outline-secondary"
             onClick={() => setShowInputs(true)}
           >
-            <Icon name="file-earmark"></Icon> Manage Input Files
+            <Icon name="file-earmark"></Icon> Add input files
           </Button>
           {isWorkerActive ? (
             <TextTooltip

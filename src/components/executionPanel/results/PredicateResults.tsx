@@ -90,17 +90,16 @@ export function PredicateResults({
                   ))}
                   <td
                     key={`row-${page * rowsPerPage + rowIdx}-trace-button`}
-                    width={50}
+                    width={32}
                   >
-                    <Button
-                      variant="outline-secondary"
-                      size="sm"
-                      title="Click to trace the introduction of this fact."
+                    <a
+                      title="Explain this inference"
                       href={`./ev/?predicate=${predicate}&query=[${rowIdx}]`}
                       target="_blank"
+                      style={{color: 'inherit'}}
                     >
-                      <Icon name="bar-chart-steps" />
-                    </Button>
+                      <Icon name="search" />
+                    </a>
                   </td>
                 </tr>
               ))}
@@ -163,7 +162,7 @@ export function PredicateResults({
             )}
           </Pagination>
           <div>
-            <Form.Label htmlFor="rowsPerPageSelect">Rows per Page:</Form.Label>
+            <Form.Label htmlFor="rowsPerPageSelect">Rows per page:</Form.Label>
             <Form.Select
               id="rowsPerPageSelect"
               value={rowsPerPage}
