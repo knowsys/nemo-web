@@ -41,11 +41,24 @@ export function NavigationBar() {
         <Navbar.Collapse id="navigation-bar-nav">
           <Nav className="me-auto">
             <ShowExamplesButton />
-            <NavDropdown title={<><Icon name="question-circle"/> Help</>} id="nav-dropdown">
-              <NavDropdown.Item href={links.documentation} target="_blank">{t("documentation")}</NavDropdown.Item>
-              <NavDropdown.Item href={links.sourceCodeNemo} target="_blank">{t("sourceCodeNemo")}</NavDropdown.Item>
+            <NavDropdown
+              title={
+                <>
+                  <Icon name="question-circle" /> Help
+                </>
+              }
+              id="nav-dropdown"
+            >
+              <NavDropdown.Item href={links.documentation} target="_blank">
+                {t("documentation")}
+              </NavDropdown.Item>
+              <NavDropdown.Item href={links.sourceCodeNemo} target="_blank">
+                {t("sourceCodeNemo")}
+              </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href={links.feedback} target="_blank">{t("common:giveFeedback")}</NavDropdown.Item>
+              <NavDropdown.Item href={links.feedback} target="_blank">
+                {t("common:giveFeedback")}
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Navbar.Text>

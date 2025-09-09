@@ -211,12 +211,12 @@ export function ExecutionPanel() {
               <Badge bg="secondary">
                 {!factCounts
                   ? "-"
-                  : Object.keys(factCounts.edbPredicates).map(pred => factCounts.edbPredicates[pred]).reduce((acc, val) => acc + val, 0)}{" "}
-                facts loaded and{" "} 
-                {!factCounts
-                  ? "-"
-                  : factCounts.factsOfDerivedPredicates}{" "}
-                facts inferred in{" "}
+                  : Object.keys(factCounts.edbPredicates)
+                      .map((pred) => factCounts.edbPredicates[pred])
+                      .reduce((acc, val) => acc + val, 0)}{" "}
+                facts loaded and{" "}
+                {!factCounts ? "-" : factCounts.factsOfDerivedPredicates} facts
+                inferred in{" "}
                 {Math.ceil(
                   (programInfo.parsingDuration +
                     initializationDuration +

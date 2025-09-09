@@ -8,7 +8,7 @@ import {
 import "./PredicateResults.css";
 import { NemoWorker } from "../../../nemoWorker/NemoWorker";
 import { RowStore } from "./RowStore";
-import { Button, Form, Pagination, Table } from "react-bootstrap";
+import { Form, Pagination, Table } from "react-bootstrap";
 import { Icon } from "../../Icon";
 import { Link } from "../../link/Link";
 
@@ -83,9 +83,12 @@ export function PredicateResults({
                     <td
                       key={`row-${page * rowsPerPage + rowIdx}-column-${index}`}
                     >
-                      {(value.toString().startsWith('http://') || value.toString().startsWith('https://')) 
-                        ? <Link href={value.toString()}>{value.toString()}</Link>
-                        : value.toString()}
+                      {value.toString().startsWith("http://") ||
+                      value.toString().startsWith("https://") ? (
+                        <Link href={value.toString()}>{value.toString()}</Link>
+                      ) : (
+                        value.toString()
+                      )}
                     </td>
                   ))}
                   <td
@@ -96,7 +99,7 @@ export function PredicateResults({
                       title="Explain this inference"
                       href={`./ev/?predicate=${predicate}&query=[${rowIdx}]`}
                       target="_blank"
-                      style={{color: 'inherit'}}
+                      style={{ color: "inherit" }}
                     >
                       <Icon name="search" />
                     </a>
