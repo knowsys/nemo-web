@@ -1,4 +1,4 @@
-import { DefaultSuspense } from "../../DefaultSuspense";
+import { DefaultSuspense } from "../DefaultSuspense";
 import "./Editor.css";
 import { LazyMonacoWrapper } from "./LazyMonacoWrapper";
 

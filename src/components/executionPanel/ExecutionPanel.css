@@ -1,3 +1,7 @@
+.execution-panel-card-body {
+  min-height: 12vh;
+}
+
 .execution-panel-code-display {
   white-space: pre;
   display: block;

@@ -2,7 +2,7 @@ import "./Examples.css";
 import { useEffect, useState } from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { ReadOnlyEditor } from "../leftPanel/editor/ReadOnlyEditor";
+import { ReadOnlyEditor } from "../editor/ReadOnlyEditor";
 import { listOfExamples } from "./files/listOfExamples";
 import { DefaultSuspense } from "../DefaultSuspense";
 

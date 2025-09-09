@@ -13,7 +13,7 @@
     "downloadFile": "Save file",
     "sourceCodeNemo": "Nemo on Github",
     "sourceCodeNemoWeb": "Web Interface on Github",
-    "documentation": "Docs"
+    "documentation": "Documentation"
   },
   "executionPanel": {
     "panelExplanation": "You can use this panel to run the program.",

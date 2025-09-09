@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Nav } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch } from "../../../store";
-import { programInfoSlice } from "../../../store/programInfo";
-import { Examples } from "../../examples/Examples";
-import { Icon } from "../../Icon";
+import { useAppDispatch } from "../../store";
+import { programInfoSlice } from "../../store/programInfo";
+import { Examples } from "../examples/Examples";
+import { Icon } from "../Icon";
 
 export function ShowExamplesButton() {
   const { t } = useTranslation("editor");
@@ -19,14 +19,9 @@ export function ShowExamplesButton() {
 
   return (
     <>
-      <Button
-        variant="outline-dark"
-        size="sm"
-        className="me-1"
-        onClick={() => setIsModalShown(true)}
-      >
-        <Icon name="file-earmark-image" /> {t("examples")}
-      </Button>
+      <Nav.Link onClick={() => setIsModalShown(true)}>
+        {t("examples")} <Icon name="file-earmark-image" />
+      </Nav.Link>
 
       <Modal show={isModalShown} onHide={hideModal} size="xl">
         <Modal.Header closeButton>

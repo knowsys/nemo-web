@@ -1,8 +1,16 @@
+.footer {
+  font-size: 0.8em;
+  margin-top: 1em;
+}
+
 .footer-logo-tu-dresden {
   width: 100%;
-  margin-top: -5.5%;
+  max-width: 200px;
 }
 
 .footer-logo-iccl {
   width: 100%;
+  margin-top: 5px;
+  margin-left: 5px;
+  max-width: 300px;
 }

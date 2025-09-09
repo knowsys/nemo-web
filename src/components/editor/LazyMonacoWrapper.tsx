@@ -1,4 +1,4 @@
-import { createLazyComponent } from "../../createLazyComponent";
+import { createLazyComponent } from "../createLazyComponent";
 
 export const LazyMonacoWrapper = createLazyComponent(
   () => import("./MonacoWrapper"),

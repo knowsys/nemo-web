@@ -8,11 +8,7 @@ import { createStore } from "./store";
 import { programInfoSlice } from "./store/programInfo";
 import { selectProgramText } from "./store/programInfo/selectors/selectProgramText";
 import "./i18n/i18n";
-import {
-  programTextLocalStorageKey,
-  uiSettingLocalStorageKey,
-} from "./localStorageKeys";
-import { uiSettingsSlice } from "./store/uiSettings";
+import { programTextLocalStorageKey } from "./localStorageKeys";
 import { LocalStorageAutoSaver } from "./components/LocalStorageAutoSaver";
 
 const store = createStore();
@@ -43,21 +39,6 @@ store.subscribe(() => {
 
   window.location.hash = btoa(code);
 });
-
-const savedUISettings =
-  window.localStorage.getItem(uiSettingLocalStorageKey) || undefined;
-if (savedUISettings !== undefined) {
-  try {
-    store.dispatch(
-      uiSettingsSlice.actions.setAllUISettings(JSON.parse(savedUISettings)),
-    );
-  } catch (error) {
-    console.error("[App] Error while loading UI setting from local storage", {
-      savedUISettings,
-      error,
-    });
-  }
-}
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
