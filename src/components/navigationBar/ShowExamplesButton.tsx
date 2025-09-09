@@ -20,7 +20,7 @@ export function ShowExamplesButton() {
   return (
     <>
       <Nav.Link onClick={() => setIsModalShown(true)}>
-        {t("examples")} <Icon name="file-earmark-image" />
+         <Icon name="file-earmark-code" /> {t("examples")}
       </Nav.Link>
 
       <Modal show={isModalShown} onHide={hideModal} size="xl">

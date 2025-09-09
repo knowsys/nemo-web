@@ -1,4 +1,4 @@
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import "./NavigationBar.css";
 import { useTranslation } from "react-i18next";
 import { links } from "../links";
@@ -40,10 +40,13 @@ export function NavigationBar() {
         <Navbar.Toggle aria-controls="navigation-bar-nav" />
         <Navbar.Collapse id="navigation-bar-nav">
           <Nav className="me-auto">
-            <Nav.Link href={links.documentation} target="_blank">
-              {t("documentation")} <Icon name="file-earmark-code" />
-            </Nav.Link>
             <ShowExamplesButton />
+            <NavDropdown title={<><Icon name="question-circle"/> Help</>} id="nav-dropdown">
+              <NavDropdown.Item href={links.documentation} target="_blank">{t("documentation")}</NavDropdown.Item>
+              <NavDropdown.Item href={links.sourceCodeNemo} target="_blank">{t("sourceCodeNemo")}</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href={links.feedback} target="_blank">{t("common:giveFeedback")}</NavDropdown.Item>
+            </NavDropdown>
           </Nav>
           <Navbar.Text>
             <span style={{ fontSize: ".8em" }}>Version: {nemoVersion}</span>{" "}
