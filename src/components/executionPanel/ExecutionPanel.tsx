@@ -182,11 +182,12 @@ export function ExecutionPanel() {
               className="me-1 my-1"
               variant="outline-danger"
               onClick={stopProgram}
+              title="Stop program execution"
             >
               <Icon name="stop-fill" />
             </Button>
           ) : (
-            <Button onClick={runProgram}>
+            <Button onClick={runProgram} title="Start program execution">
               <Icon name="play-fill" />
             </Button>
           )}{" "}
