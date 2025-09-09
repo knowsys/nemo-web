@@ -209,10 +209,14 @@ export function ExecutionPanel() {
           {programInfo && (
             <span className="float-end">
               <Badge bg="secondary">
-                {factCounts === undefined
+                {!factCounts
                   ? "-"
-                  : factCounts?.factsOfDerivedPredicates}{" "}
-                facts in{" "}
+                  : Object.keys(factCounts.edbPredicates).map(pred => factCounts.edbPredicates[pred]).reduce((acc, val) => acc + val, 0)}{" "}
+                facts loaded and{" "} 
+                {!factCounts
+                  ? "-"
+                  : factCounts.factsOfDerivedPredicates}{" "}
+                facts inferred in{" "}
                 {Math.ceil(
                   (programInfo.parsingDuration +
                     initializationDuration +

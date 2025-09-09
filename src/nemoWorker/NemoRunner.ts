@@ -148,10 +148,20 @@ export class NemoRunner {
           ]),
       ),
     );
+    const edbPredicateCounts = Object.fromEntries(
+      await Promise.all(
+        [...this.program.getEDBPredicates()]
+          .map((predicate) => [
+            predicate,
+            this.engine.countFactsInMemoryForPredicate(predicate),
+          ]),
+      ),
+    );
     return {
       factsOfDerivedPredicates:
         this.engine.countFactsInMemoryForDerivedPredicates(),
       outputPredicates: outputPredicateCounts,
+      edbPredicates: edbPredicateCounts,
     };
   }
 
