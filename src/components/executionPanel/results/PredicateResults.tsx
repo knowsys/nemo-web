@@ -1,10 +1,4 @@
-import {
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-} from "react";
+import { MutableRefObject, useEffect, useRef, useState, useMemo } from "react";
 import "./PredicateResults.css";
 import { NemoWorker } from "../../../nemoWorker/NemoWorker";
 import { RowStore } from "./RowStore";
@@ -59,15 +53,19 @@ export function PredicateResults({
         );
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [predicate, workerRef]);
 
-  const setPageHandler = useCallback(
-    (newPage: number) => {
-      rowStoreRef.current?.loadRowsUntil(newPage * rowsPerPage + rowsPerPage);
-      setPage(newPage);
-    },
-    [rowsPerPage],
+  useEffect(() => {
+    // when initial loading is done
+    if (rows.length > 0 && rows.length < numberOfRows) {
+      // load all rows
+      rowStoreRef.current?.loadRowsUntil(numberOfRows);
+    }
+  }, [rows, numberOfRows]);
+
+  const currentRows = useMemo(
+    () => rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [rows, rowsPerPage, page],
   );
 
   return (
@@ -75,71 +73,63 @@ export function PredicateResults({
       <>
         <Table striped bordered>
           <tbody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, rowIdx) => (
-                <tr key={`row-${page * rowsPerPage + rowIdx}`}>
-                  {row.map((value, index) => (
-                    <td
-                      key={`row-${page * rowsPerPage + rowIdx}-column-${index}`}
-                    >
-                      {value.toString().startsWith("http://") ||
-                      value.toString().startsWith("https://") ? (
-                        <Link href={value.toString()}>{value.toString()}</Link>
-                      ) : (
-                        value.toString()
-                      )}
-                    </td>
-                  ))}
+            {currentRows.map((row, rowIdx) => (
+              <tr key={`row-${page * rowsPerPage + rowIdx}`}>
+                {row.map((value, index) => (
                   <td
-                    key={`row-${page * rowsPerPage + rowIdx}-trace-button`}
-                    width={32}
+                    key={`row-${page * rowsPerPage + rowIdx}-column-${index}`}
                   >
-                    <a
-                      title="Explain this inference"
-                      href={`./ev/?predicate=${predicate}&query=[${rowIdx}]`}
-                      target="_blank"
-                      style={{ color: "inherit" }}
-                    >
-                      <Icon name="search" />
-                    </a>
+                    {value.toString().startsWith("http://") ||
+                    value.toString().startsWith("https://") ? (
+                      <Link href={value.toString()}>{value.toString()}</Link>
+                    ) : (
+                      value.toString()
+                    )}
                   </td>
-                </tr>
-              ))}
+                ))}
+                <td
+                  key={`row-${page * rowsPerPage + rowIdx}-trace-button`}
+                  width={32}
+                >
+                  <a
+                    title="Explain this inference"
+                    href={`./ev/?predicate=${predicate}&query=[${page * rowsPerPage + rowIdx}]`}
+                    target="_blank"
+                    style={{ color: "inherit" }}
+                  >
+                    <Icon name="search" />
+                  </a>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
         <div className="table-controls">
           <Pagination>
-            <Pagination.Item
-              active={page === 0}
-              onClick={() => setPageHandler(0)}
-            >
+            <Pagination.Item active={page === 0} onClick={() => setPage(0)}>
               {1}
             </Pagination.Item>
             {page > 3 ? (
               <Pagination.Ellipsis />
             ) : (
               page > 2 && (
-                <Pagination.Item
-                  active={page === 1}
-                  onClick={() => setPageHandler(1)}
-                >
+                <Pagination.Item active={page === 1} onClick={() => setPage(1)}>
                   {2}
                 </Pagination.Item>
               )
             )}
             {page > 1 && (
-              <Pagination.Item onClick={() => setPageHandler(page - 1)}>
+              <Pagination.Item onClick={() => setPage(page - 1)}>
                 {page}
               </Pagination.Item>
             )}
             {numberOfPages > 2 && page > 0 && page < numberOfPages - 1 && (
-              <Pagination.Item active onClick={() => setPageHandler(page)}>
+              <Pagination.Item active onClick={() => setPage(page)}>
                 {page + 1}
               </Pagination.Item>
             )}
             {page < numberOfPages - 2 && (
-              <Pagination.Item onClick={() => setPageHandler(page + 1)}>
+              <Pagination.Item onClick={() => setPage(page + 1)}>
                 {page + 2}
               </Pagination.Item>
             )}
@@ -149,7 +139,7 @@ export function PredicateResults({
               page < numberOfPages - 3 && (
                 <Pagination.Item
                   active={page === numberOfPages - 2}
-                  onClick={() => setPageHandler(numberOfPages - 2)}
+                  onClick={() => setPage(numberOfPages - 2)}
                 >
                   {numberOfPages - 1}
                 </Pagination.Item>
@@ -158,7 +148,7 @@ export function PredicateResults({
             {numberOfPages > 1 && (
               <Pagination.Item
                 active={page === numberOfPages - 1}
-                onClick={() => setPageHandler(numberOfPages - 1)}
+                onClick={() => setPage(numberOfPages - 1)}
               >
                 {numberOfPages}
               </Pagination.Item>
