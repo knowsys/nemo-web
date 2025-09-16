@@ -8,12 +8,13 @@ export interface RowProps {
   data: {
     results: any[][];
     indexColumnWidth: number;
-    onClick: (rowIndex: number, row: any[]) => void;
+    predicate: string;
   };
 }
 
 export function Row({ style, index, data }: RowProps) {
   const row = data.results[index];
+  const predicate = data.predicate;
   return (
     <div
       style={{ ...style, cursor: "pointer" }}
@@ -30,7 +31,8 @@ export function Row({ style, index, data }: RowProps) {
           variant="outline-secondary"
           size="sm"
           title="Click to trace the introduction of this fact."
-          onClick={() => data.onClick(index, row)}
+          href={`./ev/?predicate=${predicate}&query=[${index}]`}
+          target="_blank"
         >
           <Icon name="bar-chart-steps" />
         </Button>

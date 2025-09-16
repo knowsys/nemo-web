@@ -7,6 +7,16 @@ import {
   setPanicHook,
 } from "./nemoWASM";
 import { Timer } from "../Timer";
+import {
+  TableEntriesForTreeNodesQuery,
+  TableEntriesForTreeNodesQueryToJSON,
+  TableEntriesForTreeNodesResponseInner,
+  TableEntriesForTreeNodesResponseInnerFromJSON,
+  TreeForTableQuery,
+  TreeForTableQueryToJSON,
+  TreeForTableResponse,
+  TreeForTableResponseFromJSON,
+} from "./models";
 
 setPanicHook();
 setAllocErrorHook();
@@ -179,33 +189,6 @@ export class NemoRunner {
     this.engine.savePredicate(predicate, syncAccessHandle);
   }
 
-  public async traceFactAtIndexAscii(predicate: string, rowIndex: number) {
-    return this.engine.traceFactAtIndexAscii(predicate, rowIndex);
-  }
-
-  public async traceFactAtIndexGraphMlTree(
-    predicate: string,
-    rowIndex: number,
-  ) {
-    return this.engine.traceFactAtIndexGraphMlTree(predicate, rowIndex);
-  }
-
-  public async traceFactAtIndexGraphMlDag(predicate: string, rowIndex: number) {
-    return this.engine.traceFactAtIndexGraphMlDag(predicate, rowIndex);
-  }
-
-  public async parseAndTraceFactAscii(fact: string) {
-    return this.engine.parseAndTraceFactAscii(fact);
-  }
-
-  public async parseAndTraceFactGraphMlTree(fact: string) {
-    return this.engine.parseAndTraceFactGraphMlTree(fact);
-  }
-
-  public async parseAndTraceFactGraphMlDag(fact: string) {
-    return this.engine.parseAndTraceFactGraphMlDag(fact);
-  }
-
   public async getNemoVersion() {
     return getNemoVersion();
   }
@@ -216,6 +199,25 @@ export class NemoRunner {
 
   public async getOutputPredicates() {
     return this.program.getOutputPredicates();
+  }
+
+  public async traceTreeForTable(
+    tree_for_table_query: TreeForTableQuery,
+  ): Promise<TreeForTableResponse> {
+    return TreeForTableResponseFromJSON(
+      this.engine.traceTreeForTable(
+        TreeForTableQueryToJSON(tree_for_table_query),
+      ),
+    );
+  }
+
+  public async traceTableEntriesForTreeNodes(
+    table_entries_for_tree_nodes: TableEntriesForTreeNodesQuery,
+  ): Promise<TableEntriesForTreeNodesResponseInner[]> {
+    const response = this.engine.traceTableEntriesForTreeNodes(
+      TableEntriesForTreeNodesQueryToJSON(table_entries_for_tree_nodes),
+    );
+    return response.map(TableEntriesForTreeNodesResponseInnerFromJSON);
   }
 
   /*
