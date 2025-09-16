@@ -202,10 +202,6 @@ export class NemoRunner {
     return getNemoVersion();
   }
 
-  public async markDefaultOutputs() {
-    return this.program.markDefaultOutputs();
-  }
-
   public async getOutputPredicates() {
     return this.program.getOutputPredicates();
   }

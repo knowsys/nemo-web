@@ -85,7 +85,6 @@ export function ExecutionPanel() {
       console.debug("[ExecutionPanel] Created Nemo worker", worker);
 
       const programInfo = await worker.parseProgram(programText);
-      await worker.markDefaultOutputs();
       programInfo.outputPredicates = (
         await worker.getOutputPredicates()
       ).sort();
