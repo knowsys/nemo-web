@@ -8,7 +8,6 @@ export interface RowProps {
   data: {
     results: any[][];
     indexColumnWidth: number;
-    onClick: (rowIndex: number, row: any[]) => void;
     predicate: string;
   };
 }

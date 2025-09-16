@@ -7,9 +7,6 @@ import {
   Spinner,
   InputGroup,
   Form,
-  Modal,
-  Dropdown,
-  ButtonGroup,
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../../store/index";
@@ -27,7 +24,6 @@ import "./ExecutionPanel.css";
 import { chooseFile } from "../../../chooseFile";
 import { downloadPredicate } from "./downloadPredicate";
 import { toastsSlice } from "../../../store/toasts";
-import { Evonne } from "./evonne/Evonne";
 
 function convertFileSize(size: number) {
   let index = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1000));
@@ -39,12 +35,6 @@ function convertFileSize(size: number) {
     " " +
     ["B", "KB", "MB", "GB", "TB"][index]
   );
-}
-
-enum TracingFormat {
-  NONE,
-  ASCII,
-  EVONNE,
 }
 
 export function ExecutionPanel() {
@@ -67,19 +57,6 @@ export function ExecutionPanel() {
   );
   const [isProgramRunning, setIsProgramRunning] = useState(false);
   const [isWorkerActive, setIsWorkerActive] = useState(false);
-
-  const [tracingInputData, setTracingInputData] = useState<{
-    predicate: string;
-    rowIndex: number;
-    row: any[];
-  }>();
-  const [tracingFactText, setTracingFactText] = useState("");
-  const [tracingResult, setTracingResult] = useState<string | undefined>(
-    undefined,
-  );
-  const [tracingFormat, setTracingFormat] = useState(TracingFormat.NONE);
-
-  const [isTracingModalShown, setIsTracingModalShown] = useState(false);
 
   const programText = useAppSelector(selectProgramText);
 
@@ -141,48 +118,6 @@ export function ExecutionPanel() {
     setIsProgramRunning(false);
   };
 
-  const isTracingCurrentlyAllowed = (
-    tracingFactText: string,
-    tracingInputData:
-      | { predicate: string; rowIndex: number; row: any[] }
-      | undefined,
-  ) => {
-    return (
-      programInfo !== undefined &&
-      !isWorkerActive &&
-      (tracingFactText.length > 0 || !!tracingInputData)
-    );
-  };
-
-  const traceFactEvonne = async (
-    tracingFactText: string,
-    tracingInputData:
-      | { predicate: string; rowIndex: number; row: any[] }
-      | undefined,
-  ) => {
-    if (
-      !isTracingCurrentlyAllowed(tracingFactText, tracingInputData) ||
-      workerRef.current === undefined
-    ) {
-      return;
-    }
-
-    try {
-      const tracingResult = tracingFactText
-        ? await workerRef.current.parseAndTraceFactGraphMlTree(tracingFactText)
-        : await workerRef.current.traceFactAtIndexGraphMlTree(
-            tracingInputData!.predicate,
-            tracingInputData!.rowIndex,
-          );
-
-      setTracingFormat(TracingFormat.EVONNE);
-      setTracingResult(tracingResult);
-    } catch (error) {
-      setTracingFormat(TracingFormat.NONE);
-      setTracingResult((error as any).toString());
-    }
-  };
-
   useEffect(() => {
     const bc = new BroadcastChannel("NemoVisualization");
 
@@ -210,15 +145,12 @@ export function ExecutionPanel() {
       let response;
       switch (queryType) {
         case "treeForTable":
-          response =
-            await workerRef.current.experimentalNewTracingTreeForTable(payload);
+          response = await workerRef.current.traceTreeForTable(payload);
           bc.postMessage({ responseType: "treeForTable", payload: response });
           break;
         case "tableEntriesForTreeNodes":
           response =
-            await workerRef.current.experimentalNewTracingTableEntriesForTreeNodes(
-              payload,
-            );
+            await workerRef.current.traceTableEntriesForTreeNodes(payload);
           bc.postMessage({
             responseType: "tableEntriesForTreeNodes",
             payload: response,
@@ -291,23 +223,7 @@ export function ExecutionPanel() {
               </Button>
             </>
           ) : (
-            <>
-              <Dropdown as={ButtonGroup} className="me-1 my-1">
-                <Button onClick={runProgram}>Run program</Button>
-
-                <Dropdown.Toggle
-                  split
-                  variant="primary"
-                  id="execution-panel-run-button"
-                />
-
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setIsTracingModalShown(true)}>
-                    Open tracing panel
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </>
+            <Button onClick={runProgram}>Run program</Button>
           )}
 
           <Button
@@ -507,20 +423,6 @@ export function ExecutionPanel() {
                               numberOfRows={
                                 factCounts.outputPredicates[predicate]
                               }
-                              onClickRow={(predicate, rowIndex, row) => {
-                                setIsTracingModalShown(true);
-                                setTracingInputData({
-                                  predicate,
-                                  rowIndex,
-                                  row,
-                                });
-                                setTracingFactText("");
-                                traceFactEvonne("", {
-                                  predicate,
-                                  rowIndex,
-                                  row,
-                                });
-                              }}
                             />
                           ) : undefined}
                         </>
@@ -533,77 +435,6 @@ export function ExecutionPanel() {
           )}
         </Card.Body>
       </Card>
-
-      <Modal
-        show={isTracingModalShown}
-        onHide={() => setIsTracingModalShown(false)}
-        size="xl"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Fact tracing</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Tracing allows you to see the concrete rule invocations that lead to a
-          fact being inferred.
-          <hr />
-          <h4>Input</h4>
-          <Form.Group>
-            <Form.Label>
-              Fact that should be traced. The placeholder shows the fact you
-              have chosen from the table, which will be traced by default. You
-              can use the input to override this with a fact of your choice. Be
-              aware that tracing nulls (blank nodes), e.g. _:0, only works by
-              clicking the trace button on the respective row. Manually entering
-              a null value here will not yield any result.
-            </Form.Label>
-            <InputGroup className="mb-3">
-              <Form.Control
-                type="text"
-                value={tracingFactText}
-                onChange={(event) => setTracingFactText(event.target.value)}
-                placeholder={
-                  tracingInputData
-                    ? `${
-                        tracingInputData.predicate
-                      }(${tracingInputData.row.join(",")})`
-                    : "No fact chosen from table. Input your own, e.g.: a(1)"
-                }
-              />
-              <Button
-                variant="primary"
-                disabled={
-                  !isTracingCurrentlyAllowed(tracingFactText, tracingInputData)
-                }
-                onClick={() =>
-                  traceFactEvonne(tracingFactText, tracingInputData)
-                }
-              >
-                Trace
-              </Button>
-            </InputGroup>
-          </Form.Group>
-          <h4>Tracing results</h4>
-          {tracingResult === undefined ||
-          tracingFormat === TracingFormat.NONE ? (
-            <>No results</>
-          ) : tracingFormat === TracingFormat.EVONNE ? (
-            <Evonne data={tracingResult} />
-          ) : (
-            /* tracingFormat === TracingFormat.ASCII */
-            <code className="execution-panel-code-display">
-              {tracingResult}
-            </code>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setIsTracingModalShown(false)}
-          >
-            {t("common:closeModal")}
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 }
