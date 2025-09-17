@@ -2,7 +2,7 @@ export const links = {
   homepageTUDresden: "https://tu-dresden.de",
   homepageICCL: "https://iccl.inf.tu-dresden.de",
   homepageKBS: "https://iccl.inf.tu-dresden.de/web/Wissensbasierte_Systeme/en",
-  legalNoticeTUDresden: "https://tu-dresden.de/impressum",
+  legalNoticeICCL: "https://iccl.inf.tu-dresden.de/web/ICCL:Impressum",
   feedback: "https://github.com/knowsys/nemo-web/issues",
   sourceCodeNemo: "https://github.com/knowsys/nemo",
   sourceCodeNemoWeb: "https://github.com/knowsys/nemo-web",
