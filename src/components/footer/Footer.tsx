@@ -37,9 +37,7 @@ export function Footer() {
           <Col md={5}>
             Made with ❤️ in Dresden.
             <br />
-            <a href={links.legalNoticeICCL}>
-              Legal notice (Impressum)
-            </a>
+            <a href={links.legalNoticeICCL}>Legal notice (Impressum)</a>
             <br />
             <a href="3rd-party-licenses.txt">{t("thirdPartyLicenses")}</a>
           </Col>
