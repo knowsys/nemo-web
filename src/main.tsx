@@ -8,8 +8,6 @@ import { createStore } from "./store";
 import { programInfoSlice } from "./store/programInfo";
 import { selectProgramText } from "./store/programInfo/selectors/selectProgramText";
 import "./i18n/i18n";
-import { programTextLocalStorageKey } from "./localStorageKeys";
-import { LocalStorageAutoSaver } from "./components/LocalStorageAutoSaver";
 
 const store = createStore();
 console.info("[Redux] Created store: ", store);
@@ -23,10 +21,6 @@ if (window.location.hash !== "") {
   } catch (e) {
     console.error(e);
   }
-}
-
-if (!code) {
-  code = window.localStorage.getItem(programTextLocalStorageKey);
 }
 
 if (code !== null && code !== "") {
@@ -44,7 +38,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
-      <LocalStorageAutoSaver />
     </Provider>
   </React.StrictMode>,
 );
