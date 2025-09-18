@@ -13,63 +13,36 @@ export function Footer() {
   const { t } = useTranslation("footer");
 
   return (
-    <footer>
-      <div className="mt-auto py-3" style={{ borderTop: "1px solid #eeeeee" }}>
-        <Container>
-          <Row>
-            <Col md={2}>
-              <Link href={links.homepageTUDresden}>
-                <img
-                  src={logoTUDresden}
-                  alt="TU Dresden"
-                  className="footer-logo-tu-dresden"
-                />
-              </Link>
-            </Col>
-            <Col md={3}>
-              <Link href={links.homepageICCL}>
-                <img
-                  src={logoICCL}
-                  alt="International Center For Computational Logic"
-                  className="footer-logo-iccl"
-                />
-              </Link>
-            </Col>
-            <Col md={3}>
-              <p>Made with ❤️ in Dresden.</p>
-              <p>
-                <a href={links.homepageTUDresden}>TU Dresden</a>{" "}
-                <a href={links.legalNoticeTUDresden}>(Legal notice)</a>
-              </p>
-            </Col>
-            <Col md={3}>
-              <p>
-                <Link href={links.feedback}>
-                  <>{t("common:giveFeedback")}</>
-                </Link>
-              </p>
-              <p>
-                <Link href={links.sourceCodeNemo}>
-                  <>{t("sourceCodeNemo")}</>
-                </Link>
-              </p>
-              <p>
-                <Link href={links.sourceCodeNemoWeb}>
-                  <>{t("sourceCodeNemoWeb")}</>
-                </Link>
-              </p>
-              <p>
-                <Link href={links.documentation}>
-                  <>{t("navigationBar:documentation")}</>
-                </Link>
-              </p>
-              <p>
-                <a href="3rd-party-licenses.txt">{t("thirdPartyLicenses")}</a>
-              </p>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+    <footer className="footer">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={3}>
+            <Link href={links.homepageTUDresden}>
+              <img
+                src={logoTUDresden}
+                alt="TU Dresden"
+                className="footer-logo-tu-dresden"
+              />
+            </Link>
+          </Col>
+          <Col md={4}>
+            <Link href={links.homepageICCL}>
+              <img
+                src={logoICCL}
+                alt="International Center For Computational Logic"
+                className="footer-logo-iccl"
+              />
+            </Link>
+          </Col>
+          <Col md={5}>
+            Made with ❤️ in Dresden.
+            <br />
+            <a href={links.legalNoticeICCL}>Legal notice (Impressum)</a>
+            <br />
+            <a href="3rd-party-licenses.txt">{t("thirdPartyLicenses")}</a>
+          </Col>
+        </Row>
+      </Container>
     </footer>
   );
 }

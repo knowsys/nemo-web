@@ -2,7 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link
+      rel="icon"
+      href="./favicon.ico"
+      media="(prefers-color-scheme:no-preference)"
+    />
+    <link
+      rel="icon"
+      href="./favicon-white.ico"
+      media="(prefers-color-scheme:dark)"
+    />
+    <link
+      rel="icon"
+      href="./favicon.ico"
+      media="(prefers-color-scheme:light)"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -14,7 +28,11 @@
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      If you see this message, then the page is still loading or your device is
+      not supported. Note that we do not provide support for mobile devices in
+      general.
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

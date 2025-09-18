@@ -1,4 +1,4 @@
-import { NemoWorker } from "../../../../nemoWorker/NemoWorker";
+import { NemoWorker } from "../../../nemoWorker/NemoWorker";
 
 export class RowStore {
   private iterableID: number | undefined;

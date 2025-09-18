@@ -1,12 +1,10 @@
-import { Container, Row, Col, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { NavigationBar } from "./navigationBar/NavigationBar";
-import { useAppSelector } from "../store";
-import { RightPanel } from "./rightPanel/RightPanel";
-import { LeftPanel } from "./leftPanel/LeftPanel";
 import { Footer } from "./footer/Footer";
 import { Suspense } from "react";
 import { Toasts } from "./toasts/Toasts";
-import { MainArticle } from "./MainArticle";
+import { Editor } from "./editor/Editor";
+import { ExecutionPanel } from "./executionPanel/ExecutionPanel";
 
 export function DefaultSpinner() {
   return (
@@ -23,11 +21,6 @@ export function DefaultSpinner() {
 }
 
 export function App() {
-  const uiSettings = useAppSelector((state) => state.uiSettings);
-
-  const panelWidth =
-    uiSettings.showLeftPanel && uiSettings.showRightPanel ? 6 : 12;
-
   return (
     <>
       <Suspense fallback={<DefaultSpinner />}>
@@ -35,30 +28,11 @@ export function App() {
         <div aria-live="polite" aria-atomic="true" className="position-static">
           <Toasts />
         </div>
-        <Container fluid={uiSettings.enableFullscreen}>
-          <br />
-          <main>
-            <Row>
-              {uiSettings.showLeftPanel ? (
-                <Col sm={panelWidth}>
-                  <LeftPanel />
-                </Col>
-              ) : (
-                <></>
-              )}
-              <Col
-                sm={panelWidth}
-                className={uiSettings.showRightPanel ? "" : "d-none"}
-              >
-                <RightPanel />
-              </Col>
-            </Row>
-            <hr />
-            <MainArticle />
-          </main>
-        </Container>
-        <br />
-        <Footer></Footer>
+        <main>
+          <Editor />
+          <ExecutionPanel />
+        </main>
+        <Footer />
       </Suspense>
     </>
   );

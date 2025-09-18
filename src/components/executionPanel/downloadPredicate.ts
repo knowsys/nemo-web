@@ -1,5 +1,5 @@
-import { downloadBlob } from "../../../downloadBlob";
-import { NemoWorker } from "../../../nemoWorker/NemoWorker";
+import { downloadBlob } from "../../downloadBlob";
+import { NemoWorker } from "../../nemoWorker/NemoWorker";
 
 export async function cleanUpStorage() {
   if (navigator.storage !== undefined) {

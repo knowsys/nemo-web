@@ -13,7 +13,7 @@ import * as monaco from "monaco-editor";
 
 // See https://github.com/CodinGame/monaco-vscode-api?tab=readme-ov-file#loading-vsix-file
 // @ts-ignore
-import "../../../../nemoVSIX/nemo.vsix";
+import "../../../nemoVSIX/nemo.vsix";
 
 const fakeWorker = new Worker(
   new URL("vscode/workers/extensionHost.worker", import.meta.url),
@@ -54,7 +54,7 @@ export async function createEditor(
   const editor = createConfiguredEditor(container, {
     value: programText,
     language: "nemo",
-    automaticLayout: true,
+    // automaticLayout: true,
     minimap: {
       autohide: true,
       ...additionalMonacoOptions?.minimap,
