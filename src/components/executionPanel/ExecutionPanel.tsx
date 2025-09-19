@@ -49,8 +49,6 @@ export function ExecutionPanel() {
     undefined,
   );
   const [parseError, setParseError] = useState<string | undefined>(undefined);
-  const [initializationDuration, setInitializationDuration] =
-    useState<number>(0);
   const [reasoningDuration, setReasoningDuration] = useState<number>(0);
   const [factCounts, setFactCounts] = useState<FactCounts | undefined>(
     undefined,
@@ -68,7 +66,6 @@ export function ExecutionPanel() {
     }
     setProgramInfo(undefined);
     setParseError(undefined);
-    setInitializationDuration(0);
     setReasoningDuration(0);
     setFactCounts(undefined);
     setIsProgramRunning(false);
@@ -84,7 +81,14 @@ export function ExecutionPanel() {
       workerRef.current = worker;
       console.debug("[ExecutionPanel] Created Nemo worker", worker);
 
-      const programInfo = await worker.parseProgram(programText);
+      const programInfo = await worker.setupNemoEngine(
+        programText,
+        Object.fromEntries(
+          inputs
+            .map((input) => [input.resource, input.file])
+            .filter((input) => input[1] !== undefined),
+        ),
+      );
       programInfo.outputPredicates = (
         await worker.getOutputPredicates()
       ).sort();
@@ -95,14 +99,7 @@ export function ExecutionPanel() {
           : undefined,
       );
 
-      const info = await worker.start(
-        Object.fromEntries(
-          inputs
-            .map((input) => [input.resource, input.file])
-            .filter((input) => input[1] !== undefined),
-        ),
-      );
-      setInitializationDuration(info.initializationDuration);
+      const info = await worker.start();
       setReasoningDuration(info.reasoningDuration);
 
       setFactCounts(await worker.getCounts());
@@ -218,10 +215,7 @@ export function ExecutionPanel() {
                 {!factCounts ? "-" : factCounts.factsOfDerivedPredicates} facts
                 inferred in{" "}
                 {Math.ceil(
-                  (programInfo.parsingDuration +
-                    initializationDuration +
-                    reasoningDuration) /
-                    100,
+                  (programInfo.parsingDuration + reasoningDuration) / 100,
                 ) / 10}{" "}
                 seconds
               </Badge>

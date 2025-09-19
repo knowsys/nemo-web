@@ -63,7 +63,9 @@ export type NemoWorker = {
     : undefined;
 };
 
-export type NemoProgramInfo = Awaited<ReturnType<NemoWorker["parseProgram"]>>;
+export type NemoProgramInfo = Awaited<
+  ReturnType<NemoWorker["setupNemoEngine"]>
+>;
 
 export type StatusChangeHandler = (active: boolean) => void;
 
