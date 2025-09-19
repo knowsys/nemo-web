@@ -31,8 +31,7 @@ export default defineConfig({
     },
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
-        evonne: resolve(__dirname, "evonne.html"),
+        main: resolve(__dirname, "index.html")
       },
     },
   },
