@@ -21,7 +21,7 @@ cp $PATH_TO_NEMO_VSIX/nemo-X.X.X.vsix nemoVSIX/nemo.vsix
 # Copy nemo-wasm library to the correct location
 cp -r $PATH_TO_NEMO_WASM/nemoWASMBundler ./nemoWASMBundler
 
-npm install
+npm ci
 npm run dev
 ```
 
@@ -59,7 +59,7 @@ cp $PATH_TO_NEMO_VSIX/nemo-X.X.X.vsix nemoVSIX/nemo.vsix
 # Copy nemo-wasm library to the correct location
 cp -r $PATH_TO_NEMO_WASM/nemoWASMBundler ./nemoWASMBundler
 
-npm install
+npm ci
 NODE_OPTIONS=--max_old_space_size=4096 npm run build
 
 # for local preview of the production build
