@@ -1,4 +1,6 @@
-# nemo-web
+# Nemo Web IDE
+
+[![Gitter](https://badges.gitter.im/nemo/community.svg)](https://gitter.im/nemo/community)
 
 Interactive Web-Frontend for the Nemo Rule Engine/Reasoner.
 
