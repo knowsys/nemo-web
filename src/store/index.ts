@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { programInfoSlice } from "./programInfo";
-import { toastsSlice } from "./toasts";
 
 export function createStore() {
   return configureStore({
     reducer: {
       programInfo: programInfoSlice.reducer,
-      toasts: toastsSlice.reducer,
     },
     middleware: (m) => {
       return m({

@@ -1,8 +1,7 @@
+import { Suspense } from "react";
 import { Spinner } from "react-bootstrap";
 import { NavigationBar } from "./navigationBar/NavigationBar";
 import { Footer } from "./footer/Footer";
-import { Suspense } from "react";
-import { Toasts } from "./toasts/Toasts";
 import { Editor } from "./editor/Editor";
 import { ExecutionPanel } from "./executionPanel/ExecutionPanel";
 
@@ -25,9 +24,6 @@ export function App() {
     <>
       <Suspense fallback={<DefaultSpinner />}>
         <NavigationBar />
-        <div aria-live="polite" aria-atomic="true" className="position-static">
-          <Toasts />
-        </div>
         <main>
           <Editor />
           <ExecutionPanel />

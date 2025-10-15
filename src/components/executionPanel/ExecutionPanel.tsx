@@ -10,7 +10,7 @@ import {
   Badge,
   Offcanvas,
 } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "../../store/index";
+import { useAppSelector } from "../../store/index";
 import { selectProgramText } from "../../store/programInfo/selectors/selectProgramText";
 import { Icon } from "../Icon";
 import { TextTooltip } from "../TextTooltip";
@@ -24,7 +24,6 @@ import { FactCounts } from "../../nemoWorker/NemoRunner";
 import "./ExecutionPanel.css";
 import { chooseFile } from "../../chooseFile";
 import { downloadPredicate } from "./downloadPredicate";
-import { toastsSlice } from "../../store/toasts";
 
 function convertFileSize(size: number) {
   let index = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1000));
@@ -39,8 +38,6 @@ function convertFileSize(size: number) {
 }
 
 export function ExecutionPanel() {
-  const dispatch = useAppDispatch();
-
   const [inputs, setInputs] = useState<{ resource: string; file: File }[]>([]);
   const [showInputs, setShowInputs] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
@@ -347,12 +344,9 @@ export function ExecutionPanel() {
                               predicate,
                             );
                           } catch (error: any) {
-                            dispatch(
-                              toastsSlice.actions.addToast({
-                                title: "Error while downloading file",
-                                description: error.toString(),
-                                variant: "danger",
-                              }),
+                            console.error(
+                              "Error while downloading file",
+                              error,
                             );
                           }
                         }}
