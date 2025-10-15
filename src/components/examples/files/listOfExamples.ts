@@ -2,15 +2,15 @@ import elCalcCSVURL from "./elCalcCSV.rls?url";
 import elCalcOWLRDFURL from "./elCalcOWLRDF.rls?url";
 import oldLimeTreesURL from "./oldLimeTrees.rls?url";
 import divByZeroURL from "./div-by-zero.rls?url";
-import findCommonDescendants from "./findCommonDescendants.rls?url";
+import findCommonAncestors from "./findCommonAncestors.rls?url";
 
 export const listOfExamples: {
   name: string;
   url: string;
 }[] = [
   {
-    name: "Common descendants",
-    url: findCommonDescendants,
+    name: "Ancestors (basic)",
+    url: findCommonAncestors,
   },
   {
     name: "Old trees",
