@@ -9,11 +9,11 @@ export const listOfExamples: {
   url: string;
 }[] = [
   {
-    name: "Find Common Descendants",
+    name: "Common descendants",
     url: findCommonDescendants,
   },
   {
-    name: "Old lime trees",
+    name: "Old trees",
     url: oldLimeTreesURL,
   },
   {
