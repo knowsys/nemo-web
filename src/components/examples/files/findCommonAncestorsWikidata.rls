@@ -1,0 +1,57 @@
+%! Find common ancestors of Ada and Moby.
+%!
+%! This example investigates the common lineage of Ada Lovelace
+%! and Moby, based on live data from an online query service (Wikidata SPARQL).
+%! 
+%! The example shows:
+%! - how to import data with SPARQL queries,
+%! - how to use parameters to define values that matter to a program,
+%! - how to use negation (~) to remove matches from a rule,
+%! - how to select predicates for output.
+
+% Prefixes help to abbreviate long identifiers or URLs:
+@prefix wd: <http://www.wikidata.org/entity/> .
+
+% Parameters can be used for fixed terms throughout the program
+% (also try Madonna (Q1744) and Pope Leo XIV (Q6109517)):
+@parameter $personId1 = wd:Q7259 . % Ada Lovelace
+@parameter $personId2 = wd:Q14045 . % Moby
+
+% Import predicate "wdParent" (father or mother) through SPARQL:
+@import wdParent :- sparql{
+  endpoint = <https://query.wikidata.org/sparql>,
+  query = """
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    SELECT ?child ?parent WHERE { ?child (wdt:P22|wdt:P25) ?parent }
+  """
+} .
+% Import predicate "wdLabel" (English label) through SPARQL:
+@import wdLabel :- sparql{
+  endpoint = <https://query.wikidata.org/sparql>,
+  query="""
+    PREFIX wikibase: <http://wikiba.se/ontology#>
+    SELECT ?qid ?qidLabel WHERE {
+      SERVICE wikibase:label {
+        <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" } }
+  """
+} .
+
+% Find relevant ancestors, starting from selected persons:
+ancestor($personId1, ?parent) :- wdParent($personId1, ?parent) .
+ancestor($personId2, ?parent) :- wdParent($personId2, ?parent) .
+ ancestor(?person, ?ancestor) :- ancestor(?person, ?x), wdParent(?x, ?ancestor) .
+
+% Find common ancestors, and determine their names:
+ancestorOfBoth(?qid, ?name) :-
+  ancestor($personId1, ?qid),
+  ancestor($personId2, ?qid),
+  wdLabel(?qid,?name) .
+
+% That's a lot. Let's remove the ancestors that came before joint ancestors,
+% so we retain only the most recent common ancestors: 
+ancestorOfAncestorOfBoth(?parent) :- ancestorOfBoth(?child, _), wdParent(?child, ?parent) .
+mostRecentAncestorOfBoth(?qid, ?name) :- ancestorOfBoth(?qid, ?name), ~ancestorOfAncestorOfBoth(?qid) .
+
+% Select output predicates:
+@output ancestorOfBoth .
+@output mostRecentAncestorOfBoth .
