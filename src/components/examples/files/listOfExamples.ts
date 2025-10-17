@@ -4,6 +4,7 @@ import oldLimeTreesURL from "./oldLimeTrees.rls?url";
 import divByZeroURL from "./div-by-zero.rls?url";
 import findCommonAncestors from "./findCommonAncestors.rls?url";
 import findCommonAncestorsWikidata from "./findCommonAncestorsWikidata.rls?url";
+import wikipediaTitlesVsLabels from "./wikipediaTitlesVsLabels.rls?url";
 
 export const listOfExamples: {
   name: string;
@@ -14,8 +15,12 @@ export const listOfExamples: {
     url: findCommonAncestors,
   },
   {
-    name: "Ancestors of Ada and Moby (Wikidata)",
+    name: "Ancestors of Ada and Moby (Wikidata, SPARQL)",
     url: findCommonAncestorsWikidata,
+  },
+  {
+    name: "Wikipedia articles vs. labels (Wikidata, RDF, string functions)",
+    url: wikipediaTitlesVsLabels,
   },
   {
     name: "Old trees (CSV, Wikidata)",
