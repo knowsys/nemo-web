@@ -1,21 +1,21 @@
 %! Find Wikipedia articles not entitled by their native language label
 %!
-%! This example looks at a single Wikidata item, and all its Wikipediaarticles and
-%! labels across different languages. The main result is a table with all languages
-%! for which the Wikipedia page have a title that is different from Wikidata's native
-%! label for that language.
+%! This example looks at a single Wikidata item, and all its Wikipedia
+%! articles and labels across different languages. The main result is a
+%! table with all languages for which the Wikipedia page have a title that
+%! is different from Wikidata's nativelabel for that language.
 %! 
 %! The example shows:
 %! - how to load data from an online RDF file (here in Turtle format),
 %! - how to use parameters to define values that matter to a program,
-%! - how to use formatted strings (f"string") to build new strings with variable parts,
+%! - how to use formatted strings (f"string") to build strings with variable parts,
 %! - how to use simple rules to match and select data.
 
 %%% Parameter to define the Wikidata item we want to look into:
-@parameter $qid = "Q1731" . % Dresden
-% @parameter $qid = "Q158158" . % TU Dresden
-% @parameter $qid = "Q161531". % War and Peace
+@parameter $qid = "Q161531". % War and Peace
 % @parameter $qid = "Q629". % Oxygen
+% @parameter $qid = "Q1731" . % Dresden
+% @parameter $qid = "Q158158" . % TU Dresden
 
 % Prefixes help us abbreviate long identifiers in RDF data:
 @prefix wd: <http://www.wikidata.org/entity/> .
