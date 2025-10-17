@@ -37,9 +37,9 @@
 %%% Import isIntersection. A fact isIntersection(C,A,B) means that class C is the
 %%% intersection of A and B.
 @import isIntersection :- csv{resource = f"{$dataDir}conj.csv.gz"} .
-%%% Import exiisSomeValuests. A fact isSomeValue(C,R,D) means that class C is the class of
+%%% Import isSomeValues. A fact isSomeValues(C,R,D) means that class C is the class of
 %%% all things that have some value for property R that is an instance of class D.
-@import isSomeValue :- csv{resource = f"{$dataDir}exists.csv.gz"} .
+@import isSomeValues :- csv{resource = f"{$dataDir}exists.csv.gz"} .
 
 %%% Import isSubClass. A fact isSubClass(C) means that C occurs in a subclass position
 %%% somewhere in the ontology.
@@ -69,14 +69,14 @@ infSubClassOf(?C,?Y) :-
 
 %%% Rule "R_\exists^-". If E is a subclass of a someValues-class for R and C, then
 %%% every instance of E has some R-value in C (this is the intended meaning of infEx).
-infEx(?E,?R,?C) :- infSubClassOf(?E,?Y), isSomeValue(?Y,?R,?C) .
+infEx(?E,?R,?C) :- infSubClassOf(?E,?Y), isSomeValues(?Y,?R,?C) .
 
 %%% Rule "R_\exists^+". If E is inferred to have an S-value in D (first line), and
 %%% if there is a someValues-class Y for S and D that is relevant as subclass (second line),
 %%% then infer that E is a subclass of Y. 
 infSubClassOf(?E,?Y) :-
 	infEx(?E,?R,?C), infSubClassOf(?C,?D), subProp(?R,?S),
-	isSomeValue(?Y,?S,?D), isSubClass(?Y) .
+	isSomeValues(?Y,?S,?D), isSubClass(?Y) .
 
 %%% R_\sqsubseteq. A subclass of a subclass is also a subclass.
 infSubClassOf(?C,?E) :-	infSubClassOf(?C,?D), subClassOf(?D,?E) .

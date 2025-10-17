@@ -1,161 +1,186 @@
-% OWL EL Reasoning from OWL/RDF
-% See https://github.com/knowsys/nemo-examples/tree/main/examples/owl-el/from-owl-rdf
-%
-% This example shows how Nemo can be used to reason in the ontology language OWL EL,
-% based on input that is the W3C standard encoding of an OWN ontology in RDF, using
-% the NTriples syntax.
+%! Ontology reasoning for OWL EL (in standard RDF encoding)
+%!
+%! This example implements a complete reasoning algorithm for inferring all
+%! subclass-of relations that follow from an ontology in the language OWL EL.
+%! This involves parsing the ontology from its RDF encoding, replacing repeated
+%! expressions by unique representatives (for optimization), and applying a
+%! complete logical reasoning method to infer subclass-of relations.
+%!
+%! The ontology used here is an OWL EL version of the medical ontology "Galen",
+%! but most OWL EL ontologies will work (some features are not supported, and the
+%! parser does not check if unsupported features occur). Unsupported OWL EL features
+%! include: oneOf, allDisjoint. The encoding used for property chains is outdated.
+%!
+%! This example shows:
+%! - how to load compressed data from online RDF files
+%! - how to use rules to parse "nested" syntactic structures and linked lists in RDF
+%! - how to create string identifiers as unique representatives for syntactic sub-expressions
+%! - how to encode OWL reasoning rules from a research paper in simple (Datalog) rules
+%!
+%! The actual 11 rules used for the reasoning correspond to the inference rules developed in
+%! the following paper (see Figure 3):
+%!
+%! Y. Kazakov, M. Krötzsch, F. Simancik. The Incredible ELK: From Polynomial
+%! Procedures to Efficient Reasoning with EL Ontologies. J Autom. Reasoning, 2014.
+%! doi: 10.1007/S10817-013-9296-3
+%!
+%! The intended meaning of the extracted predicates is documented at the end of the program.
 
-% owl-rdf-complete-reasoning.rls:
-%
-% Complete reasoner, producing all inferred class subsumptions as output.
-%
-% This ruleset normalises an EL ontology in OWL/RDF encoding.
-% Unsupported OWL EL features include: oneOf, allDisjoint.
-% The encoding used for property chains is also slightly antique.
-%
-% The ruleset computes facts for the following predicates:
-%  nf:isMainClass(?C): ?C is an "interesting" class (not just an auxiliary class expression)
-%  nf:isSubClass(?C): ?C occurs in a subclass position (i.e., negatively) 
-%  nf:conj(?C,?D1,?D2): ?C is the conjunction of ?D1 and ?D2
-%  nf:exists(?C,?P,?D): ?C is the existential restriction of property ?P with values from ?D
-%  nf:subClassOf(?C,?D): ?C is syntactically specified to be a subclass of ?D 
-%  nf:subPropChain(?S1,?S2,?R): there was a role chain axiom ?S1 o ?S2 -> ?R
-%  nf:subProp(?R,?S): ?R is a subproperty of ?S (directly or indirectly) 
-
-@prefix nf: <http://rulewerk.semantic-web.org/normalForm/> .
-@prefix inf: <http://rulewerk.semantic-web.org/inferred/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix sct: <http://www.ihtsdo.org/owlname#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-% Read data from NT file:
-@import TRIPLE :- rdf{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-owl-rdf/galen-el.nt.gz"} .
+%%% Import ontology triples from RDF file (NTriples encoding):
+@import triple :- rdf{resource = "https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-owl-rdf/galen-el.nt.gz"} .
 
-%%% Mark classes:
+% Find all classes that occur in the triples
 ClassObject(owl:someValuesFrom) .
 ClassObject(rdf:first) .
 ClassObject(rdfs:subClassOf) .
 ClassObject(owl:equivalentClass) .
 ClassSubject(rdfs:subClassOf) .
 ClassSubject(owl:equivalentClass) .
-class(?O) :- TRIPLE(?X, ?P, ?O), ClassObject(?P) .
-class(?X) :- TRIPLE(?X, ?P, ?O), ClassSubject(?P) .
+class(?O) :- triple(?X, ?P, ?O), ClassObject(?P) .
+class(?X) :- triple(?X, ?P, ?O), ClassSubject(?P) .
 
-%%% Distinguish auxiliary class expressions from primary classes:
+% The RDF encoding of OWL uses many auxiliary elements to represent (parts of) class expressions.
+% We now mark these "classes" with the predicate auxClass.
 
-%% Mark auxiliary existential role restrictions:
-synEx(?Y,?P,?X), auxClass(?X) :- TRIPLE(?X, owl:someValuesFrom, ?Y), TRIPLE(?X, owl:onProperty, ?P) .
+% Find and mark auxiliary syntactic existential role restrictions (someValuesFrom):
+synSomeValues(?X,?P,?Y), auxClass(?X) :- triple(?X, owl:someValuesFrom, ?Y), triple(?X, owl:onProperty, ?P) .
 
-%% Mark auxiliary conjunctions:
-
-next(?L1,?L2) :- TRIPLE(?L1,rdf:rest,?L2) .
-   first(?L1) :- TRIPLE(?X, owl:intersectionOf, ?L1) .
+% Analyze linked list encodings as used for conjunctions (intersectionOf):
+next(?L1,?L2) :- triple(?L1,rdf:rest,?L2) .
+   first(?L1) :- triple(?X, owl:intersectionOf, ?L1) .
 nonfirst(?L2) :- first(?L1), next(?L1,?L2) .
 nonfirst(?L2) :- nonfirst(?L1), next(?L1,?L2) .
     last(?Ln) :- next(?Ln,rdf:nil) .
   nonlast(?L) :- next(?L,?Ln), last(?Ln) .
  nonlast(?L1) :- next(?L1,?L2), nonlast(?L2) .
-    in(?L,?C) :- TRIPLE(?L,rdf:first,?C) .
-% Mark conjunctions:
-synConj(?X,?C1,?C2), auxClass(?X) :-
-	TRIPLE(?X, owl:intersectionOf, ?L1), next(?L1,?L2), last(?L2), in(?L1,?C1), in(?L2,?C2) .
-synConj(?X,?C1,?L2), auxClass(?X) :-
-	TRIPLE(?X, owl:intersectionOf, ?L1), next(?L1,?L2), nonlast(?L2), in(?L1,?C1) .
-synConj(?L1,?C1,?L2), auxClass(?L1) :-
+    in(?L,?C) :- triple(?L,rdf:first,?C) .
+
+% Find and mark auxiliary syntactic auxiliary conjunctions (intersectionOf).
+% We translate the list of conjuncts into several binary conjunctions here.
+synIntersection(?X,?C1,?C2), auxClass(?X) :-
+	triple(?X, owl:intersectionOf, ?L1), next(?L1,?L2), last(?L2), in(?L1,?C1), in(?L2,?C2) .
+synIntersection(?X,?C1,?L2), auxClass(?X) :-
+	triple(?X, owl:intersectionOf, ?L1), next(?L1,?L2), nonlast(?L2), in(?L1,?C1) .
+synIntersection(?L1,?C1,?L2), auxClass(?L1) :-
 	nonfirst(?L1), next(?L1,?L2), nonlast(?L2), in(?L1,?C1) .
-synConj(?L1,?C1,?C2), auxClass(?L1) :-
+synIntersection(?L1,?C1,?C2), auxClass(?L1) :-
 	nonfirst(?L1), next(?L1,?L2), last(?L2), in(?L1,?C1), in(?L2,?C2) .
 
-%%% The other classes are "main classes" that are not normalised:
-nf:isMainClass(?X) :- class(?X), ~auxClass(?X) .
+% The remaining (non-auxiliary) classes are named classes that are not normalized:
+namedClass(?X) :- class(?X), ~auxClass(?X) .
 
-%%% Normalise auxiliary nested class expressions:
-           repOf(?X,?X) :- nf:isMainClass(?X) . % keep main classes unchanged
-   synExRep(?X,?P,?Rep) :- synEx(?Y,?P,?X), repOf(?Y,?Rep) .
-nf:exists(!New,?P,?Rep) :- synExRep(?X,?P,?Rep) .
-           repOf(?X,?N) :- synExRep(?X,?P,?Rep), nf:exists(?N,?P,?Rep) .
-		%  nf:exists(!New,?P,?Rep) :- synEx(?Y,?P,?X), repOf(?Y,?Rep) .
-		%         repOf(?X,?N) :- synEx(?Y,?P), repOf(?Y,?Rep), nf:exists(?N,?P,?Rep) .
-nf:conj(!New,?R1,?R2) :- synConj(?X,?C1,?C2), repOf(?C1,?R1), repOf(?C2,?R2) .
-         repOf(?X,?N) :- synConj(?X,?C1,?C2), repOf(?C1,?R1), repOf(?C2,?R2), nf:conj(?N,?R1,?R2) .
+% The same auxiliary nested class expressions can occur in many places. For efficiency, we
+% replace their individual occurrences by unique representatives, so that every class is defined
+% only once. The code works by inventing new representative names using existential variables !New.
 
+%%% Named classes represent themselves:
+repOf(?X,?X) :- namedClass(?X) . 
+%%% Represent SomeValues expression by new identifiers constructed from their parameters, after replacing the inner class with its reprentative:
+isSomeValues(?newRep,?P,?R), repOf(?X,?newRep) :- synSomeValues(?X,?P,?Y), repOf(?Y,?R), ?newRep = f"SOMEVALUES({STR(?P)} {STR(?R)})" .
+%%% Represent Intersection expression by new identifiers constructed from their parameters, after replacing the inner classes with their reprentatives:
+isIntersection(?newRep,?R1,?R2), repOf(?X,?newRep) :- synIntersection(?X,?C1,?C2), repOf(?C1,?R1), repOf(?C2,?R2), ?newRep = f"INTERSECTION({STR(?R1)} {STR(?R2)})" .
 
-%%% Extract old-style property chains:
-nf:subPropChain(?S,?T,?R), nf:subProp(?R,?R) :-
-	TRIPLE(?L,rdfs:subPropertyOf,?R), TRIPLE(?L,owl:propertyChain,?L1),
+%%% Extract old-style property chains (FIXME: this is not the current OWL standard encoding):
+subPropChain(?S,?T,?R), subProp(?R,?R) :-
+	triple(?L,rdfs:subPropertyOf,?R), triple(?L,owl:propertyChain,?L1),
 	in(?L1,?S), next(?L1,?L2), in(?L2,?T) .
 
-%%% Initialise subsumption axioms:
-                         prepareSco(?X,?Y) :- TRIPLE(?X, rdfs:subClassOf, ?Y) .
-      prepareSco(?X,?Y), prepareSco(?Y,?X) :- TRIPLE(?X, owl:equivalentClass, ?Y) .
-nf:subClassOf(?RX,?RY), nf:isSubClass(?RX) :- prepareSco(?X,?Y), repOf(?X,?RX), repOf(?Y,?RY) .
+% Extract class subsumption axioms:
+prepareSco(?X,?Y) :- triple(?X, rdfs:subClassOf, ?Y) .
+prepareSco(?X,?Y),
+prepareSco(?Y,?X) :- triple(?X, owl:equivalentClass, ?Y) .
+%%% Replace classbes by their representatives for subclass-of statements as well:
+subClassOf(?RX,?RY), isSubClass(?RX) :- prepareSco(?X,?Y), repOf(?X,?RX), repOf(?Y,?RY) .
 
-%%% Initialise disjointness:
-nf:subClassOf(!C,owl:Nothing), nf:conj(!C,?X,?Y), nf:isSubClass(!C), nf:isSubClass(?X), nf:isSubClass(?Y)
-	:- TRIPLE(?X,owl:disjointWith,?Y) .
+%%% Extract disjointness axioms, by translating them into intersections below the empty class:
+subClassOf(!C,owl:Nothing),
+isIntersection(!C,?X,?Y),
+isSubClass(!C), isSubClass(?X), isSubClass(?Y)
+	:- triple(?X,owl:disjointWith,?Y) .
 
-%%% Mark classes in subclass position recursively:
-                     nf:isSubClass(?D) :- nf:exists(?C, ?P, ?D), nf:isSubClass(?C) .
-nf:isSubClass(?C1), nf:isSubClass(?C2) :- nf:conj(?X, ?C1, ?C2), nf:isSubClass(?X) .
+% Mark further classes in subclass position recursively:
+isSubClass(?D) :- isSomeValues(?C, ?P, ?D), isSubClass(?C) .
+isSubClass(?C1),
+isSubClass(?C2) :- isIntersection(?X, ?C1, ?C2), isSubClass(?X) .
 
-%%% Precompute role hierarchy:
-directSubProp(?R,?S) :- TRIPLE(?R,rdfs:subPropertyOf,?S) .
-% Initialise role hierarchy only for roles in subclass positions:
-nf:subProp(?P,?P) :- nf:exists(?C,?P,?D), nf:isSubClass(?C) . 
-nf:subProp(?R,?T) :- nf:subProp(?R,?S), directSubProp(?S,?T) .
+%%% Extract subproperty axioms:
+directSubProp(?R,?S) :- triple(?R,rdfs:subPropertyOf,?S) .
+%%% Initialise property hierarchy for properties that connect to instances of classes in subclass positions:
+subProp(?P,?P) :- isSomeValues(?C,?P,?D), isSubClass(?C) . 
+%%% Compute property hierarchy by recursively finding subproperties:
+subProp(?R,?T) :- subProp(?R,?S), directSubProp(?S,?T) .
 
 
-%%% Start classification for all named classes:
+%%% Start classification for all named classes. Superclasses are only computed for
+%%% classes that are "initialized".
+infInit(?C) :- namedClass(?C) .
 
-inf:init(?C) :- nf:isMainClass(?C) .
+% Inference rules (from "The Incredible ELK", Fig. 3) %
 
-%%% Inference rules (from "The Incredible ELK", Fig. 3)
+%%% Rule "R_0". Every initialized class is a subclass of itself. 
+infSubClassOf(?C,?C) :- infInit(?C) .
 
-% R_0
-inf:subClassOf(?C,?C) :- inf:init(?C) .
+%%% Rule "R_\top". The top class owl:Thing is a superclass of all classes (especially of all named classes).
+infSubClassOf(?C, owl:Thing) :- namedClass(?C), isSubClass(owl:Thing) .
 
-% R_\top
-inf:subClassOf(?C,owl:Thing) :-
-	nf:isMainClass(?C), nf:isSubClass(owl:Thing) .
+%%% Rule "R_\sqcap^-". A subclass of an intersection is a subclass of both of the intersected classes.
+infSubClassOf(?C,?D1), infSubClassOf(?C,?D2) :-
+	infSubClassOf(?C,?Y), isIntersection(?Y,?D1,?D2) .
 
-% R_\sqcap^-
-inf:subClassOf(?C,?D1), inf:subClassOf(?C,?D2) :-
-	inf:subClassOf(?C,?Y), nf:conj(?Y,?D1,?D2) .
+%%% Rule "R_\sqcap^+". If a class C is a subclass of two classes D1 and D2, and there is an intersection
+%%% Y of those two classes, then C is also a subclass of Y.
+infSubClassOf(?C,?Y) :-
+	infSubClassOf(?C,?D1), infSubClassOf(?C,?D2),
+	isIntersection(?Y,?D1,?D2), isSubClass(?Y) .
 
-% R_\sqcap^+
-inf:subClassOf(?C,?Y) :-
-	inf:subClassOf(?C,?D1), inf:subClassOf(?C,?D2),
-	nf:conj(?Y,?D1,?D2), nf:isSubClass(?Y) .
+%%% Rule "R_\exists^-". If E is a subclass of a someValues-class for R and C, then
+%%% every instance of E has some R-value in C (this is the intended meaning of infEx).
+infEx(?E,?R,?C) :- infSubClassOf(?E,?Y), isSomeValues(?Y,?R,?C) .
 
-% R_\exists^-
-inf:ex(?E,?R,?C) :- inf:subClassOf(?E,?Y), nf:exists(?Y,?R,?C) .
+%%% Rule "R_\exists^+". If E is inferred to have an S-value in D (first line), and
+%%% if there is a someValues-class Y for S and D that is relevant as subclass (second line),
+%%% then infer that E is a subclass of Y. 
+infSubClassOf(?E,?Y) :-
+	infEx(?E,?R,?C), infSubClassOf(?C,?D), subProp(?R,?S),
+	isSomeValues(?Y,?S,?D), isSubClass(?Y) .
 
-% R_\exists^+
-inf:subClassOf(?E,?Y) :-
-	inf:ex(?E,?R,?C), inf:subClassOf(?C,?D),
-	nf:subProp(?R,?S), nf:exists(?Y,?S,?D), nf:isSubClass(?Y) .
+%%% R_\sqsubseteq. A subclass of a subclass is also a subclass.
+infSubClassOf(?C,?E) :-	infSubClassOf(?C,?D), subClassOf(?D,?E) .
 
-% R_\sqsubseteq
-inf:subClassOf(?C,?E) :-
-	inf:subClassOf(?C,?D), nf:subClassOf(?D,?E) .
+%%% Rule "R_\circ". If every E has some R1-value in C, and every C has some
+%%% R2-value in D, and we have supproperty (chain) information by which R1-R2-chains
+%%% lead to S, then every E has an S-value in D.
+infEx(?E,?S,?D) :-
+	infEx(?E,?R1,?C), infEx(?C,?R2,?D),
+	subProp(?R1,?S1), subProp(?R2,?S2), subPropChain(?S1,?S2,?S) .
 
-% R_\circ
-inf:ex(?E,?S,?D) :-
-	inf:ex(?E,?R1,?C), inf:ex(?C,?R2,?D),
-	nf:subProp(?R1,?S1), nf:subProp(?R2,?S2), nf:subPropChain(?S1,?S2,?S) .
+%%% Rule "R_\bot". If every E has some R-value in C, and C is empty (subclass of owl:Nothing),
+%%% then E is also empty.
+infSubClassOf(?E, owl:Nothing) :- infEx(?E,?R,?C), infSubClassOf(?C, owl:Nothing) .
 
-% R_\bot
-inf:subClassOf(?E,owl:Nothing) :-
-	inf:ex(?E,?R,?C), inf:subClassOf(?C,owl:Nothing) .
+%%% Rule "R_init". If every E has an R-value in C, then initialize C.
+infInit(?C) :- infEx(?E,?R,?C) .
 
-% R_init
-inf:init(?C) :- inf:ex(?E,?R,?C) .
+%%% Extract final results for main classes.
+mainSubClassOf(?A,?B) :- infSubClassOf(?A,?B), namedClass(?A), namedClass(?B) .
 
-%%% Extract final results for main classes
-
-mainSubClassOf(?A,?B) :-
-	inf:subClassOf(?A,?B), nf:isMainClass(?A), nf:isMainClass(?B) .
-
+%%% Output only the subclass of relation between main classes.
 @output mainSubClassOf .
+
+% Optionally also show preprocessed ontology axioms:
+% %%% subClassOf(C,D): C is syntactically specified to be a subclass of D 
+% @output subClassOf .
+% %%% subProp(R,S): R is a subproperty of S (directly or indirectly) 
+% @output subProp . 
+% %%% subPropChain(S1,S2,R): there was an OWL propery chain axiom S1 o S2 -> R
+% @output subPropChain .
+% %%% isIntersection(C,D1,D2): C is the intersection of D1 and D2
+% @output isIntersection .
+% %%% isSomeValues(C,P,D): C is the existential restriction (SomeValuesFrom) of property P with values from D
+% @output isSomeValues .
+% %%% isSubClass(C): C occurs in a subclass position (i.e., "negatively") 
+% @output isSubClass .
