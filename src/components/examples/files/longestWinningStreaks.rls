@@ -68,12 +68,12 @@ sportsEvent(?event) :- wdTriple(?event, wdt:P3450, $eventType) .
 %%% Who won these events?
 winner(?event, ?winner) :- sportsEvent(?event), wdTriple(?event, wdt:P1346, ?winner) .
 %%% Which events followed within the same series?
-next(?event,?next) :- sportsEvent(?event), wdEventInSeriesFollowedBy(?event, $eventType, ?next ) .
+next(?event, ?next) :- sportsEvent(?event), wdEventInSeriesFollowedBy(?event, $eventType, ?next ) .
 
 %%% Find the events that had the same winner as the previous one:
-sameWinnerAsPrevious(?championship) :- next(?previous, ?championship), winner(?championship,?winner), winner(?previous,?winner) .
+sameWinnerAsPrevious(?event) :- next(?previous, ?event), winner(?event, ?winner), winner(?previous, ?winner) .
 %%% A streak starts at an event if it does not have the same winner as the previous one:
-streakStart(?championship) :- sportsEvent(?championship), ~sameWinnerAsPrevious(?championship) .
+streakStart(?event) :- sportsEvent(?event), ~sameWinnerAsPrevious(?event) .
 
 %%% The start of a streak is on the streak:
 onStreak(?start, ?start) :- streakStart(?start) .

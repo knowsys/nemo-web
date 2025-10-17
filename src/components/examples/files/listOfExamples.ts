@@ -5,6 +5,7 @@ import divByZeroURL from "./div-by-zero.rls?url";
 import findCommonAncestors from "./findCommonAncestors.rls?url";
 import findCommonAncestorsWikidata from "./findCommonAncestorsWikidata.rls?url";
 import wikipediaTitlesVsLabels from "./wikipediaTitlesVsLabels.rls?url";
+import longestWinningStreaks from "./longestWinningStreaks.rls?url";
 
 export const listOfExamples: {
   name: string;
@@ -25,6 +26,10 @@ export const listOfExamples: {
   {
     name: "Old trees (CSV, Wikidata)",
     url: oldLimeTreesURL,
+  },
+  {
+    name: "Winning streaks in sports (Wikidata, SPARQL, conditional path length)",
+    url: longestWinningStreaks,
   },
   {
     name: "Ontology reasoning in OWL EL (from preprocessed ontologies)",
