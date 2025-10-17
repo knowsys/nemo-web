@@ -1,69 +1,76 @@
-%%% Div by Zero Analysis using pre-generated inputs based on the following Java Program
-% class Div {
-%   void byZero() {
-%     int a = 42;
-%     int b = 21;
-%     a = a - b * 2;
-%     if (a) {
-%       int a = 0;
-%       return;
-%     }
-%     int b = 10 / a;
-%   }
-% }
-%
+%! Program analysis (div by 0 for Java)
+%! 
+%! This example shows how to perform a data-flow analysis based on structural
+%! information about program code (in this case Java), as popularized by CodeQuest
+%! and DOOP. The input data contains tables that encodes the sytnactic structure
+%! of the program (abstract syntax tree, AST), and Def/DefUse information that tracks
+%! where previously assigned values are used.
+%!
+%! The input is based on the following Java Program:
+%! 
+%! class Div {
+%!   void byZero() {
+%!     int a = 42;
+%!     int b = 21;
+%!     a = a - b * 2;
+%!     if (a) {
+%!       int a = 0;
+%!       return;
+%!     }
+%!     int b = 10 / a;
+%!   }
+%! }
+%!
 
 @import AST :- tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/AST.tsv",format=(skip, int, int, string, string, string)}.
 @import Def :- tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/Def.tsv",format=(skip, int, int, skip)}.
 @import DefUse :- tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/DefUse.tsv",format=(skip, int, int, skip, skip, skip)}.
 
-% We compute certain operations from the AST using Nemo; first we list them.
-BinOp("AddExpr").
-BinOp("SubExpr").
-BinOp("MulExpr").
-BinOp("DivExpr").
+% Part 1: Preprocess the Abstract Syntax Tree for simplification
 
-% We assume that we have a single file and extract certain relations/expressions from the AST for simplification.
-Parent(?node, ?parentNode) :- AST(?node, ?parentNode, _, _, _).
+%%% Extract parent relationships from AST lines:
+parent(?node, ?parentNode) :- AST(?node, ?parentNode, _, _, _) .
+%%% Extract nodes with "Opt" expressions:
+optExpr(?node) :- AST(?node, _, "Opt", _, _) .
 
-OptExpr(?node) :- AST(?node, _, "Opt", _, _).
-BinExpr(?node, ?operation) :- AST(?node, _, ?operation, _, _), BinOp(?operation).
+% The following binary operations (named as in the AST) are of interest to us:
+binOp("AddExpr").  binOp("SubExpr").  binOp("MulExpr").  binOp("DivExpr") .
+%%% Extract relevant binary operations:
+binExpr(?node, ?operation, ?childNode1, ?childNode2) :-
+  AST(?node, _, ?operation, _, _),
+  binOp(?operation),
+  parent(?childNode1, ?node),
+  parent(?childNode2, ?node),
+  ?childNode1 < ?childNode2 .
+%%% Extract integer literals:
+intLiteral(?node, INT(?val)) :- AST(?node, _, "IntegerLiteral", _, ?val) .
 
-IntLiteral(?node, INT(?val)) :- AST(?node,_,"IntegerLiteral",_,?val).
 
-% We compute results of expressions in AST nodes.
-ExprResult(?node, ?val) :- IntLiteral(?node, ?val).
+% Part 2: Recursively compute results of expressions in AST nodes
 
-BinaryExpression(?node, ?operation, ?x, ?y) :- 
-  BinExpr(?node, ?operation), 
-  Parent(?childNode1, ?node), 
-  Parent(?childNode2, ?node),
-  ?childNode1 < ?childNode2,
-  ExprResult(?childNode1, ?x),
-  ExprResult(?childNode2, ?y).
-
-ExprResult(?node, ?x + ?y) :- BinaryExpression(?node, "AddExpr", ?x, ?y) .
-ExprResult(?node, ?x - ?y) :- BinaryExpression(?node, "SubExpr", ?x, ?y) .
-ExprResult(?node, ?x * ?y) :- BinaryExpression(?node, "MulExpr", ?x, ?y) .
-ExprResult(?node, ?x / ?y) :- BinaryExpression(?node, "DivExpr", ?x, ?y) .
+exprResult(?node, ?val) :- intLiteral(?node, ?val).
+exprResult(?node, ?v1 + ?v2) :- binExpr(?node, "AddExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
+exprResult(?node, ?v1 - ?v2) :- binExpr(?node, "SubExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
+exprResult(?node, ?v1 * ?v2) :- binExpr(?node, "MulExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
+exprResult(?node, ?v1 / ?v2) :- binExpr(?node, "DivExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
 
 % Propagate sub-expression results through constant variables
-ConstantVar(?defNode, ?val) :-
+constantVar(?defNode, ?val) :-
   Def(?assignmentNode, ?defNode),
-  Parent(?exprNode, ?assignmentNode),
-  ExprResult(?exprNode, ?val) .
-ConstantVar(?defNode, ?val) :-
+  parent(?exprNode, ?assignmentNode),
+  exprResult(?exprNode, ?val) .
+constantVar(?defNode, ?val) :-
   Def(?assignmentNode, ?defNode),
-  Parent(?exprNode, ?intermediate),
-  OptExpr(?intermediate),
-  Parent(?intermediate, ?assignmentNode),
-  ExprResult(?exprNode, ?val).
+  parent(?exprNode, ?intermediate),
+  optExpr(?intermediate),
+  parent(?intermediate, ?assignmentNode),
+  exprResult(?exprNode, ?val).
 
-ExprResult(?useNr, ?val) :- DefUse(?defNr, ?useNr), ConstantVar(?defNr, ?val) .
+exprResult(?useNr, ?val) :- DefUse(?defNr, ?useNr), constantVar(?defNr, ?val) .
 
-% Check for Divisions by Zero
-DivByZeroError(?node) :- BinaryExpression(?node, "DivExpr", _, 0) .
+%%% Check for Divisions by Zero
+message(f"Detected division by zero in node {STR(?node)} of the syntax tree!") :-
+	binExpr(?node, "DivExpr", _, ?c2), exprResult(?c2, 0) .
 
-Message( CONCAT("Detected division by zero in node ", STR(?node), " of the syntax tree!")) :- DivByZeroError(?node) .
-@output Message.
-
+%%% Output all messages:
+@output message.
