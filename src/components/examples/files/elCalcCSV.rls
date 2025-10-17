@@ -1,78 +1,102 @@
-% OWL EL Reasoning on preprocessed ontologies
-% See https://github.com/knowsys/nemo-examples/tree/main/examples/owl-el/from-preprocessed-csv
-%
-% This example shows how Nemo can be used to implement the core reasoning algorithm for the ontology language OWL EL,
-% based on preprocessed input files (in CSV format) that encode the ontology in a relational format.
-%
-% The rules file `el-calc.rls` contains a small number of plain Datalog rules that do the work.
-% The ontology is read from the `data` directory, where a preprocessed version of the Galen EL ontology is found.
-% Other ontologies can also be used: suitable preprocessed files can also be created with Nemo, using the 
-% logic program for EL reasoning from OWL/RDF: https://github.com/knowsys/nemo-examples/tree/main/examples/owl-el/from-owl-rdf
+%! Ontology reasoning for OWL EL (preprocessed ontology)
+%!
+%! This example implements a complete reasoning algorithm for inferring all
+%! subclass-of relations that follow from an ontology in the language OWL EL.
+%! In this example, the ontology has been preprocessed and encoded in CSV files.
+%! (There is another example that implements the preprocessing in Nemo.)
+%! The ontology used here is an OWL EL version of the medical ontology "Galen".
+%!
+%! This example shows:
+%! - how to load compressed data from online CSV files
+%! - how to encode OWL reasoning rules from a research paper in simple (Datalog) rules
+%!
+%! The actual 11 rules used here correspond to the inference rules developed in
+%! the following paper (see Figure 3):
+%!
+%! Y. Kazakov, M. Krötzsch, F. Simancik. The Incredible ELK: From Polynomial
+%! Procedures to Efficient Reasoning with EL Ontologies. J Autom. Reasoning, 2014.
+%! doi: 10.1007/S10817-013-9296-3
 
-@prefix nf: <http://rulewerk.semantic-web.org/normalForm/> .
-@prefix inf: <http://rulewerk.semantic-web.org/inferred/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix genid: <https://rulewerk.semantic-web.org/.well-known/genid/> .
 
-@import nf:isMainClass :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/isMainClass.csv.gz"} .
-@import nf:isSubClass :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/isSubClass.csv.gz"} .
-@import nf:conj :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/conj.csv.gz"} .
-@import nf:exists :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/exists.csv.gz"} .
-@import nf:subClassOf :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subClassOf.csv.gz"} .
-@import nf:subPropChain :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subPropChain.csv.gz"} .
-@import nf:subProp :- csv{resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/subProp.csv.gz"} .
+%%% Reuse same string for all imported files:
+@parameter $dataDir = "https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-preprocessed-csv/data/" .
 
-%%% Start classification for all named classes:
+%%% Import namedClass. The data contains some auxiliary class names that were created
+%%% during the pre-processing. A fact namedClass(C) means that C is not auxiliary.
+@import namedClass :- csv{resource = f"{$dataDir}isMainClass.csv.gz"} .
 
-inf:init(?C) :- nf:isMainClass(?C) .
+%%% Import subClassOf. A fact subClassOf(C,D) means that C is a subclass of D.
+@import subClassOf :- csv{resource = f"{$dataDir}subClassOf.csv.gz"} .
+%%% Import subProp. A fact subProp(R,S) means that R is a subproperty of S.
+@import subProp :- csv{resource = f"{$dataDir}subProp.csv.gz"} .
+%%% Import subPropChain. A fact subPropChain(R,S,T) means that R, S, and T are properties,
+%%% such that R(x,y) and S(y,z), then also T(x,z), as in subPropChain(parent,brother,uncle). 
+@import subPropChain :- csv{resource = f"{$dataDir}subPropChain.csv.gz"} .
 
-%%% Inference rules (from "The Incredible ELK", Fig. 3)
+%%% Import isIntersection. A fact isIntersection(C,A,B) means that class C is the
+%%% intersection of A and B.
+@import isIntersection :- csv{resource = f"{$dataDir}conj.csv.gz"} .
+%%% Import exiisSomeValuests. A fact isSomeValue(C,R,D) means that class C is the class of
+%%% all things that have some value for property R that is an instance of class D.
+@import isSomeValue :- csv{resource = f"{$dataDir}exists.csv.gz"} .
 
-% R_0
-inf:subClassOf(?C,?C) :- inf:init(?C) .
+%%% Import isSubClass. A fact isSubClass(C) means that C occurs in a subclass position
+%%% somewhere in the ontology.
+@import isSubClass :- csv{resource = f"{$dataDir}isSubClass.csv.gz"} .
 
-% R_\top
-inf:subClassOf(?C,owl:Thing) :-
-	nf:isMainClass(?C), nf:isSubClass(owl:Thing) .
+%%% Start classification for all named classes. Superclasses are only computed for
+%%% classes that are "initialized".
+infInit(?C) :- namedClass(?C) .
 
-% R_\sqcap^-
-inf:subClassOf(?C,?D1), inf:subClassOf(?C,?D2) :-
-	inf:subClassOf(?C,?Y), nf:conj(?Y,?D1,?D2) .
+% Inference rules (from "The Incredible ELK", Fig. 3) %
 
-% R_\sqcap^+
-inf:subClassOf(?C,?Y) :-
-	inf:subClassOf(?C,?D1), inf:subClassOf(?C,?D2),
-	nf:conj(?Y,?D1,?D2), nf:isSubClass(?Y) .
+%%% Rule "R_0". Every initialized class is a subclass of itself. 
+infSubClassOf(?C,?C) :- infInit(?C) .
 
-% R_\exists^-
-inf:ex(?E,?R,?C) :- inf:subClassOf(?E,?Y), nf:exists(?Y,?R,?C) .
+%%% Rule "R_\top". The top class owl:Thing is a superclass of all classes (especially of all named classes).
+infSubClassOf(?C, owl:Thing) :- namedClass(?C), isSubClass(owl:Thing) .
 
-% R_\exists^+
-inf:subClassOf(?E,?Y) :-
-	inf:ex(?E,?R,?C), inf:subClassOf(?C,?D),
-	nf:subProp(?R,?S), nf:exists(?Y,?S,?D), nf:isSubClass(?Y) .
+%%% Rule "R_\sqcap^-". A subclass of an intersection is a subclass of both of the intersected classes.
+infSubClassOf(?C,?D1), infSubClassOf(?C,?D2) :-
+	infSubClassOf(?C,?Y), isIntersection(?Y,?D1,?D2) .
 
-% R_\sqsubseteq
-inf:subClassOf(?C,?E) :-
-	inf:subClassOf(?C,?D), nf:subClassOf(?D,?E) .
+%%% Rule "R_\sqcap^+". If a class C is a subclass of two classes D1 and D2, and there is an intersection
+%%% Y of those two classes, then C is also a subclass of Y.
+infSubClassOf(?C,?Y) :-
+	infSubClassOf(?C,?D1), infSubClassOf(?C,?D2),
+	isIntersection(?Y,?D1,?D2), isSubClass(?Y) .
 
-% R_\circ
-inf:ex(?E,?S,?D) :-
-	inf:ex(?E,?R1,?C), inf:ex(?C,?R2,?D),
-	nf:subProp(?R1,?S1), nf:subProp(?R2,?S2), nf:subPropChain(?S1,?S2,?S) .
+%%% Rule "R_\exists^-". If E is a subclass of a someValues-class for R and C, then
+%%% every instance of E has some R-value in C (this is the intended meaning of infEx).
+infEx(?E,?R,?C) :- infSubClassOf(?E,?Y), isSomeValue(?Y,?R,?C) .
 
-% R_\bot
-inf:subClassOf(?E,owl:Nothing) :-
-	inf:ex(?E,?R,?C), inf:subClassOf(?C,owl:Nothing) .
+%%% Rule "R_\exists^+". If E is inferred to have an S-value in D (first line), and
+%%% if there is a someValues-class Y for S and D that is relevant as subclass (second line),
+%%% then infer that E is a subclass of Y. 
+infSubClassOf(?E,?Y) :-
+	infEx(?E,?R,?C), infSubClassOf(?C,?D), subProp(?R,?S),
+	isSomeValue(?Y,?S,?D), isSubClass(?Y) .
 
-% R_init
-inf:init(?C) :- inf:ex(?E,?R,?C) .
+%%% R_\sqsubseteq. A subclass of a subclass is also a subclass.
+infSubClassOf(?C,?E) :-	infSubClassOf(?C,?D), subClassOf(?D,?E) .
 
-%%% Extract final results for main classes
+%%% Rule "R_\circ". If every E has some R1-value in C, and every C has some
+%%% R2-value in D, and we have supproperty (chain) information by which R1-R2-chains
+%%% lead to S, then every E has an S-value in D.
+infEx(?E,?S,?D) :-
+	infEx(?E,?R1,?C), infEx(?C,?R2,?D),
+	subProp(?R1,?S1), subProp(?R2,?S2), subPropChain(?S1,?S2,?S) .
 
-mainSubClassOf(?A,?B) :-
-	inf:subClassOf(?A,?B), nf:isMainClass(?A), nf:isMainClass(?B) .
+%%% Rule "R_\bot". If every E has some R-value in C, and C is empty (subclass of owl:Nothing),
+%%% then E is also empty.
+infSubClassOf(?E, owl:Nothing) :- infEx(?E,?R,?C), infSubClassOf(?C, owl:Nothing) .
 
+%%% Rule "R_init". If every E has an R-value in C, then initialize C.
+infInit(?C) :- infEx(?E,?R,?C) .
+
+%%% Extract final results for main classes.
+mainSubClassOf(?A,?B) :- infSubClassOf(?A,?B), namedClass(?A), namedClass(?B) .
+
+%%% Output only the subclass of relation between main classes.
 @output mainSubClassOf .

@@ -27,11 +27,11 @@ export const listOfExamples: {
     url: oldLimeTreesURL,
   },
   {
-    name: "OWL EL Reasoning on preprocessed ontologies",
+    name: "Ontology reasoning in OWL EL (from preprocessed ontologies)",
     url: elCalcCSVURL,
   },
   {
-    name: "OWL EL Reasoning from OWL/RDF",
+    name: "Ontology reasoning in OWL EL (from OWL/RDF)",
     url: elCalcOWLRDFURL,
   },
   {
