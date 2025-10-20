@@ -10,6 +10,7 @@
 %! - how to use parameters to define values that matter to a program,
 %! - how to match records across data sets based on identifiers and labels,
 %! - how to use aggregation to sum up emission values,
+%! - how to use REGEX to check data formats,
 %! - how to select predicates for output.
 %!
 %! Note: The Carbon Majors data is from https://carbonmajors.org/Downloads,
