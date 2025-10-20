@@ -7,6 +7,7 @@ import findCommonAncestorsWikidata from "./findCommonAncestorsWikidata.rls?url";
 import wikipediaTitlesVsLabels from "./wikipediaTitlesVsLabels.rls?url";
 import longestWinningStreaks from "./longestWinningStreaks.rls?url";
 import carbonMajorCountries from "./carbonMajorCountries.rls?url";
+import emptyWikidataClasses from "./emptyWikidataClasses.rls?url";
 
 export const listOfExamples: {
   name: string;
