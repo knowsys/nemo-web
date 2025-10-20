@@ -38,6 +38,10 @@ export const listOfExamples: {
     url: carbonMajorCountries,
   },
   {
+    name: "Empty classes in Wikidata (Wikidata ontology analysis, SPARQL)",
+    url: emptyWikidataClasses,
+  },
+  {
     name: "Ontology reasoning in OWL EL (from preprocessed ontologies)",
     url: elCalcCSVURL,
   },
