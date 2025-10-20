@@ -6,6 +6,7 @@ import findCommonAncestors from "./findCommonAncestors.rls?url";
 import findCommonAncestorsWikidata from "./findCommonAncestorsWikidata.rls?url";
 import wikipediaTitlesVsLabels from "./wikipediaTitlesVsLabels.rls?url";
 import longestWinningStreaks from "./longestWinningStreaks.rls?url";
+import carbonMajorCountries from "./carbonMajorCountries.rls?url";
 
 export const listOfExamples: {
   name: string;
@@ -30,6 +31,10 @@ export const listOfExamples: {
   {
     name: "Winning streaks in sports (Wikidata, SPARQL, conditional path length)",
     url: longestWinningStreaks,
+  },
+  {
+    name: "CO2 emitting countries (CSV+Wikidata integration, aggregation)",
+    url: carbonMajorCountries,
   },
   {
     name: "Ontology reasoning in OWL EL (from preprocessed ontologies)",

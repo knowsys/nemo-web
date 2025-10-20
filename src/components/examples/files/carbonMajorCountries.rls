@@ -1,0 +1,93 @@
+%! Industrial carbon emissions by country 
+%!
+%! This example analyzes CO2 emissions by the world's most poluting
+%! companies and assigns them to countries (where the company is based).
+%! To do this, simple company data provided by Carbon Majors is aligned
+%! with companies found on Wikidata, where country information is found.
+%! 
+%! The example shows:
+%! - how to import data from CSV and SPARQL,
+%! - how to use parameters to define values that matter to a program,
+%! - how to match records across data sets based on identifiers and labels,
+%! - how to use aggregation to sum up emission values,
+%! - how to select predicates for output.
+%!
+%! Note: The Carbon Majors data is from https://carbonmajors.org/Downloads,
+%! but we load a copy from github since they don't serve the files in a way
+%! that works with browser security restrictions.
+
+%%% Year to analyze (max. 2023).
+@parameter $yearOfInterest = 2023 .
+%%% Main SPARQL endpoint to use
+@parameter $sparqlService = <https://query.wikidata.org/sparql> .
+% @parameter $sparqlService = <https://qlever.cs.uni-freiburg.de/api/wikidata> .
+
+%%% Carbon Majors data. LEIs (legal entity IDs) are not given for all companies.
+%%% Schema: cmData(year, organisation, org-type, LEI, Mt CO2 equivalent)
+@import cmData :- csv{
+  resource=<https://raw.githubusercontent.com/knowsys/nemo-examples/6a573cb08e57cdbd55b7dd6b6e9907cc2a290208/examples/carbon-emissions/emissions_low_granularity.csv>,
+  ignore_headers=true, % first line is CSV header here
+  format=(int,string,string,string,double)
+} .
+%%% Find Legal Entity Id on Wikidata.
+%%% Schema: wdLegalEntityId(QID, LEI)
+@import wdLegalEntityId :- sparql{ 
+  endpoint = $sparqlService,
+  query = """PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    SELECT ?qid ?lei WHERE { ?qid wdt:P1278 ?lei . }"""
+} .
+%%% Find Wikidata country information for ID.
+%%% Schema: wdCountry(QID, countryQID)
+@import wdCountry :- sparql{
+  endpoint = $sparqlService,
+  query = """PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    SELECT ?qid ?countryId WHERE { ?qid wdt:P17 ?countryId }"""
+} .
+%%% Find Wikidata businesses by is label. Labels are langstrings, as in "label"@en.
+%%% Schema: wdBusiness(QID, label)
+@import wdBusiness :- sparql{
+  endpoint = $sparqlService,
+  query = """
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    PREFIX wd: <http://www.wikidata.org/entity/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    SELECT ?qid ?langLabel WHERE {
+      ?qid rdfs:label ?langLabel;
+        wdt:P31/wdt:P279* wd:Q4830453 .
+    }"""
+} .
+%%% Find English Wikidata label for any ID. This uses the Wikidata labeling service,
+%%% and hence works only if QID is given (not like wdBusiness, which lets us search by label).
+%%% Schema: wdLabel(QID,label)
+@import wdLabel :- sparql {
+    endpoint = <https://query.wikidata.org/sparql>, % must be WDQS to support non-standard SERVICE
+    query = """
+      PREFIX wikibase: <http://wikiba.se/ontology#>
+      SELECT ?x ?xLabel WHERE {
+        SERVICE wikibase:label {
+          <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" }
+      }
+    """
+} .
+
+% 1. Try to find organisation on Wikidata by its LEI identifier:
+orgIdFromLEI(?org,?id) :- cmData(_,?org,_,?lei,_), ?lei!="", wdLegalEntityId(?id, ?lei) .
+
+% 2. Try to find organisation on Wikidata by its name:
+   businessId(?org,?id) :- cmData(_,?org,_,?lei,_), ~orgIdFromLEI(?org,_),
+                           wdBusiness(?id, STRLANG(?org,"en")) .
+    ambiguousName(?org) :- businessId(?org,?id1), businessId(?org,?id2), ?id1!=?id2 .
+orgIdFromName(?org,?id) :- businessId(?org,?id), ~ambiguousName(?org) .
+
+% 3. Fetch country information for every organisation found on Wikidata:
+orgCountry(?org,?countryId) :- orgIdFromLEI(?org,?qid), wdCountry(?qid,?countryId) .
+orgCountry(?org,?countryId) :- orgIdFromName(?org,?qid), wdCountry(?qid,?countryId) .
+
+% 4. Compute emissions per country (label) & sum up the rest under "Missing country":
+countryEmissionsPerYear(#sum(?Mtco2eq),?country) :- 
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgCountry(?org,?countryId),
+    wdLabel(?countryId,?countryLabel), ?country=STR(?countryLabel) . 
+countryEmissionsPerYear(#sum(?Mtco2eq),"Missing country") :- 
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), ~orgCountry(?org,_) . 
+
+@output countryEmissionsPerYear .
