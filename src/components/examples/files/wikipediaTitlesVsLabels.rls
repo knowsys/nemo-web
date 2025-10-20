@@ -2,8 +2,8 @@
 %!
 %! This example looks at a single Wikidata item, and all its Wikipedia
 %! articles and labels across different languages. The main result is a
-%! table with all languages for which the Wikipedia page have a title that
-%! is different from Wikidata's nativelabel for that language.
+%! table with all languages for which the Wikipedia page has a title that
+%! is different from Wikidata's native label for that language.
 %! 
 %! The example shows:
 %! - how to load data from an online RDF file (here in Turtle format),
@@ -52,7 +52,7 @@ labelTitleDifferent(?language, ?label, ?pageTitle, ?url) :-
 
 %%% Collect cases where labels and titles disagree after removing and part in ( ) from the title, 
 %%% and making the first letters upper case:
-labelTitleDifferentAfterNormalisation(?language, ?ucFirstLabel, ?ucFirstInitialPageTitle, ?pageTitle, ?url) :-
+labelTitleDifferentAfterNormalization(?language, ?ucFirstLabel, ?ucFirstInitialPageTitle, ?pageTitle, ?url) :-
   wikipediaPage(?url, ?pageTitle, ?language),
   wikidataLabel(?label, ?language),
   ?ucFirstLabel = f"{UCASE(SUBSTR(?label,1,1))}{SUBSTR(?label,2)}",  % make first letter upper case
