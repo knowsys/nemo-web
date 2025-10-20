@@ -1,4 +1,4 @@
-%! Industrial carbon emissions by country 
+%! Industrial carbon emissions by country
 %!
 %! This example analyzes CO2 emissions by the world's most poluting
 %! companies and assigns them to countries (where the company is based).
@@ -15,12 +15,15 @@
 %! Note: The Carbon Majors data is from https://carbonmajors.org/Downloads,
 %! but we load a copy from github since they don't serve the files in a way
 %! that works with browser security restrictions.
+%! Note 2: There are limits on how well this basic matching can work, especially
+%! since some organisations have nothing but very short names to match. It is
+%! an example.
 
-%%% Year to analyze (max. 2023).
+%%% Year to analyze (the CSV has data up until 2023).
 @parameter $yearOfInterest = 2023 .
 %%% Main SPARQL endpoint to use
 @parameter $sparqlService = <https://query.wikidata.org/sparql> .
-% @parameter $sparqlService = <https://qlever.cs.uni-freiburg.de/api/wikidata> .
+% @parameter $sparqlService = <https://qlever.dev/api/wikidata> .
 
 %%% Carbon Majors data. LEIs (legal entity IDs) are not given for all companies.
 %%% Schema: cmData(year, organisation, org-type, LEI, Mt CO2 equivalent)
@@ -80,14 +83,44 @@ orgIdFromLEI(?org,?id) :- cmData(_,?org,_,?lei,_), ?lei!="", wdLegalEntityId(?id
 orgIdFromName(?org,?id) :- businessId(?org,?id), ~ambiguousName(?org) .
 
 % 3. Fetch country information for every organisation found on Wikidata:
-orgCountry(?org,?countryId) :- orgIdFromLEI(?org,?qid), wdCountry(?qid,?countryId) .
-orgCountry(?org,?countryId) :- orgIdFromName(?org,?qid), wdCountry(?qid,?countryId) .
+orgId(?org,?qid) :- orgIdFromLEI(?org,?qid) .
+orgId(?org,?qid) :- orgIdFromName(?org,?qid) .
+orgCountry(?org,?countryId) :- orgId(?org,?qid), wdCountry(?qid,?countryId) .
+orgCountry(?org,?countryId) :- orgId(?org,?qid), wdCountry(?qid,?countryId) .
 
 % 4. Compute emissions per country (label) & sum up the rest under "Missing country":
-countryEmissionsPerYear(#sum(?Mtco2eq),?country) :- 
-    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgCountry(?org,?countryId),
-    wdLabel(?countryId,?countryLabel), ?country=STR(?countryLabel) . 
-countryEmissionsPerYear(#sum(?Mtco2eq),"Missing country") :- 
+countryEmissionsPerYear(#sum(?Mtco2eq),STR(?countryLabel)) :- 
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgCountry(?org,?countryId), wdLabel(?countryId,?countryLabel) . 
+countryEmissionsPerYear(#sum(?Mtco2eq),"MISSING COUNTRY") :- 
     cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), ~orgCountry(?org,_) . 
 
+% 5. Create lists of organisations for which data integration has failed or partly failed:
+matchedOrgsWithLEI(?Mtco2eq,?org,?lei,?type,STR(?countryLabel),?qid) :-
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgIdFromLEI(?org,?qid),
+    orgCountry(?org,?countryId), wdLabel(?countryId,?countryLabel) .
+matchedOrgsWithUnmatchingLEI(?Mtco2eq,?org,?lei,?type,STR(?countryLabel),?qid) :-
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgIdFromName(?org,?qid),
+    REGEX(?lei,"[0-9A-Z]{18}[0-9]{2}"),
+    orgCountry(?org,?countryId), wdLabel(?countryId,?countryLabel) .
+matchedOrgsWithoutLEI(?Mtco2eq,?org,?lei,?type,STR(?countryLabel),?qid) :-
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgIdFromName(?org,?qid),
+    ~matchedOrgsWithUnmatchingLEI(?Mtco2eq,?org,?lei,?type,_,_),
+    orgCountry(?org,?countryId), wdLabel(?countryId,?countryLabel) .
+missingCountryOrgs(?Mtco2eq,?org,?lei,?type,?qid) :-
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgId(?org,?qid), ~orgCountry(?org,_) .
+unmatchedOrgsWithLEI(?Mtco2eq,?org,?lei,?type) :-
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), ~orgId(?org,_),
+    REGEX(?lei,"[0-9A-Z]{18}[0-9]{2}") . 
+unmatchedOrgsWithoutLEI(?Mtco2eq,?org,?lei,?type) :-
+    cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), ~orgId(?org,_),
+    ~unmatchedOrgsWithLEI(?Mtco2eq,?org,?lei,?type) .
+
+
 @output countryEmissionsPerYear .
+@output matchedOrgsWithLEI .
+@output matchedOrgsWithUnmatchingLEI .
+@output matchedOrgsWithoutLEI .
+@output missingCountryOrgs .
+@output unmatchedOrgsWithLEI .
+@output unmatchedOrgsWithoutLEI .
+
