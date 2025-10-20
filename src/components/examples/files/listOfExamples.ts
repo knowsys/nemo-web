@@ -7,6 +7,7 @@ import findCommonAncestorsWikidata from "./findCommonAncestorsWikidata.rls?url";
 import wikipediaTitlesVsLabels from "./wikipediaTitlesVsLabels.rls?url";
 import longestWinningStreaks from "./longestWinningStreaks.rls?url";
 import carbonMajorCountries from "./carbonMajorCountries.rls?url";
+import emptyWikidataClasses from "./emptyWikidataClasses.rls?url";
 
 export const listOfExamples: {
   name: string;
@@ -35,6 +36,10 @@ export const listOfExamples: {
   {
     name: "CO2 emitting countries (CSV+Wikidata integration, aggregation)",
     url: carbonMajorCountries,
+  },
+  {
+    name: "Empty classes in Wikidata (Wikidata ontology analysis, SPARQL)",
+    url: emptyWikidataClasses,
   },
   {
     name: "Ontology reasoning in OWL EL (from preprocessed ontologies)",

@@ -1,0 +1,100 @@
+%! Empty classes in Wikidata
+%!
+%! This example looks for Wikidata classes that cannot have instances if
+%! we want to respect the stated disjointness of some classes. Disjointness
+%! means that two classes must not have common instances and is stated in
+%! disjoint-union statements (P2738). A class that is subclass to two disjoint
+%! classes must be empty.
+%! 
+%! The example shows:
+%! - how to import Wikidata content from SPARQL,
+%! - how to find all subproperties of a property, with their direct (wdt:) IRIs,
+%! - how to find maximal classes in a class hierarchy (while being prepared for cycles in that hierarchy).
+%!
+%! Note: There might not (currently) be any cycles in the class hierarchy, but
+%! it is still good practice to consider this case in code that is meant to detect
+%! modelling errors.
+
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+
+%%% Main SPARQL endpoint to use
+@parameter $sparqlService = <https://query.wikidata.org/sparql> .
+% @parameter $sparqlService = <https://qlever.dev/api/wikidata> .
+
+%%% Import "wdDisjointUnionStatement" (Qid, DisjointUnionStatement, class in list). Note that one
+%%% item may have several disjoint union statements with different lists of classes, hence it is
+%%% important to keep the statement (only classes listed in the same statement are disjoint).
+@import wdDisjointUnionStatement :- sparql{
+  endpoint = $sparqlService,
+  query="""
+    PREFIX p: <http://www.wikidata.org/prop/>
+    PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+    PREFIX wikibase: <http://wikiba.se/ontology#>
+    SELECT ?qid ?statement ?listItem
+    WHERE {
+      ?qid p:P2738 ?statement .
+      ?statement pq:P11260 ?listItem . 
+      MINUS { ?statement wikibase:rank wikibase:DeprecatedRank . }  
+    }"""
+} .
+%%% Import "wdTriple" as a predicate for accessing any RDF triple from Wikidata:
+@import wdTriple :- sparql{
+  endpoint = $sparqlService,
+  query = "SELECT ?subject ?prop ?value WHERE { ?subject ?prop ?value }"
+} .
+%%% Import "wdLabel" (Wikidata item, English label). This query uses the Wikidata
+%%% label service (won't work in other SPARQL endpoints). Nemo will inject bindings
+%%% for ?x during reasoning.
+@import wdLabel :- sparql{
+  endpoint = <https://query.wikidata.org/sparql>,
+  query = """
+    PREFIX wikibase: <http://wikiba.se/ontology#>
+    SELECT ?qid ?qidLabel WHERE {
+      SERVICE wikibase:label {
+        <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" } }"""
+} .
+
+% Get disjoint classes:
+disjointPart(?qid, ?statement, ?listItem) :- wdDisjointUnionStatement(?qid, ?statement, ?listItem) .
+disjointClasses(?class1, ?class2), disjointClass(?class1), disjointClass(?class2) :-
+  disjointPart(?qid, ?statement, ?class1),
+  disjointPart(?qid, ?statement, ?class2),
+  COMPARE(STR(?class1), STR(?class2)) = 1 . % compare strings to break symmetries in disjointClasses()
+
+% Find subclass-of subproperties:
+subclassProperty(wd:P279) .
+subclassProperty(?subProp) :- subclassProperty(?prop), wdTriple(?subProp, wdt:P1647, ?prop) .
+subclassDirectProperty( IRI(f"http://www.wikidata.org/prop/direct/{?pid}") ) :-
+  subclassProperty(?prop), ?pid = SUBSTR(STR(?prop),STRLEN(STR(wd:P))) .
+
+% Find subclass paths to all classes involved in disjointness:
+subclassOfPlus(?class1, ?class2) :- disjointClass(?class1), subclassDirectProperty(?prop), wdTriple(?class1, ?prop, ?class2) .
+subclassOfPlus(?class1, ?class2) :- subclassOfPlus(?class1, ?c), subclassDirectProperty(?prop), wdTriple(?c, ?prop, ?class2) .
+
+% Add reflexive relations, but only for the disjoint classes:
+subclassOfOrEqual(?class1, ?class1) :- disjointClass(?class1) .
+subclassOfOrEqual(?class1, ?class2) :- subclassOfPlus(?class1, ?class2) .
+
+% Find empty classes, maximal empty classes, and empty classes in cycles (which are never maximal):
+   empty(?emptyClass, ?class1, ?class2) :- subclassOfOrEqual(?emptyClass, ?class1), subclassOfOrEqual(?emptyClass, ?class2), disjointClasses(?class1, ?class2).
+        hasEmptySuperClass(?emptyClass) :- subclassOfPlus(?emptyClass, ?superClass), empty(?superClass, _, _) .
+emptyMax(?emptyClass, ?class1, ?class2) :- empty(?emptyClass, ?class1, ?class2), ~hasEmptySuperClass(?emptyClass) .
+ emptyOnCycle(?class, ?class1, ?class2) :- empty(?class, ?class1, ?class2), subclassOfPlus(?class, ?class) .
+
+% Fetch and join some labels:
+% Note: creating a local label/2 predicate is currently necessary to work around a bug; will be fixed in v0.9.
+label(?class, ?classLabel) :- disjointClass(?class), wdLabel(?class, ?classLabel) .
+label(?class, ?classLabel) :- empty(?class, _, _), wdLabel(?class, ?classLabel) .
+
+emptyMaxLabels(?class, ?classLabel, ?class1, ?class1Label, ?class2, ?class2Label) :-
+  emptyMax(?class, ?class1, ?class2), label(?class,?classLabel), label(?class1,?class1Label), label(?class2,?class2Label) .
+emptyOnCycleLabels(?class, ?classLabel, ?class1, ?class1Label, ?class2, ?class2Label) :-
+  emptyOnCycle(?class, ?class1, ?class2), label(?class,?classLabel), label(?class1,?class1Label), label(?class2,?class2Label) .
+
+% Select output predicates:
+@output emptyMaxLabels .
+@output emptyOnCycleLabels .
+@output subclassDirectProperty .
+% @output disjointClasses .
+% @output empty .
