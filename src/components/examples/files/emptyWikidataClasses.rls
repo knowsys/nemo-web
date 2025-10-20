@@ -20,7 +20,7 @@
 
 %%% Main SPARQL endpoint to use
 @parameter $sparqlService = <https://query.wikidata.org/sparql> .
-% @parameter $sparqlService = <https://qlever.cs.uni-freiburg.de/api/wikidata> .
+% @parameter $sparqlService = <https://qlever.dev/api/wikidata> .
 
 %%% Import "wdDisjointUnionStatement" (Qid, DisjointUnionStatement, class in list). Note that one
 %%% item may have several disjoint union statements with different lists of classes, hence it is
