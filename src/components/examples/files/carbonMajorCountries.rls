@@ -47,7 +47,7 @@
   query = """PREFIX wdt: <http://www.wikidata.org/prop/direct/>
     SELECT ?qid ?countryId WHERE { ?qid wdt:P17 ?countryId }"""
 } .
-%%% Find Wikidata businesses by is label. Labels are langstrings, as in "label"@en.
+%%% Find Wikidata businesses by their label. Labels are langstrings, as in "label"@en.
 %%% Schema: wdBusiness(QID, label)
 @import wdBusiness :- sparql{
   endpoint = $sparqlService,
