@@ -1,0 +1,27 @@
+%! Find common ancestors of Alice and Finley.
+%!
+%! This basic example shows how to use rules to move around
+%! and select data. All data in this case comes from facts
+%! stated in the program, and only simple rules are used.
+%! 
+%! The example shows:
+%! - how to write simple facts and rules,
+%! - how to make comments.
+
+% Some family data:
+father(alice, bob) .
+mother(alice, cho) .
+father(cho, daniel) .
+mother(cho, eiko) .
+mother(finley, eiko) .
+
+% Fathers and mothers are also parents:
+parent(?child, ?father) :- father(?child, ?father) .
+parent(?child, ?mother) :- mother(?child, ?mother) .
+
+% Ancestors are parents, and the parents of ancestors:
+ancestor(?child, ?parent) :- parent(?child, ?parent) .
+ancestor(?child, ?parent) :- ancestor(?child, ?ancestor), parent(?ancestor, ?parent) .
+
+% Common ancestors of Alice and Finley:
+ancestorOfBoth(?ancestor) :- ancestor(alice, ?ancestor), ancestor(finley, ?ancestor) .

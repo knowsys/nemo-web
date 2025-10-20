@@ -2,26 +2,46 @@ import elCalcCSVURL from "./elCalcCSV.rls?url";
 import elCalcOWLRDFURL from "./elCalcOWLRDF.rls?url";
 import oldLimeTreesURL from "./oldLimeTrees.rls?url";
 import divByZeroURL from "./div-by-zero.rls?url";
-import findCommonDescendants from "./findCommonDescendants.rls?url";
+import findCommonAncestors from "./findCommonAncestors.rls?url";
+import findCommonAncestorsWikidata from "./findCommonAncestorsWikidata.rls?url";
+import wikipediaTitlesVsLabels from "./wikipediaTitlesVsLabels.rls?url";
+import longestWinningStreaks from "./longestWinningStreaks.rls?url";
+import carbonMajorCountries from "./carbonMajorCountries.rls?url";
 
 export const listOfExamples: {
   name: string;
   url: string;
 }[] = [
   {
-    name: "Find Common Descendants",
-    url: findCommonDescendants,
+    name: "Ancestors (basic)",
+    url: findCommonAncestors,
   },
   {
-    name: "Old lime trees",
+    name: "Ancestors of Ada and Moby (Wikidata, SPARQL)",
+    url: findCommonAncestorsWikidata,
+  },
+  {
+    name: "Wikipedia articles vs. labels (Wikidata, RDF, string functions)",
+    url: wikipediaTitlesVsLabels,
+  },
+  {
+    name: "Old trees (CSV, Wikidata)",
     url: oldLimeTreesURL,
   },
   {
-    name: "OWL EL Reasoning on preprocessed ontologies",
+    name: "Winning streaks in sports (Wikidata, SPARQL, conditional path length)",
+    url: longestWinningStreaks,
+  },
+  {
+    name: "CO2 emitting countries (CSV+Wikidata integration, aggregation)",
+    url: carbonMajorCountries,
+  },
+  {
+    name: "Ontology reasoning in OWL EL (from preprocessed ontologies)",
     url: elCalcCSVURL,
   },
   {
-    name: "OWL EL Reasoning from OWL/RDF",
+    name: "Ontology reasoning in OWL EL (from OWL/RDF)",
     url: elCalcOWLRDFURL,
   },
   {

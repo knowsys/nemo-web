@@ -1,0 +1,109 @@
+%! Sports teams with the longest winning streaks.
+%!
+%! This example investigates which team had the longest streak of
+%! consecutive wins in a given series or league of sports events.
+%! We return the record-length streaks and a table of all proper
+%! streaks.
+%! 
+%! The example shows:
+%! - how to import data from Wikidata with SPARQL queries,
+%! - how to use parameters to define values that matter to a program,
+%! - how to use rules to answer a query that cannot be expressed in SPARQL,
+%! - how to use aggregates to measure the length of a path and to find the longest path
+%! - how to select predicates for output.
+%!
+%! Note: Our task here is simpler since the sports events form a sequence.
+%! Finding longest path in an arbitrary directed graph is more complicated.
+
+@prefix wdqs: <https://query.wikidata.org/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+
+%%% Select the series of sports tournaments to investigate.
+@parameter $eventType = wd:Q1778808 . % All-Ireland Senior Hurling Championship
+% @parameter $eventType = wd:Q190163 . % Ice Hockey World Championships
+% @parameter $eventType = wd:Q18756 . % UEFA Champions League
+% @parameter $eventType = wd:Q483794 . % Copa del Rey
+% @parameter $eventType = wd:Q16642 . % Six Nations Championship
+% @parameter $eventType = wd:Q739479 . % Faroe Islands Premier League
+
+%%% Import "wdLabel" (Wikidata item, English label). This query uses the Wikidata
+%%% label service (won't work in other SPARQL endpoints). Nemo will inject bindings
+%%% for ?x during reasoning.
+@import wdLabel :- sparql {
+    endpoint = wdqs:sparql,
+    query = """
+      PREFIX wikibase: <http://wikiba.se/ontology#>
+      SELECT ?x ?xLabel WHERE {
+        SERVICE wikibase:label {
+          <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" }
+      }
+    """
+} .
+%%% Import "wdTriple" as a predicate for accessing any RDF triple from Wikidata:
+@import wdTriple :- sparql{
+  endpoint = wdqs:sparql,
+  query = "SELECT ?subject ?prop ?value WHERE { ?subject ?prop ?value }"
+} .
+%%% Import "wdEventInSeriesFollowedBy", as a predicate that relates individual events, their
+%%% "sports series of league or competition" (P3450), and the next event ("followed by" P156)
+%%% in that series:
+@import wdEventInSeriesFollowedBy :- sparql{
+    endpoint = wdqs:sparql,
+    query = """
+      PREFIX p: <http://www.wikidata.org/prop/>
+      PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+      PREFIX ps: <http://www.wikidata.org/prop/statement/>
+      SELECT ?event ?series ?next WHERE {
+        ?event p:P3450 [
+            ps:P3450 ?series ;
+            pq:P156 ?next
+        ] .
+      }
+    """
+} .
+
+%%% What sports events are there?
+sportsEvent(?event) :- wdTriple(?event, wdt:P3450, $eventType) .
+%%% Who won these events?
+winner(?event, ?winner) :- sportsEvent(?event), wdTriple(?event, wdt:P1346, ?winner) .
+%%% Which events followed within the same series?
+next(?event, ?next) :- sportsEvent(?event), wdEventInSeriesFollowedBy(?event, $eventType, ?next ) .
+
+%%% Find the events that had the same winner as the previous one:
+sameWinnerAsPrevious(?event) :- next(?previous, ?event), winner(?event, ?winner), winner(?previous, ?winner) .
+%%% A streak starts at an event if it does not have the same winner as the previous one:
+streakStart(?event) :- sportsEvent(?event), ~sameWinnerAsPrevious(?event) .
+
+%%% The start of a streak is on the streak:
+onStreak(?start, ?start) :- streakStart(?start) .
+%%% If the previous event is on the streak, and this one has the same winner,
+%%% then it is also on the streak:
+onStreak(?start, ?next) :-
+  onStreak(?start, ?previous),
+  next(?previous, ?next),
+  sameWinnerAsPrevious(?next) .
+
+%%% Get the length of the streak by counting all events on the streak:
+streakLength(?start, #count(?onStreak)) :- onStreak(?start, ?onStreak) .
+
+%%% Get labels for all winners of some event:
+winnerLabel(?winner, ?winnerLabel) :-
+  winner(_, ?winner),
+  wdLabel(?winner, ?winnerLabel) .
+
+%%% Collect data for streaks of at least two wins:
+streaksByLength(?length, ?winner, ?winnerLabel, ?start, ?startLabel) :-
+  streakLength(?start, ?length), ?length > 1,
+  winner(?start, ?winner),
+  winnerLabel(?winner, ?winnerLabel),
+  wdLabel(?start, ?startLabel) .
+
+%%% Find the maximal length of a streak:
+longestStreakLength(#max(?length)) :- streakLength(_, ?length) .
+%%% Find the winner(s) with the longest streak(s):
+recordStreak(f"{?winnerLabel} had a record-length winning streak of length {?length} that started by winning the event {?startLabel}") :-
+  longestStreakLength(?length), streaksByLength(?length, _, ?winnerLabel, _, ?startLabel).
+
+@output recordStreak .
+@output streaksByLength .

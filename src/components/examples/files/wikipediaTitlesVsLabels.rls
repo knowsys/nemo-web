@@ -1,0 +1,62 @@
+%! Find Wikipedia articles not entitled by their native language label
+%!
+%! This example looks at a single Wikidata item, and all its Wikipedia
+%! articles and labels across different languages. The main result is a
+%! table with all languages for which the Wikipedia page have a title that
+%! is different from Wikidata's nativelabel for that language.
+%! 
+%! The example shows:
+%! - how to load data from an online RDF file (here in Turtle format),
+%! - how to use parameters to define values that matter to a program,
+%! - how to use formatted strings (f"string") to build strings with variable parts,
+%! - how to use simple rules to match and select data.
+
+%%% Parameter to define the Wikidata item we want to look into:
+@parameter $qid = "Q161531". % War and Peace
+% @parameter $qid = "Q629". % Oxygen
+% @parameter $qid = "Q1731" . % Dresden
+% @parameter $qid = "Q158158" . % TU Dresden
+
+% Prefixes help us abbreviate long identifiers in RDF data:
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix schema: <http://schema.org/> .
+@prefix wikibase: <http://wikiba.se/ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+%%% Load triple data for a Wikidata item
+@import wdTriples :- rdf{resource=f"https://www.wikidata.org/wiki/Special:EntityData/{$qid}.ttl"} .
+
+%%% Parameter for the (computed) full IRI of item $qid:
+@parameter $qidIri = IRI(f"http://www.wikidata.org/entity/{$qid}") .
+
+%%% Get all Wikipedia page URLs with the title (string only) and language code:
+wikipediaPage(?url, STR(?pageTitle), LANG(?pageTitle)) :-
+  wdTriples(?url, schema:about, $qidIri),
+  wdTriples(?url, schema:name, ?pageTitle),
+  wdTriples(?url, schema:isPartOf, ?site),
+  wdTriples(?site, wikibase:wikiGroup, "wikipedia") .
+
+%%% Get all Wikidata labels (strong only) with their language code:
+wikidataLabel(STR(?label), LANG(?label)) :- wdTriples($qidIri, rdfs:label, ?label).
+
+%%% Collect cases where labels and titles disagree in one language:
+labelTitleDifferent(?language, ?label, ?pageTitle, ?url) :-
+  wikipediaPage(?url, ?pageTitle, ?language),
+  wikidataLabel(?label, ?language),
+  ?pageTitle != ?label .
+
+% Note: There are some expectable differences of article titles and labels:
+% - article titles often start upper case, even if the word would not normally be written like this
+% - article titles may have disambiguation information in parentheses
+% The following rule manipulates strings to ignore these causes.
+
+%%% Collect cases where labels and titles disagree after removing and part in ( ) from the title, 
+%%% and making the first letters upper case:
+labelTitleDifferentAfterNormalisation(?language, ?ucFirstLabel, ?ucFirstInitialPageTitle, ?pageTitle, ?url) :-
+  wikipediaPage(?url, ?pageTitle, ?language),
+  wikidataLabel(?label, ?language),
+  ?ucFirstLabel = f"{UCASE(SUBSTR(?label,1,1))}{SUBSTR(?label,2)}",  % make first letter upper case
+  ?initialPageTitle = STRBEFORE(f"{?pageTitle} ("," ("), % restrict to title before first " (" where we add one " (" to make sure this always matches
+  ?ucFirstInitialPageTitle = f"{UCASE(SUBSTR(?initialPageTitle,1,1))}{SUBSTR(?initialPageTitle,2)}", % make first letter upper case
+  ?ucFirstInitialPageTitle != ?ucFirstLabel .
+

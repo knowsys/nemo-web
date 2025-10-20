@@ -1,17 +1,59 @@
-% This example finds trees of (some species of lime/linden tree) in Dresden,
-% which are more than 200 years old.
-% 
-% It shows how to load (typed) data from (compressed) CSV files, how to
-% perform a recursive reachability query, and how to use datatype built-in to
-% find old trees. It can be modified to use a different species or genus of
-% plant, and by changing the required age.
+%! Find particularly old trees in Dresden.
+%!
+%! Wikidata is used to find special species and varieties of trees
+%! (such as different kinds of lime/linden tree). Parameters are used
+%! to set what kinds of tree we are looking for, and how old it should be.
+%! 
+%! It shows:
+%! - how to load (typed) data from (compressed) CSV files,
+%! - how to fetch data from a SPARQL query service,
+%! - how to perform a recursive reachability query,
+%! - how to use parameters to customise a Nemo query, 
+%! - how to use datatype built-ins.
+%! 
+%! It can be modified to use a different species or genus of plant, and by
+%! changing the required age.
 
-@import tree :- csv{format=(any, string, int, int), resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/dresden-trees-ages-heights.csv"} . % location URL, species, age, height in m
-@import taxon :- csv{format=(any, string, any), resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/wikidata-taxon-name-parent.csv.gz"} . % Wikidata ID, taxon name, Wikidata ID of parent taxon
+% Prefixes let us abbreviate longer identifiers and URLs:
+@prefix wdqs: <https://query.wikidata.org/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix wd: <http://www.wikidata.org/entity/> .
 
-limeSpecies(?X, "Tilia") :- taxon(?X, "Tilia", ?P).
-limeSpecies(?X, ?Name) :- taxon(?X, ?Name, ?Y), limeSpecies(?Y, ?N).
+%%% Define what kind of genus (of trees) we are looking for:
+@parameter $treeGenus = wd:Q127849 . % = lime/linden tree
+% @parameter $treeGenus = wd:Q12004 . % = oak tree
 
-oldLime(?location,?species,?age) :- tree(?location,?species,?age,?heightInMeters), ?age > 200, limeSpecies(?id,?species) .
+%%% Define the required age for the "old" trees we are looking for:
+@parameter $minAge = 200 .
 
-@output oldLime.
+%%% Import predicate "tree" from CSV (location URL, species, age, height in m).
+%%% This data is derived from data from the Dresden Open Data Portal https://opendata.dresden.de/.
+@import tree :- csv{format=(any, string, int, int), resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/dresden-trees-ages-heights.csv"} . 
+%%% Import (arbitrary) single triples from Wikidata:
+@import wdTriple :- sparql{
+  endpoint = wdqs:sparql,
+  query = "SELECT ?subject ?prop ?value WHERE { ?subject ?prop ?value }"
+} .
+%%% Import predicate "wdLabel" (English label) from Wikidata:
+@import wdLabel :- sparql{
+  endpoint=wdqs:sparql,
+  query="""
+    PREFIX wikibase: <http://wikiba.se/ontology#>
+    SELECT ?qid ?qidLabel WHERE {
+      SERVICE wikibase:label {
+        <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" } }"""
+} .
+
+%%% Find all species of trees we are interested in, starting from the one given in the parameter:
+speciesOfInterest($treeGenus) .
+%%% If we are interested in a species, and it has a subspecies (child taxon), then we are also interested in that:
+speciesOfInterest(?childTaxon) :- speciesOfInterest(?parentTaxon), wdTriple(?childTaxon, wdt:P171, ?parentTaxon) .
+
+%%% Find the names of all species we are interested in:
+namedSpeciesOfInterest(?species,STR(?speciesLabel)) :- speciesOfInterest(?species), wdLabel(?species,?speciesLabel) .
+
+%%% Match CSV-based tree data with names of species we are interested in, and show only the old ones:
+oldTreeOfInterest(?speciesLabel,?age,?location) :- tree(?location,?speciesLabel,?age,?heightInMeters), ?age >= $minAge, namedSpeciesOfInterest(?species,?speciesLabel) .
+
+%%% Select output predicate:
+@output oldTreeOfInterest.
