@@ -58,6 +58,7 @@
     SELECT ?qid ?langLabel WHERE {
       ?qid rdfs:label ?langLabel;
         wdt:P31/wdt:P279* wd:Q4830453 .
+      FILTER NOT EXISTS { ?qid wdt:P576 [] } # dissolved date
     }"""
 } .
 %%% Find English Wikidata label for any ID. This uses the Wikidata labeling service,
