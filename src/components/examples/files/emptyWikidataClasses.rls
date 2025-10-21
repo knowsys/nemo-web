@@ -83,14 +83,10 @@ emptyMax(?emptyClass, ?class1, ?class2) :- empty(?emptyClass, ?class1, ?class2),
  emptyOnCycle(?class, ?class1, ?class2) :- empty(?class, ?class1, ?class2), subclassOfPlus(?class, ?class) .
 
 % Fetch and join some labels:
-% Note: creating a local label/2 predicate is currently necessary to work around a bug; will be fixed in v0.9.
-label(?class, ?classLabel) :- disjointClass(?class), wdLabel(?class, ?classLabel) .
-label(?class, ?classLabel) :- empty(?class, _, _), wdLabel(?class, ?classLabel) .
-
 emptyMaxLabels(?class, ?classLabel, ?class1, ?class1Label, ?class2, ?class2Label) :-
-  emptyMax(?class, ?class1, ?class2), label(?class,?classLabel), label(?class1,?class1Label), label(?class2,?class2Label) .
+  emptyMax(?class, ?class1, ?class2), wdLabel(?class,?classLabel), wdLabel(?class1,?class1Label), wdLabel(?class2,?class2Label) .
 emptyOnCycleLabels(?class, ?classLabel, ?class1, ?class1Label, ?class2, ?class2Label) :-
-  emptyOnCycle(?class, ?class1, ?class2), label(?class,?classLabel), label(?class1,?class1Label), label(?class2,?class2Label) .
+  emptyOnCycle(?class, ?class1, ?class2), wdLabel(?class,?classLabel), wdLabel(?class1,?class1Label), wdLabel(?class2,?class2Label) .
 
 % Select output predicates:
 @output emptyMaxLabels .

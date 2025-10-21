@@ -87,16 +87,11 @@ onStreak(?start, ?next) :-
 %%% Get the length of the streak by counting all events on the streak:
 streakLength(?start, #count(?onStreak)) :- onStreak(?start, ?onStreak) .
 
-%%% Get labels for all winners of some event:
-winnerLabel(?winner, ?winnerLabel) :-
-  winner(_, ?winner),
-  wdLabel(?winner, ?winnerLabel) .
-
 %%% Collect data for streaks of at least two wins:
 streaksByLength(?length, ?winner, ?winnerLabel, ?start, ?startLabel) :-
   streakLength(?start, ?length), ?length > 1,
   winner(?start, ?winner),
-  winnerLabel(?winner, ?winnerLabel),
+  wdLabel(?winner, ?winnerLabel),
   wdLabel(?start, ?startLabel) .
 
 %%% Find the maximal length of a streak:
