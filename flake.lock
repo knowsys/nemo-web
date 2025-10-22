@@ -2805,6 +2805,22 @@
         "type": "github"
       }
     },
+    "nev": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758632908,
+        "narHash": "sha256-EAP8hzoktCxHuI5ih5kuunMF9Q+QxfT0ac16MozP1+k=",
+        "owner": "imldresden",
+        "repo": "nev",
+        "rev": "e967d9b5623bee631c0c3cc8d181d4e1625b6713",
+        "type": "github"
+      },
+      "original": {
+        "owner": "imldresden",
+        "repo": "nev",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1760862643,
@@ -3314,6 +3330,7 @@
         "dream2nix": "dream2nix",
         "nemo": "nemo",
         "nemo-vscode-extension": "nemo-vscode-extension_17",
+        "nev": "nev",
         "nixpkgs": "nixpkgs",
         "utils": "utils"
       }

@@ -26,6 +26,11 @@ rec {
         nemo.follows = "nemo";
       };
     };
+
+    nev = {
+      url = "github:imldresden/nev";
+      flake = false;
+    };
   };
 
   outputs =
@@ -74,10 +79,11 @@ rec {
           nemo-web-source =
             config:
             pkgs.runCommandLocal "nemo-web-source" { } ''
-              mkdir -p $out/nemoVSIX
+              mkdir -p $out/nemoVSIX $out/public
               cp -R ${pkgs.lib.cleanSource ./.}/* $out
               cp -R ${config.deps.nemo-wasm-bundler}/lib/node_modules/nemo-wasm/ $out/nemoWASMBundler
               cp ${config.deps.nemo-vscode-extension-vsix}/nemo-*.vsix $out/nemoVSIX/nemo.vsix
+              cp -R ${config.deps.nev}/dist $out/public/ev
             '';
 
           nemo-web = dream2nix.lib.evalModules {
@@ -134,6 +140,7 @@ rec {
                         nemo-vscode-extension-vsix =
                           lib.mkDefault
                             nemo-vscode-extension.packages.${system}.nemo-vscode-extension-vsix;
+                        nev = lib.mkDefault self.packages.${system}.nev;
                       }
                       {
                         deps.nemo-vscode-extension-vsix.deps.nemo-wasm-web = config.deps.nemo-wasm-web;
@@ -151,10 +158,71 @@ rec {
               )
             ];
           };
+
+          nev = dream2nix.lib.evalModules {
+            packageSets.nixpkgs = pkgs;
+
+            modules = [
+              {
+                paths = {
+                  projectRoot = ./.;
+                  projectRootFile = "flake.nix";
+                  package = ./.;
+                };
+              }
+
+              (
+                {
+                  lib,
+                  config,
+                  dream2nix,
+                  ...
+                }:
+                {
+                  name = "nev";
+                  inherit version;
+
+                  imports = [
+                    dream2nix.modules.dream2nix.nodejs-package-lock-v3
+                    dream2nix.modules.dream2nix.nodejs-granular-v3
+                  ];
+
+                  mkDerivation = {
+                    src = inputs.nev;
+
+                    installPhase = ''
+                      runHook preInstall
+
+                      cp -R dist $out
+
+                      runHook postInstall
+                    '';
+                  };
+
+                  deps =
+                    { nixpkgs, ... }:
+                    lib.mkMerge [
+                      {
+                        inherit (nixpkgs) stdenv;
+                        nodejs = nixpkgs.nodejs_20; # generate-license-file is broken on 22
+                      }
+                    ];
+
+                  nodejs-package-lock-v3 = {
+                    packageLockFile = "${config.mkDerivation.src}/package-lock.json";
+                  };
+
+                  nodejs-granular-v3 = {
+                    buildScript = "NODE_OPTIONS=--max_old_space_size=4096 npm run build";
+                  };
+                }
+              )
+            ];
+          };
         in
         {
           packages = {
-            inherit nemo-web;
+            inherit nemo-web nev;
             default = nemo-web;
           };
 
