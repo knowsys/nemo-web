@@ -305,6 +305,7 @@ rec {
                         nemo-vscode-extension-vsix =
                           lib.mkDefault
                             nemo-vscode-extension.packages.${system}.nemo-vscode-extension-vsix;
+                        nev = lib.mkDefault self.packages.${system}.nev;
                       }
                       {
                         deps.nemo-vscode-extension-vsix.deps.nemo-wasm-web = config.deps.nemo-wasm-web;
