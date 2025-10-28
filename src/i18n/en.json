@@ -4,31 +4,17 @@
     "closeModal": "Close"
   },
   "editor": {
-    "examples": "Examples",
-    "codeEditor": "Code editor",
-    "runProgram": "Next: Run program"
+    "examples": "Examples"
   },
   "navigationBar": {
-    "openFile": "Open file",
-    "downloadFile": "Save file",
-    "sourceCodeNemo": "Nemo on Github",
-    "sourceCodeNemoWeb": "Web Interface on Github",
-    "documentation": "Documentation"
-  },
-  "executionPanel": {
-    "panelExplanation": "You can use this panel to run the program.",
-    "cardTitle": "Program execution",
-    "stopExecution": "Stop"
+    "documentation": "Documentation",
+    "sourceCodeNemo": "Nemo on Github"
   },
   "examples": {
-    "names": {},
     "introduction": "The following examples illustrate how Nemo can be used:",
     "title": "Example programs"
   },
   "footer": {
-    "sourceCodeNemo": "Nemo on Github",
-    "sourceCodeNemoWeb": "Web Interface on Github",
-    "legalNotice": "Legal notice",
     "thirdPartyLicenses": "Open source licenses"
   }
 }
