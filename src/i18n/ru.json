@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Okras"
+		]
+	},
+	"common": {
+		"giveFeedback": "Сообщить о проблеме",
+		"closeModal": "Закрыть"
+	},
+	"editor": {
+		"examples": "Примеры"
+	},
+	"navigationBar": {
+		"documentation": "Документация",
+		"sourceCodeNemo": "Nemo на Github"
+	},
+	"examples": {
+		"introduction": "Следующие примеры иллюстрируют, как можно использовать Nemo:",
+		"title": "Примеры программ"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Лицензии с открытым исходным кодом"
+	}
+}

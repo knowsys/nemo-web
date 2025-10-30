@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Abijeet Patro"
+		]
+	},
+	"common": {
+		"giveFeedback": "समस्या बताओ",
+		"closeModal": "बंद करें"
+	},
+	"editor": {
+		"examples": "उदाहरण"
+	}
+}

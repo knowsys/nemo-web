@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16"
+		]
+	},
+	"common": {
+		"giveFeedback": "Segnala un problema",
+		"closeModal": "Chiudi"
+	},
+	"editor": {
+		"examples": "Esempi"
+	},
+	"navigationBar": {
+		"documentation": "Documentazione",
+		"sourceCodeNemo": "Nemo su Github"
+	},
+	"examples": {
+		"introduction": "Gli esempi seguenti illustrano come può essere utilizzato Nemo:",
+		"title": "Esempi di programmi"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Licenze open source"
+	}
+}

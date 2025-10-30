@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"common": {
+		"giveFeedback": "Informar dun problema",
+		"closeModal": "Pechar"
+	},
+	"editor": {
+		"examples": "Exemplos"
+	},
+	"navigationBar": {
+		"documentation": "Documentación",
+		"sourceCodeNemo": "Nemo en Github"
+	},
+	"examples": {
+		"introduction": "Os seguintes exemplos ilustran como se pode usar Nemo:",
+		"title": "Programas de exemplo"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Licenzas de código aberto"
+	}
+}
