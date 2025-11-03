@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Meno25"
+		]
+	},
+	"common": {
+		"giveFeedback": "الإبلاغ عن مشكلة",
+		"closeModal": "يغلق"
+	},
+	"editor": {
+		"examples": "أمثلة"
+	},
+	"navigationBar": {
+		"documentation": "التوثيق",
+		"sourceCodeNemo": "نيمو على جيثب"
+	},
+	"examples": {
+		"introduction": "توضح الأمثلة التالية كيفية استخدام Nemo:",
+		"title": "برامج نموذجية"
+	},
+	"footer": {
+		"thirdPartyLicenses": "تراخيص مفتوحة المصدر"
+	}
+}
