@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"common": {
+		"giveFeedback": "Signalar un problema",
+		"closeModal": "Clauder"
+	},
+	"editor": {
+		"examples": "Exemplos"
+	},
+	"navigationBar": {
+		"documentation": "Documentation",
+		"sourceCodeNemo": "Nemo sur GitHub"
+	},
+	"examples": {
+		"introduction": "Le sequente exemplos illustra le uso de Nemo:",
+		"title": "Exemplos de programmas"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Licentias de codice aperte"
+	}
+}
