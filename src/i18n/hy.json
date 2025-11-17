@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kareyac"
+		]
+	},
+	"common": {
+		"closeModal": "Փակել"
+	},
+	"editor": {
+		"examples": "Օրինակներ"
+	},
+	"navigationBar": {
+		"documentation": "Ձեռնարկ"
+	}
+}
