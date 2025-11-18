@@ -119,16 +119,18 @@ export function ExecutionPanel() {
         return; // don't listen on own messages (which might be filtered by default by the channel, I did not check this...)
       }
 
+      const id = event.data.id;
+
       if (workerRef.current === undefined) {
         bc.postMessage({
-          error: "Cannot process message. Reasoning was not performed.",
+          id, error: "Cannot process message. Reasoning was not performed.",
         });
         return;
       }
 
       if (!event.data.queryType || !event.data.payload) {
         bc.postMessage({
-          error: "Expected an object with queryType and payload.",
+          id, error: "Expected an object with queryType and payload.",
         });
         return;
       }
@@ -139,18 +141,24 @@ export function ExecutionPanel() {
       switch (queryType) {
         case "treeForTable":
           response = await workerRef.current.traceTreeForTable(payload);
-          bc.postMessage({ responseType: "treeForTable", payload: response });
+          bc.postMessage({ 
+            id, 
+            responseType: "treeForTable", 
+            payload: response 
+          });
           break;
         case "tableEntriesForTreeNodes":
           response =
             await workerRef.current.traceTableEntriesForTreeNodes(payload);
           bc.postMessage({
+            id, 
             responseType: "tableEntriesForTreeNodes",
             payload: response,
           });
           break;
         default:
           bc.postMessage({
+            id, 
             error:
               "Invalid Query Type, expected treeForTable or tableEntriesForTreeNodes.",
           });
