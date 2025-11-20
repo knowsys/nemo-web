@@ -852,11 +852,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1763645800,
-        "narHash": "sha256-8yRA0esHksm4H4NrAV7e0oPTkooh0XqBq/Qwd3l7Wgk=",
+        "lastModified": 1763651288,
+        "narHash": "sha256-lryd+WOUyROf0EUUbUC2vpihK8E2MDWm8wp96iPFrWM=",
         "owner": "knowsys",
         "repo": "nemo",
-        "rev": "17cafdda872063d234e403eff65a39e435f29254",
+        "rev": "c1d5e4087dfec0eaf5cafd564a6dcbaa66ec2cab",
         "type": "github"
       },
       "original": {
@@ -5040,11 +5040,11 @@
     "nev_5": {
       "flake": false,
       "locked": {
-        "lastModified": 1763586229,
-        "narHash": "sha256-kAhnvl8FCvU8R+uRR8BEGqyL0a9ETyI9n8mU6PIgylc=",
+        "lastModified": 1763648571,
+        "narHash": "sha256-MxQG8F16qTue8pwcflxAU/X9Lbo5LeLIGw/Zcu2FMTg=",
         "owner": "imldresden",
         "repo": "nev",
-        "rev": "40ca9f8f1876ea6bfa8c0a8e57d2dccfaace8e6c",
+        "rev": "6630d37061703764cca42ad3445c703f3ee6c6ef",
         "type": "github"
       },
       "original": {
