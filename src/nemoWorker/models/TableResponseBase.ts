@@ -28,6 +28,13 @@ import {
   RuleToJSON,
   RuleToJSONTyped,
 } from "./Rule";
+import type { TableResponseBaseMetaInformation } from "./TableResponseBaseMetaInformation";
+import {
+  TableResponseBaseMetaInformationFromJSON,
+  TableResponseBaseMetaInformationFromJSONTyped,
+  TableResponseBaseMetaInformationToJSON,
+  TableResponseBaseMetaInformationToJSONTyped,
+} from "./TableResponseBaseMetaInformation";
 
 /**
  *
@@ -47,6 +54,12 @@ export interface TableResponseBase {
    * @memberof TableResponseBase
    */
   tableEntries: TableResponseBaseTableEntries;
+  /**
+   *
+   * @type {TableResponseBaseMetaInformation}
+   * @memberof TableResponseBase
+   */
+  metaInformation: TableResponseBaseMetaInformation;
   /**
    *
    * @type {Array<Rule>}
@@ -69,6 +82,8 @@ export function instanceOfTableResponseBase(
 ): value is TableResponseBase {
   if (!("predicate" in value) || value["predicate"] === undefined) return false;
   if (!("tableEntries" in value) || value["tableEntries"] === undefined)
+    return false;
+  if (!("metaInformation" in value) || value["metaInformation"] === undefined)
     return false;
   if (
     !("possibleRulesAbove" in value) ||
@@ -97,6 +112,9 @@ export function TableResponseBaseFromJSONTyped(
   return {
     predicate: json["predicate"],
     tableEntries: TableResponseBaseTableEntriesFromJSON(json["tableEntries"]),
+    metaInformation: TableResponseBaseMetaInformationFromJSON(
+      json["metaInformation"],
+    ),
     possibleRulesAbove: (json["possibleRulesAbove"] as Array<any>).map(
       RuleFromJSON,
     ),
@@ -121,6 +139,9 @@ export function TableResponseBaseToJSONTyped(
   return {
     predicate: value["predicate"],
     tableEntries: TableResponseBaseTableEntriesToJSON(value["tableEntries"]),
+    metaInformation: TableResponseBaseMetaInformationToJSON(
+      value["metaInformation"],
+    ),
     possibleRulesAbove: (value["possibleRulesAbove"] as Array<any>).map(
       RuleToJSON,
     ),

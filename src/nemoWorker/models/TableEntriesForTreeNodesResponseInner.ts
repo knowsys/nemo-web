@@ -28,6 +28,13 @@ import {
   RuleToJSON,
   RuleToJSONTyped,
 } from "./Rule";
+import type { TableResponseBaseMetaInformation } from "./TableResponseBaseMetaInformation";
+import {
+  TableResponseBaseMetaInformationFromJSON,
+  TableResponseBaseMetaInformationFromJSONTyped,
+  TableResponseBaseMetaInformationToJSON,
+  TableResponseBaseMetaInformationToJSONTyped,
+} from "./TableResponseBaseMetaInformation";
 
 /**
  *
@@ -55,6 +62,12 @@ export interface TableEntriesForTreeNodesResponseInner {
   tableEntries: TableResponseBaseTableEntries;
   /**
    *
+   * @type {TableResponseBaseMetaInformation}
+   * @memberof TableEntriesForTreeNodesResponseInner
+   */
+  metaInformation: TableResponseBaseMetaInformation;
+  /**
+   *
    * @type {Array<Rule>}
    * @memberof TableEntriesForTreeNodesResponseInner
    */
@@ -75,6 +88,8 @@ export function instanceOfTableEntriesForTreeNodesResponseInner(
 ): value is TableEntriesForTreeNodesResponseInner {
   if (!("predicate" in value) || value["predicate"] === undefined) return false;
   if (!("tableEntries" in value) || value["tableEntries"] === undefined)
+    return false;
+  if (!("metaInformation" in value) || value["metaInformation"] === undefined)
     return false;
   if (
     !("possibleRulesAbove" in value) ||
@@ -107,6 +122,9 @@ export function TableEntriesForTreeNodesResponseInnerFromJSONTyped(
       json["addressInTree"] == null ? undefined : json["addressInTree"],
     predicate: json["predicate"],
     tableEntries: TableResponseBaseTableEntriesFromJSON(json["tableEntries"]),
+    metaInformation: TableResponseBaseMetaInformationFromJSON(
+      json["metaInformation"],
+    ),
     possibleRulesAbove: (json["possibleRulesAbove"] as Array<any>).map(
       RuleFromJSON,
     ),
@@ -134,6 +152,9 @@ export function TableEntriesForTreeNodesResponseInnerToJSONTyped(
     addressInTree: value["addressInTree"],
     predicate: value["predicate"],
     tableEntries: TableResponseBaseTableEntriesToJSON(value["tableEntries"]),
+    metaInformation: TableResponseBaseMetaInformationToJSON(
+      value["metaInformation"],
+    ),
     possibleRulesAbove: (value["possibleRulesAbove"] as Array<any>).map(
       RuleToJSON,
     ),

@@ -13,6 +13,7 @@ export * from "./TableQueryBase";
 export * from "./TableQueryBaseTableEntries";
 export * from "./TableQueryBaseTableEntriesPagination";
 export * from "./TableResponseBase";
+export * from "./TableResponseBaseMetaInformation";
 export * from "./TableResponseBaseTableEntries";
 export * from "./TableResponseBaseTableEntriesPagination";
 export * from "./TreeForTableQuery";
