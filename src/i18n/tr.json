@@ -1,25 +1,23 @@
 {
-	"@metadata": {
-		"authors": [
-			"Sakblue"
-		]
-	},
-	"common": {
-		"giveFeedback": "Sorun bildirin",
-		"closeModal": "Kapalı"
-	},
-	"editor": {
-		"examples": "Örnekler"
-	},
-	"navigationBar": {
-		"documentation": "Belgelendirme",
-		"sourceCodeNemo": "Github'da Nemo"
-	},
-	"examples": {
-		"introduction": "Aşağıdaki örnekler Nemo'nun nasıl kullanılabileceğini gösterir:",
-		"title": "Örnek programlar"
-	},
-	"footer": {
-		"thirdPartyLicenses": "Açık kaynak lisansları."
-	}
+  "@metadata": {
+    "authors": ["Sakblue"]
+  },
+  "common": {
+    "giveFeedback": "Sorun bildirin",
+    "closeModal": "Kapalı"
+  },
+  "editor": {
+    "examples": "Örnekler"
+  },
+  "navigationBar": {
+    "documentation": "Belgelendirme",
+    "sourceCodeNemo": "Github'da Nemo"
+  },
+  "examples": {
+    "introduction": "Aşağıdaki örnekler Nemo'nun nasıl kullanılabileceğini gösterir:",
+    "title": "Örnek programlar"
+  },
+  "footer": {
+    "thirdPartyLicenses": "Açık kaynak lisansları."
+  }
 }

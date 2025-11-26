@@ -1,25 +1,23 @@
 {
-	"@metadata": {
-		"authors": [
-			"TFX202X"
-		]
-	},
-	"common": {
-		"giveFeedback": "报告问题",
-		"closeModal": "关闭"
-	},
-	"editor": {
-		"examples": "示例"
-	},
-	"navigationBar": {
-		"documentation": "文档",
-		"sourceCodeNemo": "Nemo在Github上"
-	},
-	"examples": {
-		"introduction": "以下示例说明了如何使用Nemo：",
-		"title": "示例程序"
-	},
-	"footer": {
-		"thirdPartyLicenses": "开源许可证"
-	}
+  "@metadata": {
+    "authors": ["TFX202X"]
+  },
+  "common": {
+    "giveFeedback": "报告问题",
+    "closeModal": "关闭"
+  },
+  "editor": {
+    "examples": "示例"
+  },
+  "navigationBar": {
+    "documentation": "文档",
+    "sourceCodeNemo": "Nemo在Github上"
+  },
+  "examples": {
+    "introduction": "以下示例说明了如何使用Nemo：",
+    "title": "示例程序"
+  },
+  "footer": {
+    "thirdPartyLicenses": "开源许可证"
+  }
 }

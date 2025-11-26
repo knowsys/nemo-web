@@ -1,25 +1,23 @@
 {
-	"@metadata": {
-		"authors": [
-			"YaronSh"
-		]
-	},
-	"common": {
-		"giveFeedback": "דיווח בעיה",
-		"closeModal": "סגירה"
-	},
-	"editor": {
-		"examples": "דוגמאות"
-	},
-	"navigationBar": {
-		"documentation": "תיעוד",
-		"sourceCodeNemo": "Nemo ב־Github"
-	},
-	"examples": {
-		"introduction": "הדוגמאות הבאות מציגות איך אפשר להשתמש ב־Nemo:",
-		"title": "תוכניות לדוגמה"
-	},
-	"footer": {
-		"thirdPartyLicenses": "רישיונות קוד פתוח"
-	}
+  "@metadata": {
+    "authors": ["YaronSh"]
+  },
+  "common": {
+    "giveFeedback": "דיווח בעיה",
+    "closeModal": "סגירה"
+  },
+  "editor": {
+    "examples": "דוגמאות"
+  },
+  "navigationBar": {
+    "documentation": "תיעוד",
+    "sourceCodeNemo": "Nemo ב־Github"
+  },
+  "examples": {
+    "introduction": "הדוגמאות הבאות מציגות איך אפשר להשתמש ב־Nemo:",
+    "title": "תוכניות לדוגמה"
+  },
+  "footer": {
+    "thirdPartyLicenses": "רישיונות קוד פתוח"
+  }
 }

@@ -1,25 +1,23 @@
 {
-	"@metadata": {
-		"authors": [
-			"Volvox"
-		]
-	},
-	"common": {
-		"giveFeedback": "E Problem mellen",
-		"closeModal": "Zoumaachen"
-	},
-	"editor": {
-		"examples": "Beispiller"
-	},
-	"navigationBar": {
-		"documentation": "Dokumentatioun",
-		"sourceCodeNemo": "Nemo op GitHub"
-	},
-	"examples": {
-		"introduction": "Déi follgend Beispiller illustréieren, wéi een Nemo benotze kann:",
-		"title": "Beispillprogrammen"
-	},
-	"footer": {
-		"thirdPartyLicenses": "Open-Source-Lizenzen"
-	}
+  "@metadata": {
+    "authors": ["Volvox"]
+  },
+  "common": {
+    "giveFeedback": "E Problem mellen",
+    "closeModal": "Zoumaachen"
+  },
+  "editor": {
+    "examples": "Beispiller"
+  },
+  "navigationBar": {
+    "documentation": "Dokumentatioun",
+    "sourceCodeNemo": "Nemo op GitHub"
+  },
+  "examples": {
+    "introduction": "Déi follgend Beispiller illustréieren, wéi een Nemo benotze kann:",
+    "title": "Beispillprogrammen"
+  },
+  "footer": {
+    "thirdPartyLicenses": "Open-Source-Lizenzen"
+  }
 }

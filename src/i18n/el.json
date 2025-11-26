@@ -1,25 +1,23 @@
 {
-	"@metadata": {
-		"authors": [
-			"Jimkats"
-		]
-	},
-	"common": {
-		"giveFeedback": "Αναφέρετε ένα πρόβλημα",
-		"closeModal": "Κλείσιμο"
-	},
-	"editor": {
-		"examples": "Παραδείγματα"
-	},
-	"navigationBar": {
-		"documentation": "Τεκμηρίωση",
-		"sourceCodeNemo": "Nemo στο Github"
-	},
-	"examples": {
-		"introduction": "Τα παρακάτω παραδείγματα δείχνουν πώς μπορεί να χρησιμοποιηθεί το Nemo:",
-		"title": "Παραδείγματα προγραμμάτων"
-	},
-	"footer": {
-		"thirdPartyLicenses": "Άδειες ανοικτού κώδικα"
-	}
+  "@metadata": {
+    "authors": ["Jimkats"]
+  },
+  "common": {
+    "giveFeedback": "Αναφέρετε ένα πρόβλημα",
+    "closeModal": "Κλείσιμο"
+  },
+  "editor": {
+    "examples": "Παραδείγματα"
+  },
+  "navigationBar": {
+    "documentation": "Τεκμηρίωση",
+    "sourceCodeNemo": "Nemo στο Github"
+  },
+  "examples": {
+    "introduction": "Τα παρακάτω παραδείγματα δείχνουν πώς μπορεί να χρησιμοποιηθεί το Nemo:",
+    "title": "Παραδείγματα προγραμμάτων"
+  },
+  "footer": {
+    "thirdPartyLicenses": "Άδειες ανοικτού κώδικα"
+  }
 }

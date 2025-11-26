@@ -123,14 +123,16 @@ export function ExecutionPanel() {
 
       if (workerRef.current === undefined) {
         bc.postMessage({
-          id, error: "Cannot process message. Reasoning was not performed.",
+          id,
+          error: "Cannot process message. Reasoning was not performed.",
         });
         return;
       }
 
       if (!event.data.queryType || !event.data.payload) {
         bc.postMessage({
-          id, error: "Expected an object with queryType and payload.",
+          id,
+          error: "Expected an object with queryType and payload.",
         });
         return;
       }
@@ -141,24 +143,24 @@ export function ExecutionPanel() {
       switch (queryType) {
         case "treeForTable":
           response = await workerRef.current.traceTreeForTable(payload);
-          bc.postMessage({ 
-            id, 
-            responseType: "treeForTable", 
-            payload: response 
+          bc.postMessage({
+            id,
+            responseType: "treeForTable",
+            payload: response,
           });
           break;
         case "tableEntriesForTreeNodes":
           response =
             await workerRef.current.traceTableEntriesForTreeNodes(payload);
           bc.postMessage({
-            id, 
+            id,
             responseType: "tableEntriesForTreeNodes",
             payload: response,
           });
           break;
         default:
           bc.postMessage({
-            id, 
+            id,
             error:
               "Invalid Query Type, expected treeForTable or tableEntriesForTreeNodes.",
           });

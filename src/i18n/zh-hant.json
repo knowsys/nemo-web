@@ -1,25 +1,23 @@
 {
-	"@metadata": {
-		"authors": [
-			"Kly"
-		]
-	},
-	"common": {
-		"giveFeedback": "問題回報",
-		"closeModal": "關閉"
-	},
-	"editor": {
-		"examples": "範例"
-	},
-	"navigationBar": {
-		"documentation": "文件",
-		"sourceCodeNemo": "在 Github 上的 Nemo"
-	},
-	"examples": {
-		"introduction": "以下範例說明如何使用 Nemo：",
-		"title": "範例程式"
-	},
-	"footer": {
-		"thirdPartyLicenses": "開放原始碼授權"
-	}
+  "@metadata": {
+    "authors": ["Kly"]
+  },
+  "common": {
+    "giveFeedback": "問題回報",
+    "closeModal": "關閉"
+  },
+  "editor": {
+    "examples": "範例"
+  },
+  "navigationBar": {
+    "documentation": "文件",
+    "sourceCodeNemo": "在 Github 上的 Nemo"
+  },
+  "examples": {
+    "introduction": "以下範例說明如何使用 Nemo：",
+    "title": "範例程式"
+  },
+  "footer": {
+    "thirdPartyLicenses": "開放原始碼授權"
+  }
 }
