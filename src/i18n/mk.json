@@ -1,23 +1,25 @@
 {
-  "@metadata": {
-    "authors": ["Bjankuloski06"]
-  },
-  "common": {
-    "giveFeedback": "Приајви проблем",
-    "closeModal": "Затвори"
-  },
-  "editor": {
-    "examples": "Примери"
-  },
-  "navigationBar": {
-    "documentation": "Документација",
-    "sourceCodeNemo": "Nemo на Github"
-  },
-  "examples": {
-    "introduction": "Следниве примери илустрираат како да се користи Nemo:",
-    "title": "Примерни програми"
-  },
-  "footer": {
-    "thirdPartyLicenses": "Лиценци со отворен код"
-  }
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"common": {
+		"giveFeedback": "Приајви проблем",
+		"closeModal": "Затвори"
+	},
+	"editor": {
+		"examples": "Примери"
+	},
+	"navigationBar": {
+		"documentation": "Документација",
+		"sourceCodeNemo": "Nemo на Github"
+	},
+	"examples": {
+		"introduction": "Следниве примери илустрираат како да се користи Nemo:",
+		"title": "Примерни програми"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Лиценци со отворен код"
+	}
 }

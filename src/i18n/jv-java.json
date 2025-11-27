@@ -1,23 +1,25 @@
 {
-  "@metadata": {
-    "authors": ["Bennylin"]
-  },
-  "common": {
-    "giveFeedback": "ꦭꦥꦸꦂꦫꦏꦺ​ꦩꦱꦭꦃ",
-    "closeModal": "ꦠꦸꦠꦸꦥ꧀"
-  },
-  "editor": {
-    "examples": "ꦕꦺꦴꦤ꧀ꦠꦺꦴ"
-  },
-  "navigationBar": {
-    "documentation": "ꦢꦺꦴꦏꦸꦩꦺꦤ꧀ꦠꦱꦶ",
-    "sourceCodeNemo": "NemoꦲꦶꦁGithub"
-  },
-  "examples": {
-    "introduction": "ꦕꦺꦴꦤ꧀ꦠꦺꦴ​ꦕꦺꦴꦤ꧀ꦠꦺꦴ​ꦲꦶꦁ​ꦔꦶꦱꦺꦴꦂ​ꦲꦶꦏꦶ​ꦁꦒꦩ꧀ꦧꦫꦏꦺ​ꦏꦺꦥꦶꦪꦺ​Nemo​ꦧꦶꦱ​ꦢꦶꦒꦸꦤꦏ꧀ꦏꦏꦺ꧇",
-    "title": "ꦕꦺꦴꦤ꧀ꦠꦺꦴ​ꦥꦿꦺꦴꦒꦿꦩ꧀"
-  },
-  "footer": {
-    "thirdPartyLicenses": "ꦭꦶꦱꦺꦤ꧀ꦱꦶ​ꦱꦸꦩ꧀ꦧꦼꦂ​ꦏꦧꦸꦏ"
-  }
+	"@metadata": {
+		"authors": [
+			"Bennylin"
+		]
+	},
+	"common": {
+		"giveFeedback": "ꦭꦥꦸꦂꦫꦏꦺ​ꦩꦱꦭꦃ",
+		"closeModal": "ꦠꦸꦠꦸꦥ꧀"
+	},
+	"editor": {
+		"examples": "ꦕꦺꦴꦤ꧀ꦠꦺꦴ"
+	},
+	"navigationBar": {
+		"documentation": "ꦢꦺꦴꦏꦸꦩꦺꦤ꧀ꦠꦱꦶ",
+		"sourceCodeNemo": "NemoꦲꦶꦁGithub"
+	},
+	"examples": {
+		"introduction": "ꦕꦺꦴꦤ꧀ꦠꦺꦴ​ꦕꦺꦴꦤ꧀ꦠꦺꦴ​ꦲꦶꦁ​ꦔꦶꦱꦺꦴꦂ​ꦲꦶꦏꦶ​ꦁꦒꦩ꧀ꦧꦫꦏꦺ​ꦏꦺꦥꦶꦪꦺ​Nemo​ꦧꦶꦱ​ꦢꦶꦒꦸꦤꦏ꧀ꦏꦏꦺ꧇",
+		"title": "ꦕꦺꦴꦤ꧀ꦠꦺꦴ​ꦥꦿꦺꦴꦒꦿꦩ꧀"
+	},
+	"footer": {
+		"thirdPartyLicenses": "ꦭꦶꦱꦺꦤ꧀ꦱꦶ​ꦱꦸꦩ꧀ꦧꦼꦂ​ꦏꦧꦸꦏ"
+	}
 }

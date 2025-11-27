@@ -1,23 +1,25 @@
 {
-  "@metadata": {
-    "authors": ["Siebrand"]
-  },
-  "common": {
-    "giveFeedback": "Probleem melden",
-    "closeModal": "Sluiten"
-  },
-  "editor": {
-    "examples": "Voorbeelden"
-  },
-  "navigationBar": {
-    "documentation": "Documentatie",
-    "sourceCodeNemo": "Nemo op Github"
-  },
-  "examples": {
-    "introduction": "De volgende voorbeelden illustreren hoe Nemo gebruikt kan worden:",
-    "title": "Voorbeeldprogramma's"
-  },
-  "footer": {
-    "thirdPartyLicenses": "Open source-licenties"
-  }
+	"@metadata": {
+		"authors": [
+			"Siebrand"
+		]
+	},
+	"common": {
+		"giveFeedback": "Probleem melden",
+		"closeModal": "Sluiten"
+	},
+	"editor": {
+		"examples": "Voorbeelden"
+	},
+	"navigationBar": {
+		"documentation": "Documentatie",
+		"sourceCodeNemo": "Nemo op Github"
+	},
+	"examples": {
+		"introduction": "De volgende voorbeelden illustreren hoe Nemo gebruikt kan worden:",
+		"title": "Voorbeeldprogramma's"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Open source-licenties"
+	}
 }

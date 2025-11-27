@@ -1,23 +1,25 @@
 {
-  "@metadata": {
-    "authors": ["Framboinnou"]
-  },
-  "common": {
-    "giveFeedback": "Signaler un problème",
-    "closeModal": "Fermer"
-  },
-  "editor": {
-    "examples": "Exemples"
-  },
-  "navigationBar": {
-    "documentation": "Documentation",
-    "sourceCodeNemo": "Nemo sur Github"
-  },
-  "examples": {
-    "introduction": "Les exemples suivants illustrent comment Nemo peut être utilisé:",
-    "title": "Exemple de programmes"
-  },
-  "footer": {
-    "thirdPartyLicenses": "licences open source"
-  }
+	"@metadata": {
+		"authors": [
+			"Framboinnou"
+		]
+	},
+	"common": {
+		"giveFeedback": "Signaler un problème",
+		"closeModal": "Fermer"
+	},
+	"editor": {
+		"examples": "Exemples"
+	},
+	"navigationBar": {
+		"documentation": "Documentation",
+		"sourceCodeNemo": "Nemo sur Github"
+	},
+	"examples": {
+		"introduction": "Les exemples suivants illustrent comment Nemo peut être utilisé:",
+		"title": "Exemple de programmes"
+	},
+	"footer": {
+		"thirdPartyLicenses": "licences open source"
+	}
 }

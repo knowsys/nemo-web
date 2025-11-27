@@ -1,23 +1,23 @@
 {
-  "@metadata": {
-    "authors": []
-  },
-  "common": {
-    "giveFeedback": "This is the title of a menu item in the “Help” menu, linking to the GitHub issues for nemo-web.",
-    "closeModal": "This is the label for the close button of modals (e.g., the example selection modal)"
-  },
-  "editor": {
-    "examples": "This is the label for the button that opens the example selection modal."
-  },
-  "navigationBar": {
-    "documentation": "This is the title of a menu item in the “Help” menu, linking to the documentation for Nemo and the rule language.",
-    "sourceCodeNemo": "This is the title of a menu item in the “Help” menu, linking to the GitHub repository for the Nemo rule engine."
-  },
-  "examples": {
-    "introduction": "This is the introductory paragraph shown before the list of example programs in the example selection modal.",
-    "title": "This is the title of the example selection modal."
-  },
-  "footer": {
-    "thirdPartyLicenses": "This is a link in the footer, linking to a file with the collected licenses of all components used in Nemo-web."
-  }
+	"@metadata": {
+		"authors": []
+	},
+	"common": {
+		"giveFeedback": "This is the title of a menu item in the “Help” menu, linking to the GitHub issues for nemo-web.",
+		"closeModal": "This is the label for the close button of modals (e.g., the example selection modal)"
+	},
+	"editor": {
+		"examples": "This is the label for the button that opens the example selection modal."
+	},
+	"navigationBar": {
+		"documentation": "This is the title of a menu item in the “Help” menu, linking to the documentation for Nemo and the rule language.",
+		"sourceCodeNemo": "This is the title of a menu item in the “Help” menu, linking to the GitHub repository for the Nemo rule engine."
+	},
+	"examples": {
+		"introduction": "This is the introductory paragraph shown before the list of example programs in the example selection modal.",
+		"title": "This is the title of the example selection modal."
+	},
+	"footer": {
+		"thirdPartyLicenses": "This is a link in the footer, linking to a file with the collected licenses of all components used in Nemo-web."
+	}
 }
