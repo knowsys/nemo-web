@@ -2,7 +2,7 @@ import { NemoWorker } from "../../../nemoWorker/NemoWorker";
 
 export class RowStore {
   private iterableID: number | undefined;
-  private rows: any[][] = [];
+  private rows: { values: any[]; id: number }[] = [];
   private currentlyLoadingUpToIndex = 0;
   private shouldLoadUpToIndex = 0;
   private waitingPromises: {
@@ -13,7 +13,7 @@ export class RowStore {
   public constructor(
     private predicate: string,
     private nemoWorker: NemoWorker,
-    private onRowsChange: (rows: any[][]) => void,
+    private onRowsChange: (rows: { values: any[]; id: number }[]) => void,
   ) {}
 
   public async initialize() {

@@ -1,6 +1,7 @@
 import {
   getNemoVersion,
   NemoEngine,
+  NemoResultRow,
   NemoResults,
   setAllocErrorHook,
   setPanicHook,
@@ -129,7 +130,11 @@ export class NemoRunner {
       throw new Error();
     }
     // Fetch next rows from web worker
-    return Array.from(take(this.resultsIterables[id], maxCount)) as any[][];
+    // Cast are safe as the row is only undefined after iteration finished.
+    return Array.from(take(this.resultsIterables[id], maxCount), (row) => ({
+      values: (row as NemoResultRow).values,
+      id: (row as NemoResultRow).id,
+    }));
   }
 
   public async deleteResultsIterable(id: number) {

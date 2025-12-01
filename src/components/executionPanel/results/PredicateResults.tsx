@@ -18,7 +18,7 @@ export function PredicateResults({
   numberOfRows,
 }: PredicateResultsProps) {
   const rowStoreRef = useRef<RowStore | undefined>(undefined);
-  const [rows, setRows] = useState<any[][]>([]);
+  const [rows, setRows] = useState<{ values: any[]; id: number }[]>([]);
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(100);
   const numberOfPages =
@@ -73,12 +73,10 @@ export function PredicateResults({
       <>
         <Table striped bordered>
           <tbody>
-            {currentRows.map((row, rowIdx) => (
-              <tr key={`row-${page * rowsPerPage + rowIdx}`}>
-                {row.map((value, index) => (
-                  <td
-                    key={`row-${page * rowsPerPage + rowIdx}-column-${index}`}
-                  >
+            {currentRows.map((row) => (
+              <tr key={`row-${row.id}`}>
+                {row.values.map((value, index) => (
+                  <td key={`row-${row.id}-column-${index}`}>
                     {value.toString().startsWith("http://") ||
                     value.toString().startsWith("https://") ? (
                       <Link href={value.toString()}>{value.toString()}</Link>
@@ -87,13 +85,10 @@ export function PredicateResults({
                     )}
                   </td>
                 ))}
-                <td
-                  key={`row-${page * rowsPerPage + rowIdx}-trace-button`}
-                  width={32}
-                >
+                <td key={`row-${row.id}-trace-button`} width={32}>
                   <a
                     title="Explain this inference"
-                    href={`./ev/?predicate=${predicate}&query=[${page * rowsPerPage + rowIdx}]`}
+                    href={`./ev/?predicate=${predicate}&query=[${row.id}]`}
                     target="_blank"
                     style={{ color: "inherit" }}
                   >
