@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"もなー(偽物)"
+		]
+	},
+	"common": {
+		"giveFeedback": "問題を報告",
+		"closeModal": "閉じる"
+	},
+	"editor": {
+		"examples": "例"
+	},
+	"navigationBar": {
+		"documentation": "ドキュメント",
+		"sourceCodeNemo": "GitHubでNemoを見る"
+	},
+	"examples": {
+		"introduction": "次の例は、Nemo の使用方法を示しています。",
+		"title": "サンプルプログラム"
+	},
+	"footer": {
+		"thirdPartyLicenses": "オープンソースライセンス"
+	}
+}
