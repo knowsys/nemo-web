@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"سعيد الشاعر الغريب"
+		]
+	},
+	"common": {
+		"giveFeedback": "ديكلاي بلمشكلة",
+		"closeModal": "سد"
+	},
+	"editor": {
+		"examples": "أمثلة"
+	},
+	"navigationBar": {
+		"documentation": "لوثائق",
+		"sourceCodeNemo": "Nemo على Github"
+	},
+	"examples": {
+		"introduction": "شوف هاد لأمثلة باش تعرف كيفاش ميتخد ب Nemo:",
+		"title": "أمثلة ديال بروغرامات"
+	},
+	"footer": {
+		"thirdPartyLicenses": "ليصونص ديال سورس لمفتوح"
+	}
+}
