@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Duongvu"
+		]
+	},
+	"common": {
+		"giveFeedback": "Báo cáo lỗi",
+		"closeModal": "Đóng"
+	},
+	"editor": {
+		"examples": "Ví dụ"
+	},
+	"navigationBar": {
+		"documentation": "Tài liệu",
+		"sourceCodeNemo": "Nemo trên Github"
+	},
+	"examples": {
+		"introduction": "Các ví dụ sau đây minh họa cách sử dụng Nemo:",
+		"title": "Ví dụ chương trình"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Giấy phép nguồn mở"
+	}
+}
