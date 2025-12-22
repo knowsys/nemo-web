@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Janabaevazizbek"
+		]
+	},
+	"common": {
+		"giveFeedback": "Mashqala haqqında xabar beriń",
+		"closeModal": "Jabıw"
+	},
+	"editor": {
+		"examples": "Mısallar"
+	},
+	"navigationBar": {
+		"documentation": "Hújjet",
+		"sourceCodeNemo": "Githubtaǵı Nemo"
+	},
+	"examples": {
+		"introduction": "Tómendegi mısallar Nemodan qanday paydalanıw múmkinligin kórsetedi:",
+		"title": "Úlgi programmalar"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Ashıq kodlı licenziyalar"
+	}
+}
