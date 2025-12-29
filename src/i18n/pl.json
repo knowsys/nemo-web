@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Woytecr"
+		]
+	},
+	"common": {
+		"giveFeedback": "Zgłoś problem",
+		"closeModal": "Zamknij"
+	},
+	"editor": {
+		"examples": "Przykłady"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentacja",
+		"sourceCodeNemo": "Nemo na Githubie"
+	},
+	"examples": {
+		"introduction": "Poniższe przykłady ilustrują, jak można używać Nemo:",
+		"title": "Przykładowe programy"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Licencje open source"
+	}
+}
