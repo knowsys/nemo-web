@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"common": {
+		"giveFeedback": "د يوې ستونزې خبر ورکول",
+		"closeModal": "تړل"
+	},
+	"editor": {
+		"examples": "بېلگې"
+	},
+	"navigationBar": {
+		"documentation": "لاسوند",
+		"sourceCodeNemo": "نېمو په گيټ‌هاب کې"
+	},
+	"examples": {
+		"introduction": "لاندې بېلگې ښيي چې نېمو څنگه کارول کېدای شي:",
+		"title": "د بېلگې پروگرامونه"
+	},
+	"footer": {
+		"thirdPartyLicenses": "د پرانېستې سرچينې منښتليکونه"
+	}
+}
