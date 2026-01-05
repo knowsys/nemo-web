@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Stefan2255"
+		]
+	},
+	"common": {
+		"giveFeedback": "Rapportera ett problem",
+		"closeModal": "Stäng"
+	},
+	"editor": {
+		"examples": "Exempel"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentation",
+		"sourceCodeNemo": "Nemo på Github"
+	},
+	"examples": {
+		"introduction": "Följande exempel illustrerar hur Nemo kan användas:",
+		"title": "Exempelprogram"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Öppen källkodslicenser"
+	}
+}
