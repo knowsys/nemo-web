@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"YeBoy371"
+		]
+	},
+	"common": {
+		"giveFeedback": "문제 보고",
+		"closeModal": "닫기"
+	},
+	"editor": {
+		"examples": "예시"
+	},
+	"examples": {
+		"introduction": "다음 예시는 Nemo의 사용법을 보여줍니다.",
+		"title": "예시 프로그램"
+	},
+	"footer": {
+		"thirdPartyLicenses": "오픈 소스 라이선스"
+	}
+}
