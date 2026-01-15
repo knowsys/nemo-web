@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
+	"common": {
+		"giveFeedback": "Rapporter et problem",
+		"closeModal": "Lukk"
+	},
+	"editor": {
+		"examples": "Eksempler"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentasjon",
+		"sourceCodeNemo": "Nemo på GitHub"
+	},
+	"examples": {
+		"introduction": "Følgende eksempler illustrerer hvordan Nemo kan brukes:",
+		"title": "Eksempelprogrammer"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Lisenser for åpen kildekode"
+	}
+}

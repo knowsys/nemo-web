@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Rusjanis"
+		]
+	},
+	"common": {
+		"giveFeedback": "Ziņot par problēmu",
+		"closeModal": "Aizvērt"
+	},
+	"editor": {
+		"examples": "Piemēri"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentācija",
+		"sourceCodeNemo": "Nemo vietnē Github"
+	},
+	"examples": {
+		"introduction": "Šie piemēri ilustrē, kā var izmantot Nemo:",
+		"title": "Piemēru programmas"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Atvērtā pirmkoda licences"
+	}
+}
