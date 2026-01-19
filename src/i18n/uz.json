@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Procedural human"
+		]
+	},
+	"common": {
+		"giveFeedback": "Muammo haqida xabar berish",
+		"closeModal": "Yopish"
+	},
+	"editor": {
+		"examples": "Namunalar"
+	},
+	"navigationBar": {
+		"documentation": "Hujjat",
+		"sourceCodeNemo": "Nemo Githubda"
+	},
+	"examples": {
+		"introduction": "Quyidagi namunalar Nemo qanday ishlatilishi mumkinligini ko'rsatadi:",
+		"title": "Namuna dasturlar"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Ochiq manba litsenziyalari"
+	}
+}
