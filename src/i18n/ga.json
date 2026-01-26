@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Aindriu80"
+		]
+	},
+	"common": {
+		"giveFeedback": "Tuairiscigh fadhb",
+		"closeModal": "Dún"
+	},
+	"editor": {
+		"examples": "Samplaí"
+	},
+	"navigationBar": {
+		"documentation": "Doiciméadú",
+		"sourceCodeNemo": "Nemo ar Github"
+	},
+	"examples": {
+		"introduction": "Léiríonn na samplaí seo a leanas conas is féidir Nemo a úsáid:",
+		"title": "Cláir shamplacha"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Ceadúnais foinse oscailte"
+	}
+}

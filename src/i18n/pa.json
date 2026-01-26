@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cabal"
+		]
+	},
+	"common": {
+		"giveFeedback": "ਕਿਸੇ ਮੁੱਦੇ ਦੀ ਇਤਲਾਹ ਦਿਓ",
+		"closeModal": "ਬੰਦ ਕਰੋ"
+	},
+	"editor": {
+		"examples": "ਮਿਸਾਲਾਂ"
+	},
+	"navigationBar": {
+		"documentation": "ਲਿਖਤਾਂ"
+	},
+	"footer": {
+		"thirdPartyLicenses": "ਖੁੱਲ੍ਹੇ ਸਰੋਤ ਲਸੰਸ"
+	}
+}
