@@ -2,8 +2,7 @@ rec {
   description = "Web frontend for the Nemo rule engine";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     dream2nix = {
       url = "github:nix-community/dream2nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,17 +10,13 @@ rec {
 
     nemo = {
       url = "github:knowsys/nemo";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        utils.follows = "utils";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nemo-vscode-extension = {
       url = "github:knowsys/nemo-vscode-extension";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        utils.follows = "utils";
         dream2nix.follows = "dream2nix";
         nemo.follows = "nemo";
       };
@@ -36,44 +31,39 @@ rec {
   outputs =
     inputs@{
       self,
-      utils,
+      nixpkgs,
       nemo,
       nemo-vscode-extension,
       dream2nix,
       ...
     }:
-    utils.lib.mkFlake {
-      inherit self inputs;
-
-      channels.nixpkgs.overlaysBuilder = channels: [
-        nemo.overlays.default
-        nemo-vscode-extension.overlays.default
+    let
+      inherit (nixpkgs) lib;
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
       ];
+      forAllSystems' = systems: f: lib.genAttrs systems f;
+      forAllSystems = forAllSystems' systems;
 
-      overlays = {
-        default =
-          final: prev:
-          let
-            pkgs = self.packages.${final.system};
-          in
-          {
-            inherit (pkgs) nemo-web;
-          };
-        nemo = nemo.overlays.default;
-        nemo-vscode-extension = nemo-vscode-extension.overlays.default;
-      };
-
-      outputsBuilder =
-        channels:
+      perSystem =
+        system:
         let
-          pkgs = channels.nixpkgs;
-
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [
+              nemo.overlays.default
+              nemo-vscode-extension.overlays.default
+            ];
+          };
           npmMeta = builtins.fromJSON (builtins.readFile ./package.json);
           inherit (npmMeta) version;
 
           meta = {
             inherit description;
-            homepage = npmMeta.repository.url;
+            homepage = "https://github.com/knowsys/nemo-web";
           };
 
           nemo-web-source =
@@ -115,6 +105,8 @@ rec {
                   ];
 
                   mkDerivation = {
+                    inherit meta;
+
                     src = nemo-web-source config;
 
                     installPhase = ''
@@ -128,9 +120,6 @@ rec {
 
                   deps =
                     { nixpkgs, ... }:
-                    let
-                      inherit (nixpkgs) system;
-                    in
                     lib.mkMerge [
                       {
                         inherit (nixpkgs) stdenv;
@@ -188,6 +177,8 @@ rec {
                   ];
 
                   mkDerivation = {
+                    meta.homepage = "https://github.com/imldresden/nev";
+
                     src = inputs.nev;
 
                     installPhase = ''
@@ -228,7 +219,14 @@ rec {
 
           apps =
             let
-              nemo-web-preview = utils.lib.mkApp {
+              mkApp =
+                { drv, ... }:
+                {
+                  type = "app";
+                  program = lib.getExe drv;
+                };
+
+              nemo-web-preview = mkApp {
                 drv = pkgs.writeShellApplication {
                   name = "nemo-web-preview";
 
@@ -238,11 +236,11 @@ rec {
 
                   text = ''
                     cd "$(mktemp --directory)"
-                    cp -R ${self.packages.${pkgs.system}.nemo-web}/lib/node_modules/nemo-web/* .
+                    cp -R ${self.packages.${system}.nemo-web}/lib/node_modules/nemo-web/* .
                     chmod -R +w node_modules
                     mkdir wrapper
                     ln -s ${
-                      self.packages.${pkgs.system}.nemo-web
+                      self.packages.${system}.nemo-web
                     }/lib/node_modules/nemo-web/node_modules/vite/bin/vite.js wrapper/vite
                     export PATH="''${PATH}:wrapper"
                     npm run preview
@@ -294,9 +292,6 @@ rec {
 
                   deps =
                     { nixpkgs, ... }:
-                    let
-                      inherit (nixpkgs) system;
-                    in
                     lib.mkMerge [
                       {
                         inherit (nixpkgs) stdenv;
@@ -320,8 +315,25 @@ rec {
             ];
           };
 
-          formatter = channels.nixpkgs.nixfmt-rfc-style;
+          formatter = pkgs.nixfmt-rfc-style;
         };
 
-    };
+      shared = {
+        overlays = {
+          default = final: prev: {
+            inherit (self.packages.${final.stdenv.hostPlatform.system}) nemo-web;
+          };
+          nemo = nemo.overlays.default;
+          nemo-vscode-extension = nemo-vscode-extension.overlays.default;
+        };
+      };
+
+    in
+    shared
+    // (lib.genAttrs [
+      "apps"
+      "packages"
+      "devShells"
+      "formatter"
+    ] (output: forAllSystems (system: (perSystem system).${output})));
 }
