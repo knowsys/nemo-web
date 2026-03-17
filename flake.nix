@@ -123,7 +123,7 @@ rec {
                     lib.mkMerge [
                       {
                         inherit (nixpkgs) stdenv;
-                        nodejs = nixpkgs.nodejs_20; # generate-license-file is broken on 22
+                        nodejs = nixpkgs.nodejs_24;
                         nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
                         nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
                         nemo-vscode-extension-vsix =
@@ -195,7 +195,7 @@ rec {
                     lib.mkMerge [
                       {
                         inherit (nixpkgs) stdenv;
-                        nodejs = nixpkgs.nodejs_20; # generate-license-file is broken on 22
+                        nodejs = nixpkgs.nodejs_24;
                       }
                     ];
 
