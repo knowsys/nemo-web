@@ -18,6 +18,10 @@
 @prefix wdqs: <https://query.wikidata.org/> .
 @prefix wdt: <http://www.wikidata.org/prop/direct/> .
 @prefix wd: <http://www.wikidata.org/entity/> .
+@prefix p: <http://www.wikidata.org/prop/> .
+@prefix pq: <http://www.wikidata.org/prop/qualifier/> .
+@prefix ps: <http://www.wikidata.org/prop/statement/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 %%% Select the series of sports tournaments to investigate.
 @parameter $eventType = wd:Q1778808 . % All-Ireland Senior Hurling Championship
@@ -27,48 +31,19 @@
 % @parameter $eventType = wd:Q16642 . % Six Nations Championship
 % @parameter $eventType = wd:Q739479 . % Faroe Islands Premier League
 
-%%% Import "wdLabel" (Wikidata item, English label). This query uses the Wikidata
-%%% label service (won't work in other SPARQL endpoints). Nemo will inject bindings
-%%% for ?x during reasoning.
-@import wdLabel :- sparql {
-    endpoint = wdqs:sparql,
-    query = """
-      PREFIX wikibase: <http://wikiba.se/ontology#>
-      SELECT ?x ?xLabel WHERE {
-        SERVICE wikibase:label {
-          <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" }
-      }
-    """
-} .
 %%% Import "wdTriple" as a predicate for accessing any RDF triple from Wikidata:
-@import wdTriple :- sparql{
-  endpoint = wdqs:sparql,
-  query = "SELECT ?subject ?prop ?value WHERE { ?subject ?prop ?value }"
-} .
-%%% Import "wdEventInSeriesFollowedBy", as a predicate that relates individual events, their
-%%% "sports series of league or competition" (P3450), and the next event ("followed by" P156)
-%%% in that series:
-@import wdEventInSeriesFollowedBy :- sparql{
-    endpoint = wdqs:sparql,
-    query = """
-      PREFIX p: <http://www.wikidata.org/prop/>
-      PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
-      PREFIX ps: <http://www.wikidata.org/prop/statement/>
-      SELECT ?event ?series ?next WHERE {
-        ?event p:P3450 [
-            ps:P3450 ?series ;
-            pq:P156 ?next
-        ] .
-      }
-    """
-} .
+@import wdTriple :- sparql{ endpoint = wdqs:sparql } .
 
 %%% What sports events are there?
 sportsEvent(?event) :- wdTriple(?event, wdt:P3450, $eventType) .
 %%% Who won these events?
 winner(?event, ?winner) :- sportsEvent(?event), wdTriple(?event, wdt:P1346, ?winner) .
 %%% Which events followed within the same series?
-next(?event, ?next) :- sportsEvent(?event), wdEventInSeriesFollowedBy(?event, $eventType, ?next ) .
+next(?event, ?next) :-
+   sportsEvent(?event),
+   wdTriple(?event, p:P3450, ?stmt),
+   wdTriple(?stmt, ps:P3450, $eventType),
+   wdTriple(?stmt, pq:P156, ?next) .
 
 %%% Find the events that had the same winner as the previous one:
 sameWinnerAsPrevious(?event) :- next(?previous, ?event), winner(?event, ?winner), winner(?previous, ?winner) .
@@ -91,8 +66,8 @@ streakLength(?start, #count(?onStreak)) :- onStreak(?start, ?onStreak) .
 streaksByLength(?length, ?winner, ?winnerLabel, ?start, ?startLabel) :-
   streakLength(?start, ?length), ?length > 1,
   winner(?start, ?winner),
-  wdLabel(?winner, ?winnerLabel),
-  wdLabel(?start, ?startLabel) .
+  wdTriple(?winner, rdfs:label, ?winnerLabel), LANG(?winnerLabel) = "en",
+  wdTriple(?start, rdfs:label, ?startLabel), LANG(?startLabel) = "en" .  
 
 %%% Find the maximal length of a streak:
 longestStreakLength(#max(?length)) :- streakLength(_, ?length) .

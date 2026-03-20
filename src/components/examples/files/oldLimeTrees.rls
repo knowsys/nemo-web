@@ -18,6 +18,7 @@
 @prefix wdqs: <https://query.wikidata.org/> .
 @prefix wdt: <http://www.wikidata.org/prop/direct/> .
 @prefix wd: <http://www.wikidata.org/entity/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 %%% Define what kind of genus (of trees) we are looking for:
 @parameter $treeGenus = wd:Q127849 . % = lime/linden tree
@@ -30,19 +31,7 @@
 %%% This data is derived from data from the Dresden Open Data Portal https://opendata.dresden.de/.
 @import tree :- csv{format=(any, string, int, int), resource="https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/lime-trees/dresden-trees-ages-heights.csv"} . 
 %%% Import (arbitrary) single triples from Wikidata:
-@import wdTriple :- sparql{
-  endpoint = wdqs:sparql,
-  query = "SELECT ?subject ?prop ?value WHERE { ?subject ?prop ?value }"
-} .
-%%% Import predicate "wdLabel" (English label) from Wikidata:
-@import wdLabel :- sparql{
-  endpoint=wdqs:sparql,
-  query="""
-    PREFIX wikibase: <http://wikiba.se/ontology#>
-    SELECT ?qid ?qidLabel WHERE {
-      SERVICE wikibase:label {
-        <http://www.bigdata.com/rdf#serviceParam> wikibase:language "mul,en" } }"""
-} .
+@import wdTriple :- sparql{ endpoint = wdqs:sparql } .
 
 %%% Find all species of trees we are interested in, starting from the one given in the parameter:
 speciesOfInterest($treeGenus) .
@@ -50,7 +39,7 @@ speciesOfInterest($treeGenus) .
 speciesOfInterest(?childTaxon) :- speciesOfInterest(?parentTaxon), wdTriple(?childTaxon, wdt:P171, ?parentTaxon) .
 
 %%% Find the names of all species we are interested in:
-namedSpeciesOfInterest(?species,STR(?speciesLabel)) :- speciesOfInterest(?species), wdLabel(?species,?speciesLabel) .
+namedSpeciesOfInterest(?species,STR(?speciesLabel)) :- speciesOfInterest(?species), wdTriple(?species, rdfs:label, ?speciesLabel), LANG(?speciesLabel) = "en" .
 
 %%% Match CSV-based tree data with names of species we are interested in, and show only the old ones:
 oldTreeOfInterest(?speciesLabel,?age,?location) :- tree(?location,?speciesLabel,?age,?heightInMeters), ?age >= $minAge, namedSpeciesOfInterest(?species,?speciesLabel) .
