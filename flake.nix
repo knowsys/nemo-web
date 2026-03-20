@@ -122,8 +122,7 @@ rec {
                     { nixpkgs, ... }:
                     lib.mkMerge [
                       {
-                        inherit (nixpkgs) stdenv;
-                        nodejs = nixpkgs.nodejs_24;
+                        inherit (nixpkgs) stdenv nodejs;
                         nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
                         nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
                         nemo-vscode-extension-vsix =
@@ -194,8 +193,7 @@ rec {
                     { nixpkgs, ... }:
                     lib.mkMerge [
                       {
-                        inherit (nixpkgs) stdenv;
-                        nodejs = nixpkgs.nodejs_24;
+                        inherit (nixpkgs) stdenv nodejs;
                       }
                     ];
 
