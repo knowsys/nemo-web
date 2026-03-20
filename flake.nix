@@ -122,7 +122,11 @@ rec {
                     { nixpkgs, ... }:
                     lib.mkMerge [
                       {
-                        inherit (nixpkgs) stdenv nodejs;
+                        inherit (nixpkgs) stdenv;
+                        # generate-license-file fails with nodejs >=
+                        # 22 under cppnix (but, surprisingly, not
+                        # under lix)
+                        nodejs = nixpkgs.nodejs_20;
                         nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
                         nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
                         nemo-vscode-extension-vsix =
@@ -193,7 +197,8 @@ rec {
                     { nixpkgs, ... }:
                     lib.mkMerge [
                       {
-                        inherit (nixpkgs) stdenv nodejs;
+                        inherit (nixpkgs) stdenv;
+                        nodejs = nixpkgs.nodejs_20;
                       }
                     ];
 
@@ -229,7 +234,7 @@ rec {
                   name = "nemo-web-preview";
 
                   runtimeInputs = [
-                    pkgs.nodejs
+                    pkgs.nodejs_20
                   ];
 
                   text = ''
@@ -282,7 +287,7 @@ rec {
                     src = nemo-web-source config;
 
                     nativeBuildInputs = [
-                      pkgs.nodejs
+                      pkgs.nodejs_20
                     ];
 
                     buildPhase = "mkdir $out";
