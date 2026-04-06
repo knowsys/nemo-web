@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bayahiu"
+		]
+	},
+	"common": {
+		"giveFeedback": "Laporkan masalah",
+		"closeModal": "Tutup"
+	},
+	"editor": {
+		"examples": "Contoh"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentasi",
+		"sourceCodeNemo": "Nemo di Github"
+	},
+	"examples": {
+		"introduction": "Contoh-contoh berikut menggambarkan bagaimana Nemo bisa digunakan:",
+		"title": "Contoh program"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Lisensi-lisensi sumber terbuka"
+	}
+}
