@@ -8,6 +8,7 @@
 import * as monaco from 'monaco-editor';
 
 import { initialize } from '@codingame/monaco-vscode-api';
+import getConfigurationServiceOverride, { initUserConfiguration } from '@codingame/monaco-vscode-configuration-service-override'
 import getExtensionServiceOverride from "@codingame/monaco-vscode-extensions-service-override";
 import getLanguagesServiceOverride from "@codingame/monaco-vscode-languages-service-override";
 import getThemeServiceOverride from "@codingame/monaco-vscode-theme-service-override";
@@ -49,8 +50,12 @@ export async function createEditor(
 ) {
   if (!servicesInitialized) {
     servicesInitialized = true;
+
+    await initUserConfiguration(JSON.stringify({"workbench.colorTheme": "Light Modern"}))
+
     await initialize(
       {
+        ...getConfigurationServiceOverride(),
         ...getExtensionServiceOverride({enableWorkerExtensionHost: true}),
         ...getLanguagesServiceOverride(),
         ...getThemeServiceOverride(),

@@ -14,6 +14,7 @@
   "dependencies": {
     "@codingame/esbuild-import-meta-url-plugin": "^1.0.3",
     "@codingame/monaco-vscode-api": "^29.1.1",
+    "@codingame/monaco-vscode-configuration-service-override": "^29.1.1",
     "@codingame/monaco-vscode-extension-api": "^29.1.1",
     "@codingame/monaco-vscode-extensions-service-override": "^29.1.1",
     "@codingame/monaco-vscode-languages-service-override": "^29.1.1",
