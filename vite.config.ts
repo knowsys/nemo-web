@@ -36,8 +36,13 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    esbuildOptions: {
-      plugins: [importMetaUrlPlugin as any], // See https://github.com/CodinGame/monaco-vscode-api
+    rolldownOptions: {
+      plugins: [importMetaUrlPlugin], // See https://github.com/CodinGame/monaco-vscode-api
     },
+    // https://github.com/CodinGame/monaco-vscode-api/wiki/Troubleshooting#commonjs-dependencies
+    include: [ 
+      'vscode-textmate',
+      'vscode-oniguruma',
+    ],
   },
 });
