@@ -28,7 +28,7 @@ const workers: Partial<Record<string, Worker>> = {
   TextMateWorker: new Worker(new URL('@codingame/monaco-vscode-textmate-service-override/worker', import.meta.url), { type: 'module' }),
 }
 
-// The approach from the docs using `getWorker` doe for some reason not work for the extensionHostWorkerMain even though the error message says it should...
+// The approach from the docs using `getWorker` does not work for the extensionHostWorkerMain even though the error message says it should...
 // Anyway, as stated above, this is what we found in 
 // https://github.com/CodinGame/monaco-vscode-api/blob/74f56d38c9481b2fafa18ff3597da39811375f5c/demo/src/setup.common.ts
 // and it seems to work.
