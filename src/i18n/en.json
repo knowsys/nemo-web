@@ -8,7 +8,8 @@
   },
   "navigationBar": {
     "documentation": "Documentation",
-    "sourceCodeNemo": "Nemo on Github"
+    "sourceCodeNemo": "Nemo on GitHub",
+    "newNemoTab": "New Nemo Tab"
   },
   "examples": {
     "introduction": "The following examples illustrate how Nemo can be used:",
