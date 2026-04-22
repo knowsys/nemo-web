@@ -86,9 +86,7 @@ export function ExecutionPanel() {
             .filter((input) => input[1] !== undefined),
         ),
       );
-      programInfo.outputPredicates = (
-        await worker.getOutputPredicates()
-      ).sort();
+      programInfo.outputPredicates = await worker.getOutputPredicates();
       setProgramInfo(programInfo);
       setActiveKey(
         programInfo.outputPredicates[0]
