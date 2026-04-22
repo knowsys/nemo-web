@@ -11,7 +11,8 @@
 	},
 	"navigationBar": {
 		"documentation": "This is the title of a menu item in the “Help” menu, linking to the documentation for Nemo and the rule language.",
-		"sourceCodeNemo": "This is the title of a menu item in the “Help” menu, linking to the GitHub repository for the Nemo rule engine."
+		"sourceCodeNemo": "This is the title of a menu item in the “Help” menu, linking to the GitHub repository for the Nemo rule engine.",
+		"newNemoTab": "This is the title for the navbar item that opens a new Nemo tab."
 	},
 	"examples": {
 		"introduction": "This is the introductory paragraph shown before the list of example programs in the example selection modal.",

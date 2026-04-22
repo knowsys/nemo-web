@@ -30,7 +30,7 @@ export function NavigationBar() {
       style={{ borderBottom: "1px solid #dddddd" }}
     >
       <Container fluid>
-        <Navbar.Brand>
+        <Navbar.Brand href="./" target="_blank">
           <img
             src={logoNemo}
             alt="Nemo - Graph Rule Engine"
@@ -39,7 +39,7 @@ export function NavigationBar() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navigation-bar-nav" />
         <Navbar.Collapse id="navigation-bar-nav">
-          <Nav className="me-auto">
+          <Nav className="me-auto" activeKey="NONE_WE_DO_NOT_WANT_ACTIVE_HIGHLIGHTING">
             <ShowExamplesButton />
             <NavDropdown
               title={
@@ -60,6 +60,9 @@ export function NavigationBar() {
                 {t("common:giveFeedback")}
               </NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link href="./" target="_blank">
+              <Icon name="file-earmark-plus" /> {t("newNemoTab")}
+            </Nav.Link>
           </Nav>
           <Navbar.Text>
             <span style={{ fontSize: ".8em" }}>Version: {nemoVersion}</span>{" "}
