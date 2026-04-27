@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Okras"
+			"Okras",
+			"Əkrəm"
 		]
 	},
 	"common": {
@@ -13,7 +14,8 @@
 	},
 	"navigationBar": {
 		"documentation": "Документация",
-		"sourceCodeNemo": "Nemo на Github"
+		"sourceCodeNemo": "Nemo на GitHub",
+		"newNemoTab": "Новая вкладка Nemo"
 	},
 	"examples": {
 		"introduction": "Следующие примеры иллюстрируют, как можно использовать Nemo:",

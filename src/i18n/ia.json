@@ -13,7 +13,8 @@
 	},
 	"navigationBar": {
 		"documentation": "Documentation",
-		"sourceCodeNemo": "Nemo sur GitHub"
+		"sourceCodeNemo": "Nemo sur GitHub",
+		"newNemoTab": "Nove scheda Nemo"
 	},
 	"examples": {
 		"introduction": "Le sequente exemplos illustra le uso de Nemo:",

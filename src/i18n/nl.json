@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Siebrand"
 		]
 	},
@@ -13,7 +14,8 @@
 	},
 	"navigationBar": {
 		"documentation": "Documentatie",
-		"sourceCodeNemo": "Nemo op Github"
+		"sourceCodeNemo": "Nemo op GitHub",
+		"newNemoTab": "Nieuw Nemo-tabblad"
 	},
 	"examples": {
 		"introduction": "De volgende voorbeelden illustreren hoe Nemo gebruikt kan worden:",

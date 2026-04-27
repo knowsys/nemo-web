@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Meno25"
+			"Meno25",
+			"Mohammed Qays"
 		]
 	},
 	"common": {
@@ -13,7 +14,8 @@
 	},
 	"navigationBar": {
 		"documentation": "التوثيق",
-		"sourceCodeNemo": "نيمو على جيثب"
+		"sourceCodeNemo": "نيمو على غيت هاب",
+		"newNemoTab": "تبويب نيمو جديد"
 	},
 	"examples": {
 		"introduction": "توضح الأمثلة التالية كيفية استخدام Nemo:",

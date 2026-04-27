@@ -13,7 +13,8 @@
 	},
 	"navigationBar": {
 		"documentation": "لاسوند",
-		"sourceCodeNemo": "نېمو په گيټ‌هاب کې"
+		"sourceCodeNemo": "نېمو په گيټ‌هاب کې",
+		"newNemoTab": "نوې نېمو ريښکه"
 	},
 	"examples": {
 		"introduction": "لاندې بېلگې ښيي چې نېمو څنگه کارول کېدای شي:",

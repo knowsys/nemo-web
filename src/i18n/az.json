@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Əkrəm"
+		]
+	},
+	"common": {
+		"giveFeedback": "Xəta bildir",
+		"closeModal": "Bağla"
+	},
+	"editor": {
+		"examples": "Nümunələr"
+	},
+	"navigationBar": {
+		"documentation": "Sənədləşdirmə",
+		"sourceCodeNemo": "\"GitHub\"da \"Nemo\"",
+		"newNemoTab": "Yeni \"Nemo\" vərəqəsi"
+	},
+	"examples": {
+		"introduction": "Aşağıdakı nümunələr \"Nemo\"nun necə istifadə oluna biləcəyini göstərir:",
+		"title": "Nümunə proqramlar"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Açıq mənbə lisenziyaları"
+	}
+}

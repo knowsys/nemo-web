@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GuoPC",
 			"TFX202X"
 		]
 	},
@@ -13,7 +14,8 @@
 	},
 	"navigationBar": {
 		"documentation": "文档",
-		"sourceCodeNemo": "Nemo在Github上"
+		"sourceCodeNemo": "GitHub上的Nemo",
+		"newNemoTab": "新Nemo标签页"
 	},
 	"examples": {
 		"introduction": "以下示例说明了如何使用Nemo：",

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Neriah",
 			"YaronSh"
 		]
 	},
@@ -13,7 +14,7 @@
 	},
 	"navigationBar": {
 		"documentation": "תיעוד",
-		"sourceCodeNemo": "Nemo ב־Github"
+		"sourceCodeNemo": "Nemo ב־GitHub"
 	},
 	"examples": {
 		"introduction": "הדוגמאות הבאות מציגות איך אפשר להשתמש ב־Nemo:",
