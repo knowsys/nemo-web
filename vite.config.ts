@@ -40,9 +40,6 @@ export default defineConfig({
       plugins: [importMetaUrlPlugin], // See https://github.com/CodinGame/monaco-vscode-api
     },
     // https://github.com/CodinGame/monaco-vscode-api/wiki/Troubleshooting#commonjs-dependencies
-    include: [ 
-      'vscode-textmate',
-      'vscode-oniguruma',
-    ],
+    include: ["vscode-textmate", "vscode-oniguruma"],
   },
 });

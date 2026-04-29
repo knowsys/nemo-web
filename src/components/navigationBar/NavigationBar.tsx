@@ -39,7 +39,10 @@ export function NavigationBar() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navigation-bar-nav" />
         <Navbar.Collapse id="navigation-bar-nav">
-          <Nav className="me-auto" activeKey="NONE_WE_DO_NOT_WANT_ACTIVE_HIGHLIGHTING">
+          <Nav
+            className="me-auto"
+            activeKey="NONE_WE_DO_NOT_WANT_ACTIVE_HIGHLIGHTING"
+          >
             <ShowExamplesButton />
             <NavDropdown
               title={
