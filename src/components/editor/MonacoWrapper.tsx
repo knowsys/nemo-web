@@ -1,10 +1,11 @@
 import * as monaco from "monaco-editor";
 import { useEffect, useRef } from "react";
 import "./MonacoWrapper.css";
-import { createEditor } from "./createMonacoEditor";
+import { createEditor, changeTheme } from "./createMonacoEditor";
 
 export interface MonacoWrapperProps {
   additionalMonacoOptions?: monaco.editor.IStandaloneEditorConstructionOptions;
+  darkMode: boolean;
   programText: string;
   onProgramTextChange?: (programText: string) => void;
 }
@@ -15,6 +16,7 @@ export interface MonacoWrapperProps {
  */
 export function MonacoWrapper({
   additionalMonacoOptions,
+  darkMode,
   programText,
   onProgramTextChange,
 }: MonacoWrapperProps) {
@@ -36,7 +38,12 @@ export function MonacoWrapper({
 
     const timeout = setTimeout(async function () {
       console.debug("[Editor] Creating Monaco editor");
-      editor = await createEditor(child, programText, additionalMonacoOptions);
+      editor = await createEditor(
+        child,
+        darkMode,
+        programText,
+        additionalMonacoOptions,
+      );
       console.debug("[Editor] Created Monaco editor", editor);
 
       if (cleanedUp) {
@@ -66,6 +73,16 @@ export function MonacoWrapper({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Update editor theme when Redux state changes
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (editor === null) {
+      return;
+    }
+
+    changeTheme(darkMode);
+  }, [darkMode]);
 
   // Update editor contents when Redux state changes
   useEffect(() => {

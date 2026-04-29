@@ -2,6 +2,8 @@ import "./Examples.css";
 import { useEffect, useState } from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../store";
+import { selectDarkMode } from "../../store/preferences/selectors/selectDarkMode";
 import { ReadOnlyEditor } from "../editor/ReadOnlyEditor";
 import { listOfExamples } from "./files/listOfExamples";
 import { DefaultSuspense } from "../DefaultSuspense";
@@ -15,6 +17,8 @@ export function Examples({ onProgramTextChange }: ExamplesProps) {
 
   const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
   const [currentProgramText, setCurrentProgramText] = useState("");
+
+  const darkPreferred = useAppSelector(selectDarkMode);
 
   useEffect(() => {
     let isCleanedUp = false;
@@ -68,7 +72,10 @@ export function Examples({ onProgramTextChange }: ExamplesProps) {
       <Col md={8}>
         <div className="examples-editor-container">
           <DefaultSuspense>
-            <ReadOnlyEditor programText={currentProgramText} />
+            <ReadOnlyEditor
+              darkMode={darkPreferred}
+              programText={currentProgramText}
+            />
           </DefaultSuspense>
         </div>
       </Col>

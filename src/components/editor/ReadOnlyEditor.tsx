@@ -3,13 +3,15 @@ import "./Editor.css";
 import { LazyMonacoWrapper } from "./LazyMonacoWrapper";
 
 export interface ReadOnlyEditorProps {
+  darkMode: boolean;
   programText: string;
 }
 
-export function ReadOnlyEditor({ programText }: ReadOnlyEditorProps) {
+export function ReadOnlyEditor({ darkMode, programText }: ReadOnlyEditorProps) {
   return (
     <DefaultSuspense>
       <LazyMonacoWrapper
+        darkMode={darkMode}
         programText={programText}
         additionalMonacoOptions={{
           readOnly: true,
