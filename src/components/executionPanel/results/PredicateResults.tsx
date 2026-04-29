@@ -76,7 +76,10 @@ export function PredicateResults({
             {currentRows.map((row) => (
               <tr key={`row-${row.id}`}>
                 {row.values.map((value, index) => (
-                  <td key={`row-${row.id}-column-${index}`}>
+                  <td
+                    key={`row-${row.id}-column-${index}`}
+                    style={{ whiteSpace: "pre-wrap" }}
+                  >
                     {value.toString().startsWith("http://") ||
                     value.toString().startsWith("https://") ? (
                       <Link href={value.toString()}>{value.toString()}</Link>
