@@ -13,7 +13,8 @@
 	},
 	"navigationBar": {
 		"documentation": "Doiciméadú",
-		"sourceCodeNemo": "Nemo ar Github"
+		"sourceCodeNemo": "Nemo ar GitHub",
+		"newNemoTab": "Cluaisín Nua Nemo"
 	},
 	"examples": {
 		"introduction": "Léiríonn na samplaí seo a leanas conas is féidir Nemo a úsáid:",

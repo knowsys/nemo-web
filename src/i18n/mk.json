@@ -13,7 +13,8 @@
 	},
 	"navigationBar": {
 		"documentation": "Документација",
-		"sourceCodeNemo": "Nemo на Github"
+		"sourceCodeNemo": "Nemo на Github",
+		"newNemoTab": "Nemo во ново јазиче"
 	},
 	"examples": {
 		"introduction": "Следниве примери илустрираат како да се користи Nemo:",
