@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"PedroMVM"
+		]
+	},
+	"common": {
+		"giveFeedback": "Relatar um problema",
+		"closeModal": "Fechar"
+	},
+	"editor": {
+		"examples": "Exemplos"
+	},
+	"navigationBar": {
+		"documentation": "Documentação",
+		"sourceCodeNemo": "Nemo no GitHub",
+		"newNemoTab": "Nova aba Nemo"
+	},
+	"examples": {
+		"introduction": "Os exemplos a seguir ilustram como Nemo pode ser usado:",
+		"title": "Programas exemplos"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Licenças de código aberto"
+	}
+}
