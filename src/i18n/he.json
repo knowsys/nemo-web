@@ -6,7 +6,7 @@
 		]
 	},
 	"common": {
-		"giveFeedback": "דיווח בעיה",
+		"giveFeedback": "דיווח על בעיה",
 		"closeModal": "סגירה"
 	},
 	"editor": {
@@ -14,7 +14,8 @@
 	},
 	"navigationBar": {
 		"documentation": "תיעוד",
-		"sourceCodeNemo": "Nemo ב־GitHub"
+		"sourceCodeNemo": "Nemo ב־GitHub",
+		"newNemoTab": "לשונית Nemo חדשה"
 	},
 	"examples": {
 		"introduction": "הדוגמאות הבאות מציגות איך אפשר להשתמש ב־Nemo:",
