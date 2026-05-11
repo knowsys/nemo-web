@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Shem.iz"
+		]
+	},
+	"common": {
+		"giveFeedback": "ഒരു പ്രശ്നം അറിയിക്കുക",
+		"closeModal": "അടയ്ക്കുക"
+	},
+	"editor": {
+		"examples": "ഉദാഹരണങ്ങൾ"
+	},
+	"navigationBar": {
+		"documentation": "വിവരണം",
+		"sourceCodeNemo": "ഗിറ്റ്ഹബിൽ നെമോ",
+		"newNemoTab": "പുതിയ നെമോ ടാബ്"
+	},
+	"examples": {
+		"introduction": "താഴെ പറയുന്ന ഉദാഹരണങ്ങൾ നെമോ എങ്ങനെ ഉപയോഗിക്കാമെന്ന് വ്യക്തമാക്കുന്നു:",
+		"title": "ഉദാഹരണ പ്രോഗ്രാമുകൾ"
+	},
+	"footer": {
+		"thirdPartyLicenses": "ഓപ്പൺ സോഴ്‌സ് ലൈസൻസുകൾ"
+	}
+}
