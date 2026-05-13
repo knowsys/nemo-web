@@ -10,6 +10,7 @@ import * as monaco from "monaco-editor";
 import { initialize } from "@codingame/monaco-vscode-api";
 import getConfigurationServiceOverride, {
   initUserConfiguration,
+  updateUserConfiguration,
 } from "@codingame/monaco-vscode-configuration-service-override";
 import getExtensionServiceOverride from "@codingame/monaco-vscode-extensions-service-override";
 import getLanguagesServiceOverride from "@codingame/monaco-vscode-languages-service-override";
@@ -60,8 +61,17 @@ window.MonacoEnvironment = {
 
 let servicesInitialized = false;
 
+export async function changeTheme(dark: boolean) {
+  await updateUserConfiguration(
+    JSON.stringify({
+      "workbench.colorTheme": dark ? "Dark Modern" : "Light Modern",
+    }),
+  );
+}
+
 export async function createEditor(
   container: HTMLElement,
+  darkMode: boolean,
   programText: string,
   additionalMonacoOptions?: monaco.editor.IStandaloneEditorConstructionOptions,
 ) {
@@ -69,7 +79,9 @@ export async function createEditor(
     servicesInitialized = true;
 
     await initUserConfiguration(
-      JSON.stringify({ "workbench.colorTheme": "Light Modern" }),
+      JSON.stringify({
+        "workbench.colorTheme": darkMode ? "Dark Modern" : "Light Modern",
+      }),
     );
 
     await initialize(

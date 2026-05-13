@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { preferencesSlice } from "./preferences";
 import { programInfoSlice } from "./programInfo";
 
 export function createStore() {
   return configureStore({
     reducer: {
+      preferences: preferencesSlice.reducer,
       programInfo: programInfoSlice.reducer,
     },
     middleware: (m) => {

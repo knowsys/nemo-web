@@ -1,17 +1,23 @@
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import "./NavigationBar.css";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../store";
+import { selectDarkMode } from "../../store/preferences/selectors/selectDarkMode";
 import { links } from "../links";
 import { useEffect, useState } from "react";
 import { createNemoWorker } from "../../nemoWorker/NemoWorker";
 import logoNemo from "./nemo-logo-rusty.svg";
+import logoNemoBright from "./nemo-logo-rusty-bright.svg";
 import { Icon } from "../Icon";
+import { DarkModeSwitch } from "./DarkModeSwitch";
 import { ShowExamplesButton } from "./ShowExamplesButton";
 
 export function NavigationBar() {
   const { t } = useTranslation("navigationBar");
 
   const [nemoVersion, setNemoVersion] = useState<string | undefined>();
+
+  const darkMode = useAppSelector(selectDarkMode);
 
   useEffect(() => {
     (async () => {
@@ -32,7 +38,7 @@ export function NavigationBar() {
       <Container fluid>
         <Navbar.Brand href="./" target="_blank">
           <img
-            src={logoNemo}
+            src={darkMode ? logoNemoBright : logoNemo}
             alt="Nemo - Graph Rule Engine"
             className="logo-nemo"
           />
@@ -72,11 +78,12 @@ export function NavigationBar() {
             <a
               href={links.sourceCodeNemo}
               target="_blank"
-              style={{ color: "inherit" }}
+              style={{ color: "inherit", cursor: "pointer" }}
             >
               <Icon name="github" />
             </a>
           </Navbar.Text>
+          <DarkModeSwitch />
         </Navbar.Collapse>
       </Container>
     </Navbar>
