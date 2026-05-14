@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"もなー(偽物)"
 		]
 	},
@@ -13,7 +14,8 @@
 	},
 	"navigationBar": {
 		"documentation": "ドキュメント",
-		"sourceCodeNemo": "GitHubでNemoを見る"
+		"sourceCodeNemo": "GitHubでNemoを見る",
+		"newNemoTab": "新しいNemoタブ"
 	},
 	"examples": {
 		"introduction": "次の例は、Nemo の使用方法を示しています。",

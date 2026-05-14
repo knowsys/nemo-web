@@ -17,6 +17,10 @@
 		"sourceCodeNemo": "GitHub上的Nemo",
 		"newNemoTab": "新Nemo标签页"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "切换到浅色模式。",
+		"switchToDark": "切换到深色模式。"
+	},
 	"examples": {
 		"introduction": "以下示例说明了如何使用Nemo：",
 		"title": "示例程序"

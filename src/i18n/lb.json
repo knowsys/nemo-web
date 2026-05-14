@@ -16,6 +16,10 @@
 		"sourceCodeNemo": "Nemo op GitHub",
 		"newNemoTab": "Neien Nemo-Tab"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "An den helle Modus wiesselen.",
+		"switchToDark": "An den däischtere Modus wiesselen."
+	},
 	"examples": {
 		"introduction": "Déi follgend Beispiller illustréieren, wéi een Nemo benotze kann:",
 		"title": "Beispillprogrammen"

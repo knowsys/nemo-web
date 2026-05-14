@@ -17,6 +17,10 @@
 		"sourceCodeNemo": "GitHub에서 Nemo 보기",
 		"newNemoTab": "새 Nemo 탭"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "밝은 모드로 전환.",
+		"switchToDark": "어두운 모드로 전환."
+	},
 	"examples": {
 		"introduction": "다음 예시는 Nemo의 사용법을 보여줍니다.",
 		"title": "예시 프로그램"

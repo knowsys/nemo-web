@@ -17,6 +17,10 @@
 		"sourceCodeNemo": "Nemo op GitHub",
 		"newNemoTab": "Nieuw Nemo-tabblad"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "Overschakelen naar lichte modus.",
+		"switchToDark": "Overschakelen naar donkere modus."
+	},
 	"examples": {
 		"introduction": "De volgende voorbeelden illustreren hoe Nemo gebruikt kan worden:",
 		"title": "Voorbeeldprogramma's"
