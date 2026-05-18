@@ -16,6 +16,10 @@
 		"sourceCodeNemo": "Nemo на Github",
 		"newNemoTab": "Nemo во ново јазиче"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "Префрли на светол режим",
+		"switchToDark": "Префрли на темен режим"
+	},
 	"examples": {
 		"introduction": "Следниве примери илустрираат како да се користи Nemo:",
 		"title": "Примерни програми"

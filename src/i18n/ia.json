@@ -16,6 +16,10 @@
 		"sourceCodeNemo": "Nemo sur GitHub",
 		"newNemoTab": "Nove scheda Nemo"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "Cambiar al modo clar.",
+		"switchToDark": "Cambiar al modo obscur."
+	},
 	"examples": {
 		"introduction": "Le sequente exemplos illustra le uso de Nemo:",
 		"title": "Exemplos de programmas"

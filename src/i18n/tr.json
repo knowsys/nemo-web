@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Leo",
 			"Sakblue",
 			"Əkrəm"
 		]
@@ -16,6 +17,10 @@
 		"documentation": "Belgelendirme",
 		"sourceCodeNemo": "GitHub'da Nemo",
 		"newNemoTab": "Yeni Nemo Sekmesi"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "Açık moda geçin.",
+		"switchToDark": "Karanlık moda geçin."
 	},
 	"examples": {
 		"introduction": "Aşağıdaki örnekler Nemo'nun nasıl kullanılabileceğini gösterir:",
