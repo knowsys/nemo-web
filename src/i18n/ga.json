@@ -16,6 +16,10 @@
 		"sourceCodeNemo": "Nemo ar GitHub",
 		"newNemoTab": "Cluaisín Nua Nemo"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "Athraigh go mód solais.",
+		"switchToDark": "Athraigh go mód dorcha."
+	},
 	"examples": {
 		"introduction": "Léiríonn na samplaí seo a leanas conas is féidir Nemo a úsáid:",
 		"title": "Cláir shamplacha"
