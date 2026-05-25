@@ -17,6 +17,10 @@
 		"sourceCodeNemo": "GitHubでNemoを見る",
 		"newNemoTab": "新しいNemoタブ"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "明るいモードに切り替え。",
+		"switchToDark": "ダークモードに切り替え。"
+	},
 	"examples": {
 		"introduction": "次の例は、Nemo の使用方法を示しています。",
 		"title": "サンプルプログラム"

@@ -17,6 +17,10 @@
 		"sourceCodeNemo": "نيمو على غيت هاب",
 		"newNemoTab": "تبويب نيمو جديد"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "انقل إلى وضع الضوء",
+		"switchToDark": "انقل إلى وضع الظلام"
+	},
 	"examples": {
 		"introduction": "توضح الأمثلة التالية كيفية استخدام Nemo:",
 		"title": "برامج نموذجية"
