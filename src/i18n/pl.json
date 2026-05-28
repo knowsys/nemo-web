@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"G3raltJJ",
 			"Woytecr"
 		]
 	},
@@ -13,7 +14,12 @@
 	},
 	"navigationBar": {
 		"documentation": "Dokumentacja",
-		"sourceCodeNemo": "Nemo na Githubie"
+		"sourceCodeNemo": "Nemo na GitHubie",
+		"newNemoTab": "Nowe Okienko Nemo"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "Przełącz na tryb jasny.",
+		"switchToDark": "Przełącz na tryb ciemny."
 	},
 	"examples": {
 		"introduction": "Poniższe przykłady ilustrują, jak można używać Nemo:",

@@ -13,7 +13,12 @@
 	},
 	"navigationBar": {
 		"documentation": "Τεκμηρίωση",
-		"sourceCodeNemo": "Nemo στο Github"
+		"sourceCodeNemo": "Nemo στο GitHub",
+		"newNemoTab": "Νέα Καρτέλα Nemo"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "Εναλλαγή σε φωτεινή λειτουργία.",
+		"switchToDark": "Εναλλαγή σε σκοτεινή λειτουργία."
 	},
 	"examples": {
 		"introduction": "Τα παρακάτω παραδείγματα δείχνουν πώς μπορεί να χρησιμοποιηθεί το Nemo:",
