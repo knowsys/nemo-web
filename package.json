@@ -49,7 +49,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "generate-license-file": "^2.0.0",
+    "generate-license-file": "^4.2.1",
     "prettier": "^3.0.3",
     "rollup": "^4.60.1",
     "terser": "^5.22.0",

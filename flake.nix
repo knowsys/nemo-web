@@ -2,7 +2,7 @@ rec {
   description = "Web frontend for the Nemo rule engine";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.xz";
     dream2nix = {
       url = "github:nix-community/dream2nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -122,11 +122,7 @@ rec {
                     { nixpkgs, ... }:
                     lib.mkMerge [
                       {
-                        inherit (nixpkgs) stdenv;
-                        # generate-license-file fails with nodejs >=
-                        # 22 under cppnix (but, surprisingly, not
-                        # under lix)
-                        nodejs = nixpkgs.nodejs_20;
+                        inherit (nixpkgs) stdenv nodejs;
                         nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
                         nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
                         nemo-vscode-extension-vsix =
@@ -197,8 +193,7 @@ rec {
                     { nixpkgs, ... }:
                     lib.mkMerge [
                       {
-                        inherit (nixpkgs) stdenv;
-                        nodejs = nixpkgs.nodejs_20;
+                        inherit (nixpkgs) stdenv nodejs;
                       }
                     ];
 
@@ -234,7 +229,7 @@ rec {
                   name = "nemo-web-preview";
 
                   runtimeInputs = [
-                    pkgs.nodejs_20
+                    pkgs.nodejs
                   ];
 
                   text = ''
@@ -287,7 +282,7 @@ rec {
                     src = nemo-web-source config;
 
                     nativeBuildInputs = [
-                      pkgs.nodejs_20
+                      pkgs.nodejs
                     ];
 
                     buildPhase = "mkdir $out";
