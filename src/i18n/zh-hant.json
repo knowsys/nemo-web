@@ -13,7 +13,12 @@
 	},
 	"navigationBar": {
 		"documentation": "文件",
-		"sourceCodeNemo": "在 Github 上的 Nemo"
+		"sourceCodeNemo": "在 GitHub 上的 Nemo",
+		"newNemoTab": "新 Nemo 分頁"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "切換成明亮模式。",
+		"switchToDark": "切換成暗黑模式。"
 	},
 	"examples": {
 		"introduction": "以下範例說明如何使用 Nemo：",
