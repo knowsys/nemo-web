@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"common": {
+		"giveFeedback": "Nahlásiť problém",
+		"closeModal": "Zavrieť"
+	},
+	"editor": {
+		"examples": "Príklady"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentácia",
+		"sourceCodeNemo": "Nemo na GitHube",
+		"newNemoTab": "Nová karta Nemo"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "Prepnúť na svetlý režim.",
+		"switchToDark": "Prepnúť na tmavý režim."
+	},
+	"examples": {
+		"introduction": "Nasledujúce príklady ilustrujú, ako možno Nemo použiť:",
+		"title": "Ukážkové programy"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Licencie s otvoreným zdrojovým kódom"
+	}
+}
