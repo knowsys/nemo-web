@@ -16,6 +16,10 @@
 		"sourceCodeNemo": "نېمو په گيټ‌هاب کې",
 		"newNemoTab": "نوې نېمو ريښکه"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "روښانه ونگ‌ډول ته اړول.",
+		"switchToDark": "تياره ونگ‌ډول ته اړول."
+	},
 	"examples": {
 		"introduction": "لاندې بېلگې ښيي چې نېمو څنگه کارول کېدای شي:",
 		"title": "د بېلگې پروگرامونه"
