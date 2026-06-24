@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import {
   Card,
   Button,
@@ -24,6 +24,7 @@ import { FactCounts } from "../../nemoWorker/NemoRunner";
 import "./ExecutionPanel.css";
 import { chooseFile } from "../../chooseFile";
 import { downloadPredicate } from "./downloadPredicate";
+import { NemoSessionIdContext } from "../../store/nemoSessionIdContext";
 
 function convertFileSize(size: number) {
   let index = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1000));
@@ -38,6 +39,7 @@ function convertFileSize(size: number) {
 }
 
 export function ExecutionPanel() {
+  const nemoSessionId = useContext(NemoSessionIdContext);
   const [inputs, setInputs] = useState<{ resource: string; file: File }[]>([]);
   const [showInputs, setShowInputs] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
@@ -113,14 +115,21 @@ export function ExecutionPanel() {
     const bc = new BroadcastChannel("NemoVisualization");
 
     const onMessage = async (event: MessageEvent) => {
+      // Don't listen on own messages (which might be filtered by default by the channel, I did not check this...).
       if (!!event.data.error || !!event.data.responseType) {
-        return; // don't listen on own messages (which might be filtered by default by the channel, I did not check this...)
+        return;
+      }
+
+      // Ignore messages that are not meant for this nemo session.
+      if (event.data.nemoId !== nemoSessionId) {
+        return;
       }
 
       const id = event.data.id;
 
       if (workerRef.current === undefined) {
         bc.postMessage({
+          nemoId: nemoSessionId,
           id,
           error: "Cannot process message. Reasoning was not performed.",
         });
@@ -129,6 +138,7 @@ export function ExecutionPanel() {
 
       if (!event.data.queryType || !event.data.payload) {
         bc.postMessage({
+          nemoId: nemoSessionId,
           id,
           error: "Expected an object with queryType and payload.",
         });
@@ -142,6 +152,7 @@ export function ExecutionPanel() {
         case "treeForTable":
           response = await workerRef.current.traceTreeForTable(payload);
           bc.postMessage({
+            nemoId: nemoSessionId,
             id,
             responseType: "treeForTable",
             payload: response,
@@ -151,6 +162,7 @@ export function ExecutionPanel() {
           response =
             await workerRef.current.traceTableEntriesForTreeNodes(payload);
           bc.postMessage({
+            nemoId: nemoSessionId,
             id,
             responseType: "tableEntriesForTreeNodes",
             payload: response,
@@ -158,6 +170,7 @@ export function ExecutionPanel() {
           break;
         default:
           bc.postMessage({
+            nemoId: nemoSessionId,
             id,
             error:
               "Invalid Query Type, expected treeForTable or tableEntriesForTreeNodes.",
@@ -172,7 +185,7 @@ export function ExecutionPanel() {
       bc.removeEventListener("message", onMessage);
       bc.close();
     };
-  }, []);
+  }, [nemoSessionId]);
 
   return (
     <>

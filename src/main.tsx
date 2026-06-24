@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { nanoid } from "nanoid";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { App } from "./components/App";
@@ -7,6 +8,7 @@ import { Provider } from "react-redux";
 import { createStore } from "./store";
 import { programInfoSlice } from "./store/programInfo";
 import { selectProgramText } from "./store/programInfo/selectors/selectProgramText";
+import { NemoSessionIdContext } from "./store/nemoSessionIdContext";
 import "./i18n/i18n";
 
 const store = createStore();
@@ -34,10 +36,15 @@ store.subscribe(() => {
   window.location.hash = btoa(code);
 });
 
+// Create a unique id for this Nemo tab for interaction with Nev.
+const nemoSessionId = nanoid();
+
 createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <NemoSessionIdContext.Provider value={nemoSessionId}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </NemoSessionIdContext.Provider>
   </React.StrictMode>,
 );

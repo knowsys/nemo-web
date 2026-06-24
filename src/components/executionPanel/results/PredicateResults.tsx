@@ -1,10 +1,18 @@
-import { MutableRefObject, useEffect, useRef, useState, useMemo } from "react";
+import {
+  MutableRefObject,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useContext,
+} from "react";
 import "./PredicateResults.css";
 import { NemoWorker } from "../../../nemoWorker/NemoWorker";
 import { RowStore } from "./RowStore";
 import { Form, Pagination, Table } from "react-bootstrap";
 import { Icon } from "../../Icon";
 import { Link } from "../../link/Link";
+import { NemoSessionIdContext } from "../../../store/nemoSessionIdContext";
 
 export interface PredicateResultsProps {
   workerRef: MutableRefObject<NemoWorker | undefined>;
@@ -17,6 +25,7 @@ export function PredicateResults({
   predicate,
   numberOfRows,
 }: PredicateResultsProps) {
+  const nemoSessionId = useContext(NemoSessionIdContext);
   const rowStoreRef = useRef<RowStore | undefined>(undefined);
   const [rows, setRows] = useState<{ values: any[]; id: number }[]>([]);
   const [page, setPage] = useState<number>(0);
@@ -91,7 +100,7 @@ export function PredicateResults({
                 <td key={`row-${row.id}-trace-button`} width={32}>
                   <a
                     title="Explain this inference"
-                    href={`./ev/?predicate=${predicate}&query=[${row.id}]`}
+                    href={`./ev/?predicate=${predicate}&query=[${row.id}]&nemoId=${nemoSessionId}`}
                     target="_blank"
                     style={{ color: "inherit" }}
                   >
