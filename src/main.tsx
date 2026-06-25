@@ -8,7 +8,8 @@ import { Provider } from "react-redux";
 import { createStore } from "./store";
 import { programInfoSlice } from "./store/programInfo";
 import { selectProgramText } from "./store/programInfo/selectors/selectProgramText";
-import { NemoSessionIdContext } from "./store/nemoSessionIdContext";
+import { NemoSessionIdContext } from "./nemoSessionIdContext";
+import { NemoWorkerProvider } from "./NemoWorkerContext/NemoWorkerContextProvider";
 import "./i18n/i18n";
 
 const store = createStore();
@@ -42,9 +43,11 @@ const nemoSessionId = nanoid();
 createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <NemoSessionIdContext.Provider value={nemoSessionId}>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <NemoWorkerProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </NemoWorkerProvider>
     </NemoSessionIdContext.Provider>
   </React.StrictMode>,
 );
