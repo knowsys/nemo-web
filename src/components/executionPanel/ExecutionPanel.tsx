@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useCallback, useState } from "react";
 import {
   Card,
   Button,
@@ -10,21 +10,27 @@ import {
   Badge,
   Offcanvas,
 } from "react-bootstrap";
-import { useAppSelector } from "../../store/index";
+import { useAppSelector } from "../../store";
 import { selectProgramText } from "../../store/programInfo/selectors/selectProgramText";
 import { Icon } from "../Icon";
 import { TextTooltip } from "../TextTooltip";
-import {
-  createNemoWorker,
-  NemoProgramInfo,
-  NemoWorker,
-} from "../../nemoWorker/NemoWorker";
+import { createNemoWorker, NemoProgramInfo } from "../../nemoWorker/NemoWorker";
 import { PredicateResults } from "./results/PredicateResults";
 import { FactCounts } from "../../nemoWorker/NemoRunner";
 import "./ExecutionPanel.css";
 import { chooseFile } from "../../chooseFile";
 import { downloadPredicate } from "./downloadPredicate";
-import { NemoSessionIdContext } from "../../store/nemoSessionIdContext";
+import {
+  NevBroadcastChannelHandler,
+  useNevBroadcastChannelListener,
+} from "../../NevBroadcastChannel";
+import {
+  TableEntriesForTreeNodesQuery,
+  TableEntriesForTreeNodesResponseInner,
+  TreeForTableQuery,
+  TreeForTableResponse,
+} from "../../nemoWorker/models";
+import { useNemoWorkerRef } from "../../NemoWorkerContext/NemoWorkerContext";
 
 function convertFileSize(size: number) {
   let index = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1000));
@@ -39,11 +45,9 @@ function convertFileSize(size: number) {
 }
 
 export function ExecutionPanel() {
-  const nemoSessionId = useContext(NemoSessionIdContext);
   const [inputs, setInputs] = useState<{ resource: string; file: File }[]>([]);
   const [showInputs, setShowInputs] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
-  const workerRef = useRef<NemoWorker | undefined>(undefined);
   const [programInfo, setProgramInfo] = useState<NemoProgramInfo | undefined>(
     undefined,
   );
@@ -57,8 +61,10 @@ export function ExecutionPanel() {
 
   const programText = useAppSelector(selectProgramText);
 
+  const workerRef = useNemoWorkerRef();
+
   const stopProgram = () => {
-    if (workerRef.current !== undefined) {
+    if (workerRef?.current) {
       // Terminate web worker
       workerRef.current.stop();
       workerRef.current = undefined;
@@ -77,7 +83,7 @@ export function ExecutionPanel() {
 
     try {
       const worker = await createNemoWorker(setIsWorkerActive);
-      workerRef.current = worker;
+      workerRef!.current = worker;
       console.debug("[ExecutionPanel] Created Nemo worker", worker);
 
       const programInfo = await worker.setupNemoEngine(
@@ -111,81 +117,41 @@ export function ExecutionPanel() {
     setIsProgramRunning(false);
   };
 
-  useEffect(() => {
-    const bc = new BroadcastChannel("NemoVisualization");
-
-    const onMessage = async (event: MessageEvent) => {
-      // Don't listen on own messages (which might be filtered by default by the channel, I did not check this...).
-      if (!!event.data.error || !!event.data.responseType) {
-        return;
+  // add treeForTable listener
+  const treeForTableHandler: NevBroadcastChannelHandler<
+    TreeForTableQuery,
+    TreeForTableResponse
+  > = useCallback(
+    async (payload) => {
+      if (!workerRef?.current) {
+        throw "Cannot process message. Reasoning was not performed.";
       }
+      return await workerRef.current.traceTreeForTable(payload);
+    },
+    [workerRef],
+  );
+  useNevBroadcastChannelListener<TreeForTableQuery, TreeForTableResponse>(
+    "treeForTable",
+    treeForTableHandler,
+  );
 
-      // Ignore messages that are not meant for this nemo session.
-      if (event.data.nemoId !== nemoSessionId) {
-        return;
+  // add tableEntriesForTreeNodes listener
+  const tableEntriesForTreeNodesHandler: NevBroadcastChannelHandler<
+    TableEntriesForTreeNodesQuery,
+    TableEntriesForTreeNodesResponseInner[]
+  > = useCallback(
+    async (payload) => {
+      if (!workerRef?.current) {
+        throw "Cannot process message. Reasoning was not performed.";
       }
-
-      const id = event.data.id;
-
-      if (workerRef.current === undefined) {
-        bc.postMessage({
-          nemoId: nemoSessionId,
-          id,
-          error: "Cannot process message. Reasoning was not performed.",
-        });
-        return;
-      }
-
-      if (!event.data.queryType || !event.data.payload) {
-        bc.postMessage({
-          nemoId: nemoSessionId,
-          id,
-          error: "Expected an object with queryType and payload.",
-        });
-        return;
-      }
-
-      const { queryType, payload } = event.data; // data should consist of queryType and payload
-
-      let response;
-      switch (queryType) {
-        case "treeForTable":
-          response = await workerRef.current.traceTreeForTable(payload);
-          bc.postMessage({
-            nemoId: nemoSessionId,
-            id,
-            responseType: "treeForTable",
-            payload: response,
-          });
-          break;
-        case "tableEntriesForTreeNodes":
-          response =
-            await workerRef.current.traceTableEntriesForTreeNodes(payload);
-          bc.postMessage({
-            nemoId: nemoSessionId,
-            id,
-            responseType: "tableEntriesForTreeNodes",
-            payload: response,
-          });
-          break;
-        default:
-          bc.postMessage({
-            nemoId: nemoSessionId,
-            id,
-            error:
-              "Invalid Query Type, expected treeForTable or tableEntriesForTreeNodes.",
-          });
-          break;
-      }
-    };
-
-    bc.addEventListener("message", onMessage);
-
-    return () => {
-      bc.removeEventListener("message", onMessage);
-      bc.close();
-    };
-  }, [nemoSessionId]);
+      return await workerRef.current.traceTableEntriesForTreeNodes(payload);
+    },
+    [workerRef],
+  );
+  useNevBroadcastChannelListener<
+    TableEntriesForTreeNodesQuery,
+    TableEntriesForTreeNodesResponseInner[]
+  >("tableEntriesForTreeNodes", tableEntriesForTreeNodesHandler);
 
   return (
     <>
@@ -356,7 +322,7 @@ export function ExecutionPanel() {
                         title="Download Table as CSV"
                         className="fst-italic text-decoration-none"
                         onClick={async () => {
-                          if (workerRef.current === undefined) {
+                          if (!workerRef?.current) {
                             return;
                           }
                           try {
@@ -391,7 +357,6 @@ export function ExecutionPanel() {
                           {factCounts !== undefined &&
                           predicate in factCounts.outputPredicates ? (
                             <PredicateResults
-                              workerRef={workerRef}
                               predicate={predicate}
                               numberOfRows={
                                 factCounts.outputPredicates[predicate]

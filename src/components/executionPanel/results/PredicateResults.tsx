@@ -1,31 +1,23 @@
-import {
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useContext,
-} from "react";
+import { useEffect, useRef, useState, useMemo, useContext } from "react";
 import "./PredicateResults.css";
-import { NemoWorker } from "../../../nemoWorker/NemoWorker";
 import { RowStore } from "./RowStore";
 import { Form, Pagination, Table } from "react-bootstrap";
 import { Icon } from "../../Icon";
 import { Link } from "../../link/Link";
-import { NemoSessionIdContext } from "../../../store/nemoSessionIdContext";
+import { NemoSessionIdContext } from "../../../nemoSessionIdContext";
+import { useNemoWorkerRef } from "../../../NemoWorkerContext/NemoWorkerContext";
 
 export interface PredicateResultsProps {
-  workerRef: MutableRefObject<NemoWorker | undefined>;
   predicate: string;
   numberOfRows: number;
 }
 
 export function PredicateResults({
-  workerRef,
   predicate,
   numberOfRows,
 }: PredicateResultsProps) {
   const nemoSessionId = useContext(NemoSessionIdContext);
+  const workerRef = useNemoWorkerRef();
   const rowStoreRef = useRef<RowStore | undefined>(undefined);
   const [rows, setRows] = useState<{ values: any[]; id: number }[]>([]);
   const [page, setPage] = useState<number>(0);
@@ -34,7 +26,7 @@ export function PredicateResults({
     numberOfRows <= 0 ? 1 : Math.ceil(numberOfRows / rowsPerPage);
 
   useEffect(() => {
-    if (workerRef.current === undefined) {
+    if (!workerRef?.current) {
       return;
     }
 
@@ -100,8 +92,11 @@ export function PredicateResults({
                 <td key={`row-${row.id}-trace-button`} width={32}>
                   <a
                     title="Explain this inference"
-                    href={`./ev/?predicate=${predicate}&query=[${row.id}]&nemoId=${nemoSessionId}`}
-                    target="_blank"
+                    onClick={() => {
+                      window.open(
+                        `./ev/?predicate=${predicate}&query=[${row.id}]&nemoId=${nemoSessionId}`,
+                      );
+                    }}
                     style={{ color: "inherit" }}
                   >
                     <Icon name="search" />
