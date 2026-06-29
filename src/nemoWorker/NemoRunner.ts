@@ -160,6 +160,10 @@ export class NemoRunner {
     return this.engine!.getOutputPredicates();
   }
 
+  public async getLineNumberFromRuleId(ruleId: number) {
+    return this.engine!.getLineNumberFromRuleId(ruleId);
+  }
+
   public async traceTreeForTable(
     tree_for_table_query: TreeForTableQuery,
   ): Promise<TreeForTableResponse> {
