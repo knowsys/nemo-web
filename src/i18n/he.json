@@ -17,6 +17,10 @@
 		"sourceCodeNemo": "Nemo ב־GitHub",
 		"newNemoTab": "לשונית Nemo חדשה"
 	},
+	"darkModeSwitch": {
+		"switchToLight": "מעבר למצב בהיר.",
+		"switchToDark": "מעבר למצב כהה."
+	},
 	"examples": {
 		"introduction": "הדוגמאות הבאות מציגות איך אפשר להשתמש ב־Nemo:",
 		"title": "תוכניות לדוגמה"
