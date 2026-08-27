@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"JiodoJ"
+		]
+	},
+	"common": {
+		"giveFeedback": "Irrapporta problema",
+		"closeModal": "Agħlaq"
+	},
+	"editor": {
+		"examples": "Eżempji"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentazzjoni",
+		"sourceCodeNemo": "Nemo fuq GitHub",
+		"newNemoTab": "Tablatura Ġdida ta' Nemo"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "Aqleb għall-mod ċar.",
+		"switchToDark": "Aqleb għall-mod skur"
+	},
+	"examples": {
+		"introduction": "L-eżempji ġejjiena juru kif Nemo jista' jintuża:",
+		"title": "Programmi Eżemplari"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Liċenzji ta' sors miftuħ"
+	}
+}

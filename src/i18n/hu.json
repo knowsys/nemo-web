@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"EmeseToth"
+		]
+	},
+	"common": {
+		"giveFeedback": "Hibabejelentés",
+		"closeModal": "Bezárás"
+	},
+	"editor": {
+		"examples": "Példák"
+	},
+	"navigationBar": {
+		"documentation": "Dokumentáció",
+		"sourceCodeNemo": "Nemo a GitHubon",
+		"newNemoTab": "Új Nemo lap"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "Váltás világos módra.",
+		"switchToDark": "Váltás sötét módra."
+	},
+	"examples": {
+		"introduction": "A következő példák bemutatják, hogyan használható a Nemo:",
+		"title": "Példaprogramok"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Nyílt forráskódú licencek"
+	}
+}

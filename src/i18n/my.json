@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kalixlouiis"
+		]
+	},
+	"common": {
+		"giveFeedback": "ပြဿနာ သတင်းပို့ရန်",
+		"closeModal": "ပိတ်ရန်"
+	},
+	"editor": {
+		"examples": "ဥပမာများ"
+	},
+	"navigationBar": {
+		"documentation": "မှတ်တမ်းမှတ်ရာများ",
+		"sourceCodeNemo": "GitHub ပေါ်ရှိ Nemo",
+		"newNemoTab": "Nemo Tab အသစ်"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "အလင်းမုဒ်သို့ ပြောင်းရန်",
+		"switchToDark": "အမှောင်မုဒ်သို့ ပြောင်းရန်"
+	},
+	"examples": {
+		"introduction": "အောက်ပါ ဥပမာများသည် Nemo ကို မည်သို့ အသုံးပြုနိုင်ကြောင်း ဖော်ပြထားပါသည် -",
+		"title": "နမူနာ ပရိုဂရမ်များ"
+	},
+	"footer": {
+		"thirdPartyLicenses": "Open-source လိုင်စင်များ"
+	}
+}
