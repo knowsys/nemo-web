@@ -17,18 +17,6 @@ export const listOfExamples: {
   url: string;
 }[] = [
   {
-    name: "Find conflicts of interest based on DBLP data",
-    url: conflictsOfInterestFromDblp,
-  },
-  {
-    name: "Find shortest paths in a directed graph",
-    url: shortestPathsInGraph,
-  },
-  {
-    name: "Find persons in Wikidata with two Nobel prizes",
-    url: personsWithTwoNobelPrizes,
-  },
-  {
     name: "Ancestors (basic)",
     url: findCommonAncestors,
   },
@@ -67,5 +55,17 @@ export const listOfExamples: {
   {
     name: "Div by Zero Analysis (using pregenerated input files for a fixed Java Program)",
     url: divByZeroURL,
+  },
+  {
+    name: "Find conflicts of interest based on DBLP data",
+    url: conflictsOfInterestFromDblp,
+  },
+  {
+    name: "Find shortest paths in a directed graph",
+    url: shortestPathsInGraph,
+  },
+  {
+    name: "Find persons in Wikidata with two Nobel prizes",
+    url: personsWithTwoNobelPrizes,
   },
 ];
