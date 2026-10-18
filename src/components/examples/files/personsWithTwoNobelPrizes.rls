@@ -6,7 +6,7 @@
 
 @parameter $nobelPrize = wd:Q7191 .
 
-@import triple :- sparql{endpoint=<https://query.wikidata.org/sparql>} .
+@import triple from sparql{endpoint=<https://query.wikidata.org/sparql>} .
 
 %%% For offline use, comment the import above and uncomment the following lines:
 % triple(curie, p:P166, s1) .
@@ -25,3 +25,5 @@ twoPrizes(?person, ?prize1, ?prize2) :-
     triple(?prize1, wdt:P31, $nobelPrize), triple(?prize2, wdt:P31, $nobelPrize),
     ?t1 != ?t2 .
 
+% Select output predicates:
+@output twoPrizes .

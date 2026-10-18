@@ -1,0 +1,24 @@
+%! Declarations and named arguments.
+%!
+%! A declaration gives the columns of a predicate names and types.
+%! Facts and rule bodies can then name their arguments, in any order,
+%! and a body atom may leave out the columns it does not need.
+%!
+%! The example shows:
+%! - how to declare a predicate with @declare,
+%! - how to write facts and atoms with named arguments,
+%! - how to leave out columns of a body atom,
+%! - how an integral decimal such as 20.0 fits an int column.
+
+@declare person(name: string, age: int, city: string) .
+
+person(name: "Alice", age: 30, city: "Dresden") .
+person(city: "Berlin", name: "Bob", age: 25) .
+person("Carol", 41, "Prague") .
+person("Dora", 20.0, "Leipzig") .
+
+senior(?name) :- person(name: ?name, age: ?age), ?age > 28 .
+livesIn(?name, ?city) :- person(city: ?city, name: ?name) .
+known(?name) :- person(name: ?name) .
+
+@output senior, livesIn, known .

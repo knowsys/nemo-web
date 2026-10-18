@@ -1,0 +1,14 @@
+%! Pairs of nodes within a number of hops of each other.
+%!
+%! This file is a module: a program uses it with `@use hops`, binds its
+%! input `edge` to a predicate of its own and, if it wants, its
+%! parameter `$limit`, and reads its output `within`.
+
+@input edge(from: any, to: any) .
+@parameter $limit: int = 3 .
+
+hops(?x, ?y, 1) :- edge(?x, ?y) .
+hops(?x, ?z, ?n + 1) :- hops(?x, ?y, ?n), edge(?y, ?z), ?n < $limit .
+within(?x, ?y) :- hops(?x, ?y, _) .
+
+@output within .

@@ -1,0 +1,45 @@
+%! Influences between famous people (Wikidata, bound SPARQL imports).
+%!
+%! A bound import asks a SPARQL endpoint only for what the program
+%! needs: `where item(?item)` restricts the query to the items of the
+%! predicate `item`, which Nemo sends along with the query. What binds
+%! an import may be derived by rules, recursively, so the program
+%! follows a chain of influences through Wikidata, one round at a time.
+%!
+%! The example shows:
+%! - how to bind a SPARQL import to the values of a predicate,
+%! - how bound imports follow chains of values derived by rules,
+%! - how to fetch labels for exactly the items a program found.
+
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+item(wd:Q42) .    % Douglas Adams
+item(wd:Q937) .   % Albert Einstein
+item(wd:Q7186) .  % Marie Curie
+
+% Who influenced whom, asked for every person reached so far:
+@import influence(?person, ?other) from sparql {
+    endpoint = <https://query.wikidata.org/sparql>,
+    query = "SELECT ?person ?other WHERE { ?person <http://www.wikidata.org/prop/direct/P737> ?other }"
+} where reached(?person) .
+
+reached(?person) :- item(?person) .
+reached(?other) :- influence(?person, ?other), ?person != ?other .
+
+% English labels, asked only for the people reached:
+@import caption(?item, ?text) from sparql {
+    endpoint = <https://query.wikidata.org/sparql>,
+    query = """
+        SELECT ?item ?text WHERE {
+            ?item rdfs:label ?text .
+            FILTER(LANG(?text) = "en")
+        }
+    """,
+    page = 500
+} where reached(?item) .
+
+influencedBy(?text, ?otherText) :-
+    influence(?person, ?other), caption(?person, ?text), caption(?other, ?otherText) .
+
+@output influencedBy .

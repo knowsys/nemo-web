@@ -1,0 +1,4 @@
+<http://example.org/alice> <http://example.org/age> "34"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/bob> <http://example.org/age> "27"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/carol> <http://example.org/age> "unknown" .
+_:someone <http://example.org/age> "50"^^<http://www.w3.org/2001/XMLSchema#integer> .

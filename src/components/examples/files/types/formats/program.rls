@@ -1,0 +1,48 @@
+%! Import formats and declarations.
+%!
+%! An import's format is the type of what it reads: it says how a cell
+%! becomes a value, and a cell it cannot read makes its row malformed.
+%! A declaration on an imported predicate must follow from the formats,
+%! or from the conditions in the import's `where` clause, which keep the
+%! rows for which they hold. The files read here are this example's input
+%! files (see "Input files" next to the run button).
+%!
+%! The example shows:
+%! - how a declaration alone decides how CSV cells are read,
+%! - how a format reads the same file in different ways,
+%! - how the conditions of a `where` clause give an RDF import the types
+%!   its declaration states,
+%! - how malformed rows are reported.
+
+@prefix ex: <http://example.org/> .
+
+% Declaration only: each column reads in the format of its type, so
+% `int` parses, `string` reads verbatim and `iri` reads an IRI. Line 3
+% of people.csv is malformed (its age is no integer), line 4 too (a
+% column short); the other rows are read.
+@declare person(name: string, age: int, tag: iri) .
+@import person from csv { resource = "people.csv" } .
+
+% Format only: `string` reads every cell as it is written, and `term`
+% reads a cell as the program would read it (bare words are IRIs).
+% Same file, two readings.
+@import plain from csv { resource = "mixed.csv", format = (string, string) } .
+@import terms from csv { resource = "mixed.csv", format = (int, term) } .
+
+% Both: `term` defers to the declaration, so the first column is read
+% as a string, and 42 is not read as an integer.
+@declare labeled(code: string, who: iri) .
+@import labeled from csv { resource = "mixed.csv", format = (term, term) } .
+
+% RDF statements come as the graph writes them: a subject is an IRI or a
+% blank node, and an object any term. The conditions of the `where`
+% clause keep the statements whose subject is an IRI and whose age is an
+% integer, which gives the import the types its declaration states. A
+% string age and a blank-node subject are left out silently.
+@declare age(who: iri, of: iri, years: int) .
+@import age(?who, ?of, ?years) from ntriples { resource = "ages.nt" }
+    where ISIRI(?who), ISINTEGER(?years) .
+
+adult(?who) :- age(?who, ex:age, ?years), ?years >= 18 .
+
+@output person, plain, terms, labeled, adult .

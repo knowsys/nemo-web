@@ -1,0 +1,40 @@
+%! Regular expressions.
+%!
+%! REGEX tests whether a string matches a pattern, and REPLACE replaces
+%! every match, with $1, $2, ... for the groups of the match. Both take
+%! flags: i ignores case, m lets ^ and $ match at line breaks, s lets .
+%! match line breaks, and q reads the pattern as plain text. An invalid
+%! pattern derives nothing.
+%!
+%! The example shows:
+%! - how to filter strings with REGEX,
+%! - how to rewrite strings with REPLACE and groups,
+%! - how flags change the matching.
+
+word("Hello") .
+word("hello") .
+word("HELP") .
+word("a.c") .
+word("abc") .
+
+entry("2024-03-15") .
+entry("1999-12-31") .
+entry("tomorrow") .
+
+startsWithHel(?w) :- word(?w), REGEX(?w, "^hel", "i") .
+anyMiddle(?w) :- word(?w), REGEX(?w, "^a.c$") .
+dotInMiddle(?w) :- word(?w), REGEX(?w, "a.c", "q") .
+
+% Groups in the pattern are $1, $2 and $3 in the replacement:
+german(?d, REPLACE(?d, "^(\d+)-(\d+)-(\d+)$", "$3.$2.$1")) :- entry(?d), REGEX(?d, "^\d+-\d+-\d+$") .
+
+replaced(REPLACE("banana", "a", "o")) .
+replaced(REPLACE("Hello hello", "hello", "bye", "i")) .
+replaced(REPLACE("1+1", "+", "-", "q")) .
+% The language tag of a string is kept:
+replaced(REPLACE("color"@en, "or", "our")) .
+
+% "(" is no valid pattern, so this derives nothing:
+invalid(?w) :- word(?w), REGEX(?w, "(") .
+
+@output startsWithHel, anyMiddle, dotInMiddle, german, replaced, invalid .

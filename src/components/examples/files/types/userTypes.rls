@@ -1,0 +1,39 @@
+%! User-defined types.
+%!
+%! @type defines a type of structured values: a label with the types of
+%! its parts. Types compose, and a type over a single value, such as an
+%! angle over a decimal, is a type of its own: an angle is not the
+%! decimal it wraps. Every value of a declared type is checked against
+%! its definition, wherever in the program it is built.
+%!
+%! The example shows:
+%! - how to define tuple types, map types and wrapper types with @type,
+%! - how to use them in declarations,
+%! - how to build and match values of these types in rules.
+
+@type point(int, int) .
+@type segment(point, point) .
+@type angle(decimal) .
+@type config {host: string, port: int} .
+
+@declare road(span: segment, name: string) .
+@declare rotation(by: angle) .
+@declare server(config) .
+
+road(segment(point(1, 2), point(3, 4)), "A4") .
+road(segment(point(0, 0), point(0, 5)), "B2") .
+rotation(angle(0.5)) .
+rotation(angle(2)) .
+server(config{host = "localhost", port = 8080}) .
+plain(0.5) .
+
+shifted(segment(point(?x1 + 1, ?y1), point(?x2 + 1, ?y2)), ?name) :-
+    road(segment(point(?x1, ?y1), point(?x2, ?y2)), ?name) .
+vertical(?name) :- road(segment(point(?x, _), point(?x, _)), ?name) .
+turns(?value) :- rotation(angle(?value)) .
+port(?host, ?port) :- server(config{host = ?host, port = ?port}) .
+
+% An angle is not a plain decimal, so this derives nothing:
+sameAsPlain(?a) :- rotation(?a), plain(?a) .
+
+@output shifted, vertical, turns, port, sameAsPlain .

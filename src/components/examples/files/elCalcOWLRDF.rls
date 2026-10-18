@@ -31,7 +31,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 %%% Import ontology triples from RDF file (NTriples encoding):
-@import triple :- rdf{resource = "https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-owl-rdf/galen-el.nt.gz"} .
+@import triple from rdf{resource = "https://raw.githubusercontent.com/knowsys/nemo-examples/main/examples/owl-el/from-owl-rdf/galen-el.nt.gz"} .
 
 % Find all classes that occur in the triples
 ClassObject(owl:someValuesFrom) .

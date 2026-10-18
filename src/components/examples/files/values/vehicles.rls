@@ -1,0 +1,11 @@
+%! Part of an ontology: every motorbike has some motor as a part.
+%!
+%! This file is a module: a program uses it with `@use vehicles` and
+%! reads its output `axiom`. Its class without a name is the blank node
+%! _:r, which belongs to this file, whatever other files call theirs.
+
+axiom(motorbike, subClassOf, _:r) .
+axiom(_:r, onProperty, hasPart) .
+axiom(_:r, someValuesFrom, motor) .
+
+@output axiom .

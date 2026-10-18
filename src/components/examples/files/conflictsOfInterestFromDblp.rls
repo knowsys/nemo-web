@@ -1,5 +1,5 @@
 @prefix dblp: <https://dblp.org/rdf/schema#> .
-@import dblp :- sparql{endpoint=<https://sparql.dblp.org/sparql>} .
+@import dblp from sparql{endpoint=<https://sparql.dblp.org/sparql>} .
 
 %%% To try this offline, comment the import above and uncomment the following lines.
 % dblp(1, dblp:primaryCreatorName, "Raimund Dachselt").
@@ -20,3 +20,7 @@ pcmembId(?name,?id) :- pcMember(?name), dblp(?id, dblp:primaryCreatorName, ?name
 coi(?author,?pc) :- authorId(?author,?aid), pcmembId(?pc, ?pid),
                     dblp(?pub, dblp:authoredBy, ?aid), dblp(?pub, dblp:authoredBy, ?pid) .
 
+% Select output predicates:
+@output authorId .
+@output pcmembId .
+@output coi .

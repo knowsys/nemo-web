@@ -1,0 +1,44 @@
+%! Tuples, maps and labeled values.
+%!
+%! Values can have structure: tuples such as (51, 13), maps such as
+%! {host = "localhost", port = 8080}, and both with a label in front,
+%! such as stop("Hbf", (51, 13)) or backend{host = "10.0.0.1", port = 9000}.
+%! Rules take them apart with patterns, or read into them with accessors.
+%!
+%! The example shows:
+%! - how to declare columns that hold tuples and maps,
+%! - how tuple, map and labeled patterns match in rule bodies,
+%! - how the accessors ?t[k], LENGTH, LABEL, KEYS and HASKEY read structures.
+
+@declare city(location: (int, int), name: string) .
+@declare config({host: string, port: int}) .
+
+city((51, 13), "Dresden") .
+city((52, 13), "Berlin") .
+station(stop("Hbf", (51, 13))) .
+station(stop("Süd", (51, 14))) .
+station(depot((51, 13))) .
+config({host = "localhost", port = 8080}) .
+server(backend{host = "10.0.0.1", port = 9000}) .
+server(frontend{host = "10.0.0.2", port = 80}) .
+
+% Tuple patterns bind by position:
+latitude(?name, ?lat) :- city((?lat, _), ?name) .
+
+% Labeled patterns match the label too, so depot(...) values do not match:
+stopAt(?name, ?city) :- station(stop(?name, ?point)), city(?point, ?city) .
+
+% Map patterns name every key of the maps they match:
+endpoint(?host, ?port) :- config({host = ?host, port = ?port}) .
+
+% Maps can carry labels as well, so only backend{...} values match:
+backendPort(?port) :- server(backend{host = _, port = ?port}) .
+
+% Accessors read into structures directly; ?t[k] is short for GET(?t, k):
+firstCoordinate(?lat) :- city(?point, _), ?lat = ?point[0] .
+pair(?point) :- city(?point, _), LENGTH(?point) = 2 .
+kind(?station, LABEL(?station)) :- station(?station) .
+keyList(?config, KEYS(?config)) :- config(?config) .
+withPort(?config) :- config(?config), HASKEY(?config, port) .
+
+@output latitude, stopAt, endpoint, backendPort, firstCoordinate, pair, kind, keyList, withPort .

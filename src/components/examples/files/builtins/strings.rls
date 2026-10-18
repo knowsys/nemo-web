@@ -1,0 +1,34 @@
+%! Strings: trimming, hashing and language tags.
+%!
+%! Nemo has the string functions of SPARQL and a few more: STRTRIM and
+%! its one-sided forms remove whitespace, hash functions compute
+%! digests, langMatches matches language tags against ranges, and
+%! STRJOIN joins a tuple of strings.
+%!
+%! The example shows:
+%! - how to trim strings, keeping their language tags,
+%! - how to compute hash digests,
+%! - how to select strings by language,
+%! - how to join strings.
+
+padded("  padded \t") .
+padded(" hola "@es) .
+
+trimmed(STRTRIM(?s), STRTRIMSTART(?s), STRTRIMEND(?s)) :- padded(?s) .
+
+word("abc") .
+word("é") .
+
+digest(?w, MD5(?w), SHA256(?w)) :- word(?w) .
+
+name("colour"@en-GB) .
+name("color"@en-US) .
+name("Farbe"@de) .
+name("couleur"@fr) .
+
+english(?n) :- name(?n), langMatches(LANG(?n), "en") .
+american(?n) :- name(?n), langMatches(LANG(?n), "en-us") .
+
+joined(STRJOIN(("a", "b", "c"), "-")) .
+
+@output trimmed, digest, english, american, joined .

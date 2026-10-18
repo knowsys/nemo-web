@@ -1,0 +1,50 @@
+%! Dates, times and durations.
+%!
+%! Dates, times and durations are values with arithmetic and an order:
+%! subtracting two dates gives a duration, adding a duration to a date
+%! gives a date, and month arithmetic follows the calendar.
+%!
+%! The example shows:
+%! - how to write dates, dateTimes and durations as typed literals,
+%! - how to add, subtract and compare them,
+%! - how to read their components and convert between them,
+%! - how aggregates add up and compare durations and dates.
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+event(launch, "2024-03-01T12:30:00+01:00"^^xsd:dateTime) .
+event(landing, "2024-03-15T08:00:00Z"^^xsd:dateTime) .
+milestone(start, "2024-03-01"^^xsd:date) .
+milestone(end, "2024-03-15"^^xsd:date) .
+span(twoWeeks, "P14D"^^xsd:dayTimeDuration) .
+span(quarter, "P3M"^^xsd:yearMonthDuration) .
+shift(early, "PT8H"^^xsd:dayTimeDuration) .
+shift(late, "PT7H30M"^^xsd:dayTimeDuration) .
+
+% Arithmetic:
+result(daysBetween, ?end - ?start) :- milestone(start, ?start), milestone(end, ?end) .
+result(flightTime, ?landing - ?launch) :- event(launch, ?launch), event(landing, ?landing) .
+result(startPlusTwoWeeks, ?start + ?span) :- milestone(start, ?start), span(twoWeeks, ?span) .
+result(startPlusQuarter, ?start + ?span) :- milestone(start, ?start), span(quarter, ?span) .
+result(twoWeeksAndAHalf, ?span * 1.25) :- span(twoWeeks, ?span) .
+% A month after the last day of January is the last day of February:
+result(januaryEndPlusMonth, "2024-01-31"^^xsd:date + "P1M"^^xsd:yearMonthDuration) .
+
+% Components and conversions:
+result(launchYear, YEAR(?time)) :- event(launch, ?time) .
+result(launchHours, HOURS(?time)) :- event(launch, ?time) .
+result(launchTimezone, TIMEZONE(?time)) :- event(launch, ?time) .
+result(launchInUtc, ADJUST(?time, DAYTIMEDURATION("PT0S"))) :- event(launch, ?time) .
+result(launchDate, DATE(?time)) :- event(launch, ?time) .
+
+% Comparison:
+before(?a, ?b) :- milestone(?a, ?x), milestone(?b, ?y), ?x < ?y .
+% Months and days have no order between them, so this derives nothing:
+longer(quarter, twoWeeks) :- span(quarter, ?q), span(twoWeeks, ?d), ?q > ?d .
+
+% Aggregates:
+totalShift(#sum(?d)) :- shift(_, ?d) .
+averageShift(#avg(?d)) :- shift(_, ?d) .
+firstMilestone(#min(?day)) :- milestone(_, ?day) .
+
+@output result, before, longer, totalShift, averageShift, firstMilestone .

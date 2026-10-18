@@ -24,26 +24,26 @@
 
 %%% Import namedClass. The data contains some auxiliary class names that were created
 %%% during the pre-processing. A fact namedClass(C) means that C is not auxiliary.
-@import namedClass :- csv{resource = f"{$dataDir}isMainClass.csv.gz"} .
+@import namedClass from csv{resource = f"{$dataDir}isMainClass.csv.gz"} .
 
 %%% Import subClassOf. A fact subClassOf(C,D) means that C is a subclass of D.
-@import subClassOf :- csv{resource = f"{$dataDir}subClassOf.csv.gz"} .
+@import subClassOf from csv{resource = f"{$dataDir}subClassOf.csv.gz"} .
 %%% Import subProp. A fact subProp(R,S) means that R is a subproperty of S.
-@import subProp :- csv{resource = f"{$dataDir}subProp.csv.gz"} .
+@import subProp from csv{resource = f"{$dataDir}subProp.csv.gz"} .
 %%% Import subPropChain. A fact subPropChain(R,S,T) means that R, S, and T are properties,
 %%% such that R(x,y) and S(y,z), then also T(x,z), as in subPropChain(parent,brother,uncle). 
-@import subPropChain :- csv{resource = f"{$dataDir}subPropChain.csv.gz"} .
+@import subPropChain from csv{resource = f"{$dataDir}subPropChain.csv.gz"} .
 
 %%% Import isIntersection. A fact isIntersection(C,A,B) means that class C is the
 %%% intersection of A and B.
-@import isIntersection :- csv{resource = f"{$dataDir}conj.csv.gz"} .
+@import isIntersection from csv{resource = f"{$dataDir}conj.csv.gz"} .
 %%% Import isSomeValues. A fact isSomeValues(C,R,D) means that class C is the class of
 %%% all things that have some value for property R that is an instance of class D.
-@import isSomeValues :- csv{resource = f"{$dataDir}exists.csv.gz"} .
+@import isSomeValues from csv{resource = f"{$dataDir}exists.csv.gz"} .
 
 %%% Import isSubClass. A fact isSubClass(C) means that C occurs in a subclass position
 %%% somewhere in the ontology.
-@import isSubClass :- csv{resource = f"{$dataDir}isSubClass.csv.gz"} .
+@import isSubClass from csv{resource = f"{$dataDir}isSubClass.csv.gz"} .
 
 %%% Start classification for all named classes. Superclasses are only computed for
 %%% classes that are "initialized".

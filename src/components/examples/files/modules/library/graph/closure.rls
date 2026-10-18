@@ -1,0 +1,8 @@
+%! The transitive closure of a relation.
+
+@input edge(from: any, to: any) .
+
+path(?x, ?y) :- edge(?x, ?y) .
+path(?x, ?z) :- path(?x, ?y), edge(?y, ?z) .
+
+@output path .

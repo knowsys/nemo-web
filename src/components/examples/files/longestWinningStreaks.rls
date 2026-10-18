@@ -32,7 +32,7 @@
 % @parameter $eventType = wd:Q739479 . % Faroe Islands Premier League
 
 %%% Import "wdTriple" as a predicate for accessing any RDF triple from Wikidata:
-@import wdTriple :- sparql{ endpoint = wdqs:sparql } .
+@import wdTriple from sparql{ endpoint = wdqs:sparql } .
 
 %%% What sports events are there?
 sportsEvent(?event) :- wdTriple(?event, wdt:P3450, $eventType) .

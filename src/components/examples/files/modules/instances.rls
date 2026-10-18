@@ -1,0 +1,24 @@
+%! Using a module twice.
+%!
+%! Any Nemo program can be used as a module: its @input and @parameter
+%! directives say what a user binds, and its @output what it gives back.
+%! Here, the module is the input file hops.rls (see "Input files" next
+%! to the run button), which `@use hops` reads.
+%!
+%! The example shows:
+%! - how to use a module with @use, binding its input and parameter,
+%! - how one module is used twice, under two names,
+%! - how to read the output of a module as name::predicate.
+
+@use hops { edge = flight, $limit = 1 } as direct .
+@use hops { edge = flight, $limit = 3 } as short .
+
+flight(berlin, dresden) .
+flight(dresden, prague) .
+flight(prague, vienna) .
+flight(vienna, budapest) .
+
+nonstop(?x, ?y) :- direct::within(?x, ?y) .
+trip(?x, ?y) :- short::within(?x, ?y) .
+
+@output nonstop, trip .

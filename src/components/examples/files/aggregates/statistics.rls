@@ -1,0 +1,23 @@
+%! Several aggregates in one rule.
+%!
+%! A rule head may hold several aggregates over the same group. Sums and
+%! averages are exact: decimals add up without rounding errors, sums of
+%! integers grow beyond 64 bits, and the average of integers is a
+%! decimal.
+%!
+%! The example shows:
+%! - how to compute several aggregates over one group,
+%! - how sums and averages stay exact.
+
+sale(north, monday, 10) .
+sale(north, tuesday, 30) .
+sale(north, wednesday, 15) .
+sale(south, monday, 0.1) .
+sale(south, tuesday, 0.2) .
+sale(east, monday, 9223372036854775807) .
+sale(east, tuesday, 9223372036854775807) .
+
+statistics(?region, #count(), #sum(?amount per ?day), #min(?amount), #max(?amount), #avg(?amount per ?day)) :-
+    sale(?region, ?day, ?amount) .
+
+@output statistics .

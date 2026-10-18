@@ -2,3 +2,16 @@
   height: 65vh;
   overflow: scroll;
 }
+
+.examples-list {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.examples-group-name {
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  color: var(--bs-secondary-color);
+}

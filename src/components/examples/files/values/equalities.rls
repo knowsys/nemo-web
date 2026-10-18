@@ -1,0 +1,36 @@
+%! Two kinds of equality.
+%!
+%! `=` and `!=` compare terms: two terms are equal when they are the
+%! same term. This is the equality joins use, and it holds or fails for
+%! any two values. `==` and `!==` compare values, as SPARQL does:
+%! numbers of different kinds, or dateTimes in different timezones,
+%! are equal when they denote the same value. A number and a string
+%! cannot be compared by value, so `==` derives nothing for them.
+%!
+%! The example shows:
+%! - how 1, 1.0d and 1f are three terms but one number,
+%! - how two dateTimes can be the same instant but different terms,
+%! - how NaN is the same term as itself but no number equal to itself.
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+one(1) .
+one(1.0d) .
+one(1f) .
+one("1") .
+
+sameTerm(?x, ?y) :- one(?x), one(?y), ?x = ?y .
+sameNumber(?x, ?y) :- one(?x), one(?y), ?x == ?y .
+
+instant("2024-03-01T12:00:00Z"^^xsd:dateTime) .
+instant("2024-03-01T13:00:00+01:00"^^xsd:dateTime) .
+
+sameInstant(?x, ?y) :- instant(?x), instant(?y), ?x == ?y, ?x != ?y .
+
+nan("NaN"^^xsd:double) .
+
+nanIsSameTerm(yes) :- nan(?x), ?x = ?x .
+nanIsEqual(yes) :- nan(?x), ?x == ?x .
+nanIsNotEqual(yes) :- nan(?x), ?x !== ?x .
+
+@output sameTerm, sameNumber, sameInstant, nanIsSameTerm, nanIsEqual, nanIsNotEqual .

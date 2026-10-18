@@ -1,0 +1,24 @@
+%! Building structured values.
+%!
+%! Rule heads build tuples, maps and labeled values from the values a
+%! rule body matches, nested to any depth, and rule bodies take them
+%! apart again.
+%!
+%! The example shows:
+%! - how to build tuples, maps and labeled values in rule heads,
+%! - how to compute values inside a structure,
+%! - how to match the structures a rule built.
+
+edge(a, b, 3) .
+edge(b, c, 4) .
+
+asTuple((?x, ?y)) :- edge(?x, ?y, _) .
+asMap({from = ?x, to = ?y, weight = ?w}) :- edge(?x, ?y, ?w) .
+asLabeled(link(?x, ?y)) :- edge(?x, ?y, _) .
+nested((?x, (?y, ?w * 2))) :- edge(?x, ?y, ?w) .
+
+% The structures built above, taken apart again:
+swapped((?y, ?x)) :- asTuple((?x, ?y)) .
+heavy(?x, ?y) :- asMap({from = ?x, to = ?y, weight = ?w}), ?w > 3 .
+
+@output asTuple, asMap, asLabeled, nested, swapped, heavy .

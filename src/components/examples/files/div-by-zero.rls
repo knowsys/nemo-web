@@ -22,9 +22,9 @@
 %! }
 %!
 
-@import AST :- tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/AST.tsv",format=(skip, int, int, string, string, string)}.
-@import Def :- tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/Def.tsv",format=(skip, int, int, skip)}.
-@import DefUse :- tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/DefUse.tsv",format=(skip, int, int, skip, skip, skip)}.
+@import AST from tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/AST.tsv",format=(skip, int, int, string, string, string)}.
+@import Def from tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/Def.tsv",format=(skip, int, int, skip)}.
+@import DefUse from tsv{resource="https://tools.iccl.inf.tu-dresden.de/nemo/imports/div-by-zero/DefUse.tsv",format=(skip, int, int, skip, skip, skip)}.
 
 % Part 1: Preprocess the Abstract Syntax Tree for simplification
 

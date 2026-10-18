@@ -24,7 +24,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 %%% Load triple data for a Wikidata item
-@import wdTriples :- rdf{resource=f"https://www.wikidata.org/wiki/Special:EntityData/{$qid}.ttl"} .
+@import wdTriples from rdf{resource=f"https://www.wikidata.org/wiki/Special:EntityData/{$qid}.ttl"} .
 
 %%% Parameter for the (computed) full IRI of item $qid:
 @parameter $qidIri = IRI(f"http://www.wikidata.org/entity/{$qid}") .

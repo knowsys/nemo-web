@@ -18,7 +18,7 @@
 @parameter $personId2 = wd:Q14045 . % Moby
 
 % Import predicate "wdParent" (father or mother) through SPARQL:
-@import wdParent :- sparql{
+@import wdParent from sparql{
   endpoint = <https://query.wikidata.org/sparql>,
   query = """
     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -26,7 +26,7 @@
   """
 } .
 % Import predicate "wdLabel" (English label) through SPARQL:
-@import wdLabel :- sparql{
+@import wdLabel from sparql{
   endpoint = <https://query.wikidata.org/sparql>,
   query="""
     PREFIX wikibase: <http://wikiba.se/ontology#>

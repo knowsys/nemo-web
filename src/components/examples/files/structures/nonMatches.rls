@@ -1,0 +1,25 @@
+%! Patterns that do not match.
+%!
+%! A pattern of the wrong shape is a non-match, never an error: a pair
+%! pattern skips triples, and a map pattern skips maps with other keys.
+%! So one predicate may hold values of many shapes, and an accessor
+%! that finds no such component derives nothing.
+%!
+%! The example shows:
+%! - how patterns select values of one shape,
+%! - how isTuple and isMap test the kind of a value.
+
+value((1, 2)) .
+value((1, 2, 3)) .
+value({a = 1}) .
+value({a = 1, b = 2}) .
+value(plain) .
+
+pair(?x, ?y) :- value((?x, ?y)) .
+onlyKeyA(?x) :- value({a = ?x}) .
+third(?v, ?z) :- value(?v), ?z = ?v[2] .
+keyB(?v, ?z) :- value(?v), ?z = GET(?v, b) .
+tuple(?v) :- value(?v), isTuple(?v) .
+map(?v) :- value(?v), isMap(?v) .
+
+@output pair, onlyKeyA, third, keyB, tuple, map .

@@ -28,28 +28,28 @@
 
 %%% Carbon Majors data. LEIs (legal entity IDs) are not given for all companies.
 %%% Schema: cmData(year, organisation, org-type, LEI, Mt CO2 equivalent)
-@import cmData :- csv{
+@import cmData from csv{
   resource=<https://raw.githubusercontent.com/knowsys/nemo-examples/6a573cb08e57cdbd55b7dd6b6e9907cc2a290208/examples/carbon-emissions/emissions_low_granularity.csv>,
   ignore_headers=true, % first line is CSV header here
   format=(int,string,string,string,double)
 } .
 %%% Find Legal Entity Id on Wikidata.
 %%% Schema: wdLegalEntityId(QID, LEI)
-@import wdLegalEntityId :- sparql{ 
+@import wdLegalEntityId from sparql{ 
   endpoint = $sparqlService,
   query = """PREFIX wdt: <http://www.wikidata.org/prop/direct/>
     SELECT ?qid ?lei WHERE { ?qid wdt:P1278 ?lei . }"""
 } .
 %%% Find Wikidata country information for ID.
 %%% Schema: wdCountry(QID, countryQID)
-@import wdCountry :- sparql{
+@import wdCountry from sparql{
   endpoint = $sparqlService,
   query = """PREFIX wdt: <http://www.wikidata.org/prop/direct/>
     SELECT ?qid ?countryId WHERE { ?qid wdt:P17 ?countryId }"""
 } .
 %%% Find Wikidata businesses by their label. Labels are langstrings, as in "label"@en.
 %%% Schema: wdBusiness(QID, label)
-@import wdBusiness :- sparql{
+@import wdBusiness from sparql{
   endpoint = $sparqlService,
   query = """
     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -64,7 +64,7 @@
 %%% Find English Wikidata label for any ID. This uses the Wikidata labeling service,
 %%% and hence works only if QID is given (not like wdBusiness, which lets us search by label).
 %%% Schema: wdLabel(QID,label)
-@import wdLabel :- sparql {
+@import wdLabel from sparql {
     endpoint = <https://query.wikidata.org/sparql>, % must be WDQS to support non-standard SERVICE
     query = """
       PREFIX wikibase: <http://wikiba.se/ontology#>

@@ -1,0 +1,66 @@
+%! Blank nodes and nulls.
+%!
+%! A blank node such as _:home is a value that exists but has no name.
+%! Every mention of _:home in a file is the same value, and _:other
+%! would be another. A blank node belongs to the file it is written in:
+%! every use of a module has blank nodes of its own, as every RDF file
+%! Nemo reads has.
+%!
+%! An existential variable such as !y invents values, too, but a new one
+%! for every match of its rule, and only where no fact provides one.
+%!
+%! Here, the modules are the input files household.rls and vehicles.rls
+%! (see "Input files" next to the run button), which `@use household`
+%! and `@use vehicles` read.
+%!
+%! The example shows:
+%! - how a blank node is one value, however often a rule uses it,
+%! - how every use of a module gets blank nodes of its own,
+%! - how blank nodes describe the classes without a name in an ontology,
+%! - how an existential variable !y invents a value only where needed.
+
+@use household { member = millers } as millerHouse .
+@use household { member = smiths } as smithHouse .
+
+millers(anna) .
+millers(ben) .
+smiths(carl) .
+
+livesAt(?person, ?place) :- millerHouse::livesAt(?person, ?place) .
+livesAt(?person, ?place) :- smithHouse::livesAt(?person, ?place) .
+
+% The module writes _:home for both households, but each use has its
+% own: Anna and Ben share a home, and Carl lives elsewhere. Had the
+% module written a name such as home, Carl would live with them, too.
+housemates(?x, ?y) :- livesAt(?x, ?place), livesAt(?y, ?place), ?x != ?y .
+
+% A use case: an ontology in the shape OWL takes in RDF. "Every bicycle
+% has some wheel as a part" makes bicycle a subclass of a class without
+% a name, the things with some wheel as a part. RDF writes such a class
+% as a blank node, and so does this program:
+axiom(bicycle, subClassOf, _:r) .
+axiom(_:r, onProperty, hasPart) .
+axiom(_:r, someValuesFrom, wheel) .
+
+% vehicles.rls adds that every motorbike has some motor as a part, and
+% calls its class _:r, too, as tools that write RDF often do. The two
+% stay apart; had both files written the name r, every bicycle would
+% need a motor and every motorbike a wheel.
+@use vehicles as more .
+axiom(?s, ?p, ?o) :- more::axiom(?s, ?p, ?o) .
+
+type(myBike, bicycle) .
+type(yourBike, bicycle) .
+type(myMoped, motorbike) .
+related(yourBike, hasPart, frontWheel) .
+type(frontWheel, wheel) .
+
+% What a class asks for, its members have. Nemo invents a wheel for
+% myBike and a motor for myMoped, but no wheel for yourBike, whose
+% wheel is known:
+type(?x, ?d) :- type(?x, ?c), axiom(?c, subClassOf, ?d) .
+related(?x, ?p, !y), type(!y, ?c) :-
+    type(?x, ?r), axiom(?r, onProperty, ?p), axiom(?r, someValuesFrom, ?c) .
+parts(?thing, ?part, ?class) :- related(?thing, hasPart, ?part), type(?part, ?class) .
+
+@output livesAt, housemates, parts .

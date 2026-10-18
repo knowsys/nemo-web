@@ -1,0 +1,25 @@
+%! Parameters with types and defaults.
+%!
+%! Parameters name the values that matter to a program, so they can be
+%! changed in one place. A parameter may declare a type, and may be
+%! computed from other parameters.
+%!
+%! The example shows:
+%! - how to define parameters with @parameter,
+%! - how to give a parameter a type,
+%! - how to use parameters in rule heads, conditions and other parameters.
+
+@parameter $limit: int = 3 .
+@parameter $label: string = "item" .
+@parameter $double = $limit * 2 .
+
+n(1) .
+n(2) .
+n(3) .
+n(4) .
+
+small(?x) :- n(?x), ?x < $limit .
+labeled(?x, $label) :- n(?x), ?x = $limit .
+doubled(?x, $double) :- n(?x), ?x > $limit .
+
+@output small, labeled, doubled .
