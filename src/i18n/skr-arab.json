@@ -1,0 +1,31 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saraiki",
+			"Tauqeerkhansurani"
+		]
+	},
+	"common": {
+		"giveFeedback": "مسئلے دی رپورٹ",
+		"closeModal": "بند کرو"
+	},
+	"editor": {
+		"examples": "مثالاں"
+	},
+	"navigationBar": {
+		"documentation": "دستاویزیت",
+		"sourceCodeNemo": "GitHub تے Nemo",
+		"newNemoTab": "نواں Nemo ٹیب"
+	},
+	"darkModeSwitch": {
+		"switchToLight": "روشن موڈ تے ونجو۔",
+		"switchToDark": "کالی موڈ تے ونجو۔"
+	},
+	"examples": {
+		"introduction": "ہیٹھلیاں مثالاں ݙسیندن جو Nemo کیویں ورتیا ونج سڳدا ہے:",
+		"title": "مثالی پروگرام"
+	},
+	"footer": {
+		"thirdPartyLicenses": "اوپن سورس لائسنس"
+	}
+}
