@@ -1,0 +1,33 @@
+%! Random values and the current time.
+%!
+%! RAND gives a random double between 0 and 1, UUID a new IRI of the
+%! form urn:uuid:..., and STRUUID a new UUID as a string. They give a new
+%! value for every match of the rule body. NOW gives the time at which
+%! reasoning started, so all its calls in one run give the same value.
+%!
+%! The example shows:
+%! - how to assign random numbers and UUIDs,
+%! - how to choose a random sample,
+%! - how to compute with the current time.
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+item(apple) .
+item(banana) .
+item(cherry) .
+item(plum) .
+
+score(?x, RAND()) :- item(?x) .
+identifier(?x, UUID(), STRUUID()) :- item(?x) .
+
+% About half of the items, different ones in every run:
+sample(?x) :- item(?x), RAND() < 0.5 .
+
+event(moonLanding, "1969-07-20"^^xsd:date) .
+started(NOW()) .
+
+yearsAgo(?event, YEAR(?now) - YEAR(?date)) :- event(?event, ?date), started(?now) .
+% NOW() in this rule gives the same value as in the fact above:
+sameTime(yes) :- started(?now), NOW() = ?now .
+
+@output score, identifier, sample, started, yearsAgo, sameTime .

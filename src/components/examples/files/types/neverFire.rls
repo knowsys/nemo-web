@@ -1,13 +1,13 @@
 %! Rules that can never fire.
 %!
-%! Nemo infers the types of every column from the declarations, the
-%! facts and the rules. A rule whose body asks for values that a column
-%! can never hold can never fire, and Nemo warns about it before
-%! reasoning starts. Run the example and read the warnings.
+%! Nemo infers the type of every column from the declarations, the facts
+%! and the rules. If a rule body requires a value that a column can never
+%! contain, the rule can never fire. Nemo warns about such rules before
+%! reasoning starts.
 %!
 %! The example shows:
-%! - how declarations type the columns of predicates,
-%! - how type analysis finds rules that can never fire.
+%! - how declarations give types to the columns of predicates,
+%! - how Nemo finds rules that can never fire.
 
 @declare person(name: string, age: int) .
 @declare city(name: string, location: (int, int)) .
@@ -19,10 +19,10 @@ city("Dresden", (51, 13)) .
 
 adult(?name) :- person(?name, ?age), ?age >= 18 .
 
-% A name is a string and an age an integer, so no value is both:
+% A name is a string and an age is an integer, so ?x cannot be both:
 nameAndAge(?x) :- person(?x, _), person(_, ?x) .
 
-% A location is a pair, never a triple:
+% A location is a pair, so it never matches a pattern for triples:
 wide(?a) :- city(_, (?a, _, _)) .
 
 @output adult, nameAndAge, wide .

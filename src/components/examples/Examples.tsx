@@ -141,7 +141,7 @@ export function Examples({ onExampleChange }: ExamplesProps) {
               {group.name}
               {group.isNew && (
                 <Badge bg="info" className="ms-2">
-                  new
+                  {t("newBadge")}
                 </Badge>
               )}
             </h6>
@@ -165,10 +165,7 @@ export function Examples({ onExampleChange }: ExamplesProps) {
       <Col md={8}>
         {files.length > 1 && (
           <>
-            <p className="text-muted">
-              Copying this example to the editor also adds its files to the
-              input files.
-            </p>
+            <p className="text-muted">{t("inputFilesNote")}</p>
             {/* Plain markup: the dialog opens from the navigation bar, whose context would make
                 a `Nav` a vertical navbar list */}
             <ul className="nav nav-tabs">
@@ -183,7 +180,7 @@ export function Examples({ onExampleChange }: ExamplesProps) {
                     }
                     onClick={() => setCurrentFileIndex(index)}
                   >
-                    {index === 0 ? "Program" : file.resource}
+                    {index === 0 ? t("program") : file.resource}
                   </button>
                 </li>
               ))}

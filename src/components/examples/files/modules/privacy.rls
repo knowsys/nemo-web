@@ -1,14 +1,15 @@
 %! Module defaults and private predicates.
 %!
-%! A parameter of a module that @use leaves unbound takes its default.
-%! The predicates a module derives for itself are private: a predicate
-%! of the same name in the using program is another predicate.
+%! If @use does not set a parameter of the module, the parameter keeps its
+%! default value. Predicates that are not outputs of the module are
+%! private to it: a predicate with the same name in the using program is
+%! a different predicate.
 %!
 %! The example shows:
-%! - how a module parameter falls back to its default,
+%! - how a module parameter keeps its default value,
 %! - how the predicates of a module stay private to it.
 
-% $limit is left out, so it is 3, the default in hops.rls:
+% $limit is not set, so it is 3, the default in hops.rls:
 @use hops { edge = road } as routes .
 
 road(a, b) .
@@ -16,7 +17,7 @@ road(b, c) .
 road(c, d) .
 road(d, e) .
 
-% Not the hops of the module, which is private to it:
+% This is not the predicate hops of the module, which is private:
 hops(local, value, 0) .
 
 reachable(?x, ?y) :- routes::within(?x, ?y) .

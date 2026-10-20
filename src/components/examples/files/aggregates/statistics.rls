@@ -1,13 +1,13 @@
 %! Several aggregates in one rule.
 %!
-%! A rule head may hold several aggregates over the same group. Sums and
-%! averages are exact: decimals add up without rounding errors, sums of
-%! integers grow beyond 64 bits, and the average of integers is a
-%! decimal.
+%! A rule head can contain several aggregates, which are computed over
+%! the same group. Sums of decimals are exact, and sums of integers can
+%! exceed 64 bits. The average of integers is a decimal, rounded after
+%! 18 decimal places if it does not terminate.
 %!
 %! The example shows:
-%! - how to compute several aggregates over one group,
-%! - how sums and averages stay exact.
+%! - how to compute several aggregates over the same group,
+%! - how sums and averages of integers and decimals are computed.
 
 sale(north, monday, 10) .
 sale(north, tuesday, 30) .

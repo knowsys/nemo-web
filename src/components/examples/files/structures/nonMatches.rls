@@ -1,13 +1,17 @@
-%! Patterns that do not match.
+%! Values of different shapes.
 %!
-%! A pattern of the wrong shape is a non-match, never an error: a pair
-%! pattern skips triples, and a map pattern skips maps with other keys.
-%! So one predicate may hold values of many shapes, and an accessor
-%! that finds no such component derives nothing.
+%! A predicate can hold values of different shapes. A pattern only
+%! matches values of its own shape: (?x, ?y) matches pairs but not
+%! triples, and {a = ?x} matches only maps whose single key is a. The
+%! other values are skipped without an error. Accessors such as ?v[2]
+%! and GET(?v, b) can be applied to any value. If the value has no such
+%! part, the rule derives nothing for it, and Nemo counts these cases in
+%! a warning.
 %!
 %! The example shows:
 %! - how patterns select values of one shape,
-%! - how isTuple and isMap test the kind of a value.
+%! - how accessors treat values without the requested part,
+%! - how isTuple and isMap check the kind of a value.
 
 value((1, 2)) .
 value((1, 2, 3)) .

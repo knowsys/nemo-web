@@ -1,13 +1,14 @@
 %! User-defined types.
 %!
-%! @type defines a type of structured values: a label with the types of
-%! its parts. Types compose, and a type over a single value, such as an
-%! angle over a decimal, is a type of its own: an angle is not the
-%! decimal it wraps. Every value of a declared type is checked against
-%! its definition, wherever in the program it is built.
+%! @type defines a type of structured values by a label and the types of
+%! its parts. A type can use other types as parts. A type with a single
+%! part, such as angle(decimal), is a type of its own: the value
+%! angle(0.5) is different from the decimal 0.5. Nemo checks that every
+%! value of a defined type fits its definition, including values built by
+%! rules.
 %!
 %! The example shows:
-%! - how to define tuple types, map types and wrapper types with @type,
+%! - how to define tuple types, map types and a type with a single part,
 %! - how to use them in declarations,
 %! - how to build and match values of these types in rules.
 
@@ -33,7 +34,7 @@ vertical(?name) :- road(segment(point(?x, _), point(?x, _)), ?name) .
 turns(?value) :- rotation(angle(?value)) .
 port(?host, ?port) :- server(config{host = ?host, port = ?port}) .
 
-% An angle is not a plain decimal, so this derives nothing:
+% An angle is not a decimal, so this rule can never fire:
 sameAsPlain(?a) :- rotation(?a), plain(?a) .
 
 @output shifted, vertical, turns, port, sameAsPlain .

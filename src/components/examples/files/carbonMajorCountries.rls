@@ -88,12 +88,12 @@ orgIdFromName(?org,?id) :- businessId(?org,?id), ~ambiguousName(?org) .
 orgId(?org,?qid) :- orgIdFromLEI(?org,?qid) .
 orgId(?org,?qid) :- orgIdFromName(?org,?qid) .
 orgCountry(?org,?countryId) :- orgId(?org,?qid), wdCountry(?qid,?countryId) .
-orgCountry(?org,?countryId) :- orgId(?org,?qid), wdCountry(?qid,?countryId) .
 
-% 4. Compute emissions per country (label) & sum up the rest under "Missing country":
-countryEmissionsPerYear(#sum(?Mtco2eq),STR(?countryLabel)) :- 
+% 4. Compute emissions per country (label) & sum up the rest under "Missing country".
+%    The emissions of each organisation are added once, even if two organisations emit the same amount:
+countryEmissionsPerYear(#sum(?Mtco2eq per ?org),STR(?countryLabel)) :-
     cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), orgCountry(?org,?countryId), wdLabel(?countryId,?countryLabel) . 
-countryEmissionsPerYear(#sum(?Mtco2eq),"MISSING COUNTRY") :- 
+countryEmissionsPerYear(#sum(?Mtco2eq per ?org),"MISSING COUNTRY") :-
     cmData($yearOfInterest,?org,?type,?lei,?Mtco2eq), ~orgCountry(?org,_) . 
 
 % 5. Create lists of organisations for which data integration has failed or partly failed:

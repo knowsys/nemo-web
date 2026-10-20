@@ -1,11 +1,12 @@
 %! Collecting groups into tuples and maps.
 %!
-%! The aggregates #tuple and #map collect the values of a group into
-%! one structured value, which other rules and builtins can read.
+%! The aggregates #tuple and #map collect the values of a group into a
+%! single tuple or map. Other rules and builtins can use this value like
+%! any other.
 %!
 %! The example shows:
 %! - how #tuple collects the values of a group into a tuple,
-%! - how #map collects pairs of a group into a map,
+%! - how #map collects the key-value pairs of a group into a map,
 %! - how STRJOIN joins a tuple of strings into one string.
 
 price(apple, fruit, 2) .
@@ -23,7 +24,7 @@ inStock(?kind, #tuple(?item)) :- price(?item, ?kind, _), stocked(?item, _) .
 priceList(?kind, #map(?item = ?price)) :- price(?item, ?kind, ?price) .
 shelf(?kind, STRJOIN(#tuple(STR(?item)), ", ")) :- price(?item, ?kind, _) .
 
-% A map collected above, read again:
+% Reading from the maps collected above:
 dearest(?kind, ?item) :- priceList(?kind, ?prices), price(?item, ?kind, _), GET(?prices, ?item) >= 3 .
 
 @output inStock, priceList, shelf, dearest .

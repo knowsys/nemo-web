@@ -1,8 +1,8 @@
 %! Dates, times and durations.
 %!
-%! Dates, times and durations are values with arithmetic and an order:
-%! subtracting two dates gives a duration, adding a duration to a date
-%! gives a date, and month arithmetic follows the calendar.
+%! Nemo can compute with dates, times and durations. Subtracting two dates
+%! gives a duration, and adding a duration to a date gives a date. Adding
+%! months follows the calendar.
 %!
 %! The example shows:
 %! - how to write dates, dateTimes and durations as typed literals,
@@ -39,7 +39,8 @@ result(launchDate, DATE(?time)) :- event(launch, ?time) .
 
 % Comparison:
 before(?a, ?b) :- milestone(?a, ?x), milestone(?b, ?y), ?x < ?y .
-% Months and days have no order between them, so this derives nothing:
+% A duration in months cannot be compared with one in days, so this rule
+% derives nothing, and Nemo warns about it:
 longer(quarter, twoWeeks) :- span(quarter, ?q), span(twoWeeks, ?d), ?q > ?d .
 
 % Aggregates:

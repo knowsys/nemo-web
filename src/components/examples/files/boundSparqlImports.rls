@@ -1,15 +1,16 @@
 %! Influences between famous people (Wikidata, bound SPARQL imports).
 %!
-%! A bound import asks a SPARQL endpoint only for what the program
-%! needs: `where item(?item)` restricts the query to the items of the
-%! predicate `item`, which Nemo sends along with the query. What binds
-%! an import may be derived by rules, recursively, so the program
-%! follows a chain of influences through Wikidata, one round at a time.
+%! A SPARQL import with a `where` clause only asks the endpoint for the
+%! data the program needs. Here, `where reached(?person)` restricts the
+%! query to the people in the predicate `reached`, which Nemo sends along
+%! with the query. The predicate in the `where` clause can be derived by
+%! rules, even recursively: this program follows a chain of influences
+%! through Wikidata and fetches new data in each round.
 %!
 %! The example shows:
-%! - how to bind a SPARQL import to the values of a predicate,
-%! - how bound imports follow chains of values derived by rules,
-%! - how to fetch labels for exactly the items a program found.
+%! - how to restrict a SPARQL import to the values of a predicate,
+%! - how such imports follow chains of values derived by rules,
+%! - how to fetch labels only for the items the program found.
 
 @prefix wd: <http://www.wikidata.org/entity/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -18,7 +19,7 @@ item(wd:Q42) .    % Douglas Adams
 item(wd:Q937) .   % Albert Einstein
 item(wd:Q7186) .  % Marie Curie
 
-% Who influenced whom, asked for every person reached so far:
+% Who influenced whom, for every person reached so far:
 @import influence(?person, ?other) from sparql {
     endpoint = <https://query.wikidata.org/sparql>,
     query = "SELECT ?person ?other WHERE { ?person <http://www.wikidata.org/prop/direct/P737> ?other }"
@@ -27,7 +28,7 @@ item(wd:Q7186) .  % Marie Curie
 reached(?person) :- item(?person) .
 reached(?other) :- influence(?person, ?other), ?person != ?other .
 
-% English labels, asked only for the people reached:
+% English labels, only for the people reached:
 @import caption(?item, ?text) from sparql {
     endpoint = <https://query.wikidata.org/sparql>,
     query = """

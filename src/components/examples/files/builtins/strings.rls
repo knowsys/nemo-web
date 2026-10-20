@@ -1,14 +1,18 @@
-%! Strings: trimming, hashing and language tags.
+%! String functions.
 %!
-%! Nemo has the string functions of SPARQL and a few more: STRTRIM and
-%! its one-sided forms remove whitespace, hash functions compute
-%! digests, langMatches matches language tags against ranges, and
-%! STRJOIN joins a tuple of strings.
+%! Nemo supports the string functions of SPARQL and a few more. STRTRIM
+%! removes whitespace from both ends of a string, STRTRIMSTART and
+%! STRTRIMEND from one end. MD5, SHA1, SHA256, SHA384 and SHA512 compute
+%! hash values. langMatches checks a language tag against a language
+%! range, as in SPARQL, and STRJOIN joins a tuple of strings. Positions
+%! in SUBSTR are integers, counted from 1.
 %!
 %! The example shows:
 %! - how to trim strings, keeping their language tags,
-%! - how to compute hash digests,
+%! - how to compute hash values,
 %! - how to select strings by language,
+%! - how to compute a position for SUBSTR,
+%! - how STRBEFORE and STRAFTER treat language tags,
 %! - how to join strings.
 
 padded("  padded \t") .
@@ -29,6 +33,20 @@ name("couleur"@fr) .
 english(?n) :- name(?n), langMatches(LANG(?n), "en") .
 american(?n) :- name(?n), langMatches(LANG(?n), "en-us") .
 
+% Dividing integers keeps the fractional part, so STRLEN(?t) / 2 is 3.5
+% for "Datalog". INT drops the fractional part and gives an integer
+% position:
+title("Nemo") .
+title("Datalog") .
+
+firstHalf(?t, SUBSTR(?t, 1, INT(STRLEN(?t) / 2))) :- title(?t) .
+% Without INT, this rule derives nothing for "Datalog":
+firstHalfWithoutInt(?t, SUBSTR(?t, 1, STRLEN(?t) / 2)) :- title(?t) .
+
+% A part of a tagged string keeps the tag. If the separator does not
+% occur, the result is the empty string without a tag:
+part(STRBEFORE("colour"@en-GB, "ou"), STRAFTER("colour"@en-GB, "x")) .
+
 joined(STRJOIN(("a", "b", "c"), "-")) .
 
-@output trimmed, digest, english, american, joined .
+@output trimmed, digest, english, american, firstHalf, firstHalfWithoutInt, part, joined .

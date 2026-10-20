@@ -1,7 +1,7 @@
 %! The number of nodes each node of a relation reaches.
 %!
-%! This module uses the module closure.rls beside it in its folder, so
-%! `@use closure` names it without the folder.
+%! This module uses closure.rls from the same folder, so it can write
+%! `@use closure` without the folder name.
 
 @input edge(from: any, to: any) .
 

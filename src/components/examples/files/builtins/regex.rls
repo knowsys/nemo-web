@@ -1,10 +1,12 @@
 %! Regular expressions.
 %!
-%! REGEX tests whether a string matches a pattern, and REPLACE replaces
-%! every match, with $1, $2, ... for the groups of the match. Both take
-%! flags: i ignores case, m lets ^ and $ match at line breaks, s lets .
-%! match line breaks, and q reads the pattern as plain text. An invalid
-%! pattern derives nothing.
+%! REGEX checks whether a string matches a pattern, and REPLACE replaces
+%! every match of a pattern. In the replacement, $1, $2, ... stand for
+%! the groups of the match. Both functions accept flags: i ignores case,
+%! m makes ^ and $ match at line breaks, s makes . match line breaks, x
+%! ignores whitespace in the pattern, and q reads the pattern as plain
+%! text. A rule with an invalid pattern derives nothing, and Nemo warns
+%! about it.
 %!
 %! The example shows:
 %! - how to filter strings with REGEX,
@@ -34,7 +36,7 @@ replaced(REPLACE("1+1", "+", "-", "q")) .
 % The language tag of a string is kept:
 replaced(REPLACE("color"@en, "or", "our")) .
 
-% "(" is no valid pattern, so this derives nothing:
+% "(" is not a valid pattern, so this rule derives nothing:
 invalid(?w) :- word(?w), REGEX(?w, "(") .
 
 @output startsWithHel, anyMiddle, dotInMiddle, german, replaced, invalid .

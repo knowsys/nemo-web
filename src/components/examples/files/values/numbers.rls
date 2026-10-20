@@ -1,17 +1,17 @@
 %! Integers, decimals, doubles and floats.
 %!
-%! A number with a point is an exact decimal: 0.1 is one tenth, not the
-%! binary fraction closest to it, so 0.1 + 0.2 is exactly 0.3. Doubles
-%! and floats are written with a suffix (2.5d, 2.5f) or an exponent
-%! (2.5E0). Dividing integers gives their exact quotient, and arithmetic
-%! on different kinds of numbers gives the later kind in the order
+%! Numbers with a decimal point, such as 0.1, are exact decimals, so
+%! 0.1 + 0.2 is exactly 0.3. Doubles and floats are written with a suffix
+%! (2.5d, 2.5f) or an exponent (2.5E0). Dividing two integers keeps the
+%! fractional part: 7 / 2 is 3.5. When numbers of different types are
+%! combined, the result has the type that comes later in the order
 %! integer, decimal, float, double, as in SPARQL.
 %!
 %! The example shows:
-%! - how to write the four kinds of numbers,
+%! - how to write the four types of numbers,
 %! - how decimal arithmetic stays exact,
 %! - how division and mixed arithmetic behave,
-%! - how numbers of different kinds compare by their exact values.
+%! - how numbers of different types are compared by their exact values.
 
 kinds(5, 2.5, 2.5d, 2.5f) .
 kindNames(DATATYPE(5), DATATYPE(2.5), DATATYPE(2.5d), DATATYPE(2.5f)) .
@@ -21,19 +21,19 @@ total(decimal, 0.1 + 0.2) .
 total(double, 0.1d + 0.2d) .
 threeTenths(?kind) :- total(?kind, ?total), ?total == 0.3 .
 
-% Integral decimals are integers:
+% A decimal without a fractional part is an integer:
 whole(6.5 - 1.5) .
 
-% Dividing integers gives the exact quotient, a decimal where needed:
+% Dividing integers gives a decimal where needed:
 quotient(?x, ?y, ?x / ?y) :- pair(?x, ?y) .
 pair(7, 2) .
 pair(8, 4) .
 pair(-7, 2) .
 
-% Mixed arithmetic gives the later kind in the order integer, decimal, float, double:
+% Mixed arithmetic gives the later type in the order integer, decimal, float, double:
 mixed(1 + 0.5, 1 + 0.5d, 0.5d + 0.5f) .
 
-% Numbers of different kinds compare by their exact values:
+% Numbers of different types are compared by their exact values:
 % 0.3 is greater than the double 0.3d, which is 0.29999999999999998889...
 above(?a, ?b) :- number(?a, ?x), number(?b, ?y), ?x > ?y .
 number(decimal, 0.3) .

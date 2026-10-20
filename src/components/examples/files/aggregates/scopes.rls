@@ -1,15 +1,16 @@
-%! What an aggregate counts.
+%! Which values an aggregate counts.
 %!
-%! An aggregate ranges over the distinct values of its variable, so two
-%! items of the same price add that price once. To count a value once
-%! for each combination of other variables, list them after `per`.
-%! #count() without a variable counts every match of the rule body.
+%! An aggregate such as #sum(?p) uses each distinct value of ?p once per
+%! group: if two items have the same price, that price is added only
+%! once. To add the price once for every item, write #sum(?p per ?item).
+%! The value is then counted once for each distinct combination of the
+%! variables after `per`. #count() without a variable counts the matches
+%! of the rule body.
 %!
 %! The example shows:
-%! - how #sum ranges over distinct values,
-%! - how `per` counts a value once per combination of variables,
-%! - how #count() counts body matches, and #count(per ...) combinations,
-%! - how #avg divides exactly.
+%! - how #sum adds up distinct values,
+%! - how `per` counts a value once per item, or once per item and day,
+%! - how #count() counts body matches, and #count(per ...) combinations.
 
 @declare price(item: iri, kind: iri, price: decimal) .
 
@@ -25,17 +26,18 @@ stocked(apple, tuesday, alice) .
 stocked(date, monday, alice) .
 stocked(cherry, monday, carol) .
 
-% Equal prices count once: the sum ranges over distinct values.
+% Apple and date both cost 2, so 2 is added only once:
 distinctPrices(?kind, #sum(?p)) :- price(?item, ?kind, ?p) .
 
-% Each item's price counts once:
+% The price of each item is added once:
 itemTotal(?kind, #sum(?p per ?item)) :- price(?item, ?kind, ?p) .
 itemAverage(?kind, #avg(?p per ?item)) :- price(?item, ?kind, ?p) .
 
-% Each item's price counts once for every day it is in stock:
+% The price of each item is added once for every day it is in stock:
 dailyValue(?kind, #sum(?p per ?item, ?day)) :- price(?item, ?kind, ?p), stocked(?item, ?day, _) .
 
-% #count() counts body matches, #count(per ...) distinct combinations:
+% Apple was stocked twice on Monday, by Alice and by Bob. #count() counts
+% both matches, #count(per ?item, ?day) counts the pair (apple, monday) once:
 matches(?kind, #count()) :- price(?item, ?kind, ?p), stocked(?item, ?day, ?by) .
 stockDays(?kind, #count(per ?item, ?day)) :- price(?item, ?kind, ?p), stocked(?item, ?day, ?by) .
 

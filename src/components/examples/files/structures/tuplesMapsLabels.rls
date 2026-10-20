@@ -1,9 +1,10 @@
 %! Tuples, maps and labeled values.
 %!
-%! Values can have structure: tuples such as (51, 13), maps such as
-%! {host = "localhost", port = 8080}, and both with a label in front,
-%! such as stop("Hbf", (51, 13)) or backend{host = "10.0.0.1", port = 9000}.
-%! Rules take them apart with patterns, or read into them with accessors.
+%! Besides numbers, strings and IRIs, Nemo supports structured values:
+%! tuples such as (51, 13), maps such as {host = "localhost", port = 8080},
+%! and tuples or maps with a label, such as stop("Hbf", (51, 13)) or
+%! backend{host = "10.0.0.1", port = 9000}. Rules can take them apart
+%! with patterns, or read their parts with accessors.
 %!
 %! The example shows:
 %! - how to declare columns that hold tuples and maps,
@@ -25,16 +26,16 @@ server(frontend{host = "10.0.0.2", port = 80}) .
 % Tuple patterns bind by position:
 latitude(?name, ?lat) :- city((?lat, _), ?name) .
 
-% Labeled patterns match the label too, so depot(...) values do not match:
+% A labeled pattern also checks the label, so depot(...) values do not match:
 stopAt(?name, ?city) :- station(stop(?name, ?point)), city(?point, ?city) .
 
-% Map patterns name every key of the maps they match:
+% A map pattern lists all keys of the maps it matches:
 endpoint(?host, ?port) :- config({host = ?host, port = ?port}) .
 
-% Maps can carry labels as well, so only backend{...} values match:
+% Maps can have labels, too. This pattern only matches backend{...}:
 backendPort(?port) :- server(backend{host = _, port = ?port}) .
 
-% Accessors read into structures directly; ?t[k] is short for GET(?t, k):
+% Accessors read parts of a value; ?t[k] is short for GET(?t, k):
 firstCoordinate(?lat) :- city(?point, _), ?lat = ?point[0] .
 pair(?point) :- city(?point, _), LENGTH(?point) = 2 .
 kind(?station, LABEL(?station)) :- station(?station) .

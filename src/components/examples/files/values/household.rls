@@ -1,9 +1,9 @@
-%! One household: everyone it is given lives at one home.
+%! A household: all its members live in the same home.
 %!
-%! This file is a module: a program uses it with `@use household`, binds
-%! its input `member` to a predicate of its own, and reads its output
-%! `livesAt`. The home is the blank node _:home, and every use of the
-%! module has a _:home of its own.
+%! This file is a module. A program uses it with `@use household`, binds
+%! the input `member` to one of its own predicates, and reads the output
+%! `livesAt`. The home is the blank node _:home, which is a different one
+%! for each use of the module.
 
 @input member(person: any) .
 

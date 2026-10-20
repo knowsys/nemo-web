@@ -1,8 +1,8 @@
 %! Pairs of nodes within a number of hops of each other.
 %!
-%! This file is a module: a program uses it with `@use hops`, binds its
-%! input `edge` to a predicate of its own and, if it wants, its
-%! parameter `$limit`, and reads its output `within`.
+%! This file is a module. A program uses it with `@use hops`, binds the
+%! input `edge` to one of its own predicates, can set the parameter
+%! `$limit`, and reads the output `within`.
 
 @input edge(from: any, to: any) .
 @parameter $limit: int = 3 .

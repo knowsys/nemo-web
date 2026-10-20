@@ -1,0 +1,45 @@
+%! Datatypes, language tags and type checks.
+%!
+%! DATATYPE gives the datatype IRI of a literal, and LANG its language
+%! tag. A literal without a tag has the empty tag "", so LANG(?x) = ""
+%! selects the literals without a tag. IRIs are not literals: both
+%! functions give no result for them, and Nemo warns about it. Functions
+%! such as isInteger or isLangString check the type of a value, and STRDT
+%! and STRLANG build literals.
+%!
+%! The example shows:
+%! - how to get the datatype and the language tag of a value,
+%! - how to check the type of a value,
+%! - how to build typed literals and language-tagged strings.
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+term(42) .
+term(4.2) .
+term(4.2d) .
+term(true) .
+term("text") .
+term("Text"@en) .
+term("2024-03-01"^^xsd:date) .
+term("P1D"^^xsd:dayTimeDuration) .
+term(<https://example.org/a>) .
+
+datatypeOf(?t, DATATYPE(?t)) :- term(?t) .
+languageOf(?t, LANG(?t)) :- term(?t) .
+untagged(?t) :- term(?t), LANG(?t) = "" .
+
+% Integers are decimals, too:
+kind(?t, integer) :- term(?t), isInteger(?t) .
+kind(?t, decimal) :- term(?t), isDecimal(?t) .
+kind(?t, double) :- term(?t), isDouble(?t) .
+kind(?t, numeric) :- term(?t), isNumeric(?t) .
+kind(?t, boolean) :- term(?t), isBoolean(?t) .
+kind(?t, string) :- term(?t), isString(?t) .
+kind(?t, langString) :- term(?t), isLangString(?t) .
+kind(?t, date) :- term(?t), isDate(?t) .
+kind(?t, duration) :- term(?t), isDuration(?t) .
+kind(?t, iri) :- term(?t), isIri(?t) .
+
+built(STRDT("2024-03-01", xsd:date), STRDT("5", xsd:integer), STRLANG("chat", "fr")) .
+
+@output datatypeOf, languageOf, untagged, kind, built .

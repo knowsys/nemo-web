@@ -1,8 +1,10 @@
 %! Parameters with types and defaults.
 %!
-%! Parameters name the values that matter to a program, so they can be
-%! changed in one place. A parameter may declare a type, and may be
-%! computed from other parameters.
+%! Parameters give names to values that a program uses, so that they can
+%! be changed in one place. A parameter can have a type, and it can be
+%! computed from other parameters. The value in the program is a default:
+%! a program that uses this one as a module can set another value, and
+%! so can the command line.
 %!
 %! The example shows:
 %! - how to define parameters with @parameter,

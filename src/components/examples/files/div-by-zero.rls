@@ -52,7 +52,8 @@ exprResult(?node, ?val) :- intLiteral(?node, ?val).
 exprResult(?node, ?v1 + ?v2) :- binExpr(?node, "AddExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
 exprResult(?node, ?v1 - ?v2) :- binExpr(?node, "SubExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
 exprResult(?node, ?v1 * ?v2) :- binExpr(?node, "MulExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
-exprResult(?node, ?v1 / ?v2) :- binExpr(?node, "DivExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
+% Java divides integers toward zero, which INT does to the exact quotient:
+exprResult(?node, INT(?v1 / ?v2)) :- binExpr(?node, "DivExpr", ?c1, ?c2), exprResult(?c1, ?v1), exprResult(?c2, ?v2) .
 
 % Propagate sub-expression results through constant variables
 constantVar(?defNode, ?val) :-

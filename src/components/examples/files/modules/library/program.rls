@@ -1,14 +1,14 @@
 %! A library of modules in a folder.
 %!
-%! Module names follow folders: `@use graph::closure` reads the input
-%! file graph/closure.rls, and graph/reach.rls, in the same folder,
-%! reads it with just `@use closure`. To use modules of your own, add
-%! .rls files as input files and give them names with their folders,
-%! such as graph/closure.rls.
+%! Module names follow the folders of the files: `@use graph::closure`
+%! reads the input file graph/closure.rls. The module graph/reach.rls,
+%! which is in the same folder, uses it with just `@use closure`. To use
+%! your own modules, add .rls files as input files, with their folder in
+%! the name, such as graph/closure.rls.
 %!
 %! The example shows:
 %! - how module names follow the folders of the input files,
-%! - how a module uses another module beside it.
+%! - how a module uses another module in the same folder.
 
 @use graph::closure { edge = follows } as social .
 @use graph::reach { edge = follows } as counted .

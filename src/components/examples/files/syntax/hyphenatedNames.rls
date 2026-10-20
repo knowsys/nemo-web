@@ -1,9 +1,9 @@
 %! Names with hyphens.
 %!
-%! A `-` between two parts of a name belongs to the name, as in SPARQL's
-%! prefixed names: stock-item, item-1 and ex:spare-part are names. After
-%! a variable it stays a minus, so ?count-1 subtracts, and with spaces
-%! around it a `-` always subtracts.
+%! Names can contain hyphens, as prefixed names in SPARQL can: stock-item,
+%! item-1 and ex:spare-part are names. After a variable, `-` is a minus
+%! sign, so ?count-1 subtracts 1. With spaces around it, `-` is always a
+%! minus sign.
 %!
 %! The example shows:
 %! - how to write predicate and constant names with hyphens,

@@ -1,8 +1,8 @@
 %! Building structured values.
 %!
-%! Rule heads build tuples, maps and labeled values from the values a
-%! rule body matches, nested to any depth, and rule bodies take them
-%! apart again.
+%! Rules can build tuples, maps and labeled values in their heads, from
+%! the values matched in the body. These structures can be nested. Rule
+%! bodies can take them apart again with patterns of the same shape.
 %!
 %! The example shows:
 %! - how to build tuples, maps and labeled values in rule heads,
@@ -17,7 +17,7 @@ asMap({from = ?x, to = ?y, weight = ?w}) :- edge(?x, ?y, ?w) .
 asLabeled(link(?x, ?y)) :- edge(?x, ?y, _) .
 nested((?x, (?y, ?w * 2))) :- edge(?x, ?y, ?w) .
 
-% The structures built above, taken apart again:
+% Matching the structures built above:
 swapped((?y, ?x)) :- asTuple((?x, ?y)) .
 heavy(?x, ?y) :- asMap({from = ?x, to = ?y, weight = ?w}), ?w > 3 .
 

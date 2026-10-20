@@ -1,0 +1,53 @@
+%! Number functions.
+%!
+%! ROUND, CEIL and FLOOR round decimals to integers. ROUND rounds halves
+%! up, toward positive infinity, as SPARQL does, so ROUND(-2.5) is -2.
+%! INT drops the fractional part of a number, and reads a string as an
+%! integer. Since `/` keeps the fractional part, INT and REM give integer
+%! division with a remainder. POW and the bit operations work on integers
+%! of any size. MAX and MIN convert their arguments to a common type, as
+%! arithmetic does.
+%!
+%! The example shows:
+%! - how to round numbers and convert them to integers,
+%! - how to divide integers with an integer result and a remainder,
+%! - how to read integers from strings,
+%! - how to compute powers and bit operations,
+%! - how MAX and MIN treat numbers of different types.
+
+value(2.5) .
+value(-2.5) .
+value(2.4) .
+value(1.5d) .
+
+% ROUND, CEIL and FLOOR keep doubles as doubles, but INT always gives an
+% integer:
+rounded(?x, ROUND(?x), CEIL(?x), FLOOR(?x), INT(?x)) :- value(?x) .
+
+% INT rounds toward zero, and REM gives the matching remainder:
+pair(7, 2) .
+pair(-7, 2) .
+
+quotient(?x, ?y, ?x / ?y, INT(?x / ?y), REM(?x, ?y)) :- pair(?x, ?y) .
+
+% INT reads integers, also with the prefixes 0b, 0o and 0x. "4.5" and
+% "forty-two" are not integers, so the rule derives nothing for them:
+text("42") .
+text("+7") .
+text("0x1F") .
+text("4.5") .
+text("forty-two") .
+
+parsed(?t, INT(?t)) :- text(?t) .
+
+% Powers of integers and decimals with a non-negative integer exponent
+% are exact; other powers are doubles:
+power(POW(2, 10), POW(2, 100), POW(1.5, 2), POW(2, -1), POW(2, 0.5)) .
+
+% Bit operations work beyond 64 bits:
+bits(BITAND(12, 10), BITOR(12, 10), BITXOR(12, 10), BITSHL(1, 70), BITSHR(-16, 2)) .
+
+% 3 and 2.5d are compared as doubles, so the larger one is 3d:
+extremes(MAX(3, 2.5d), MIN(3, 2.5), MAX(1, 2, 3)) .
+
+@output rounded, quotient, parsed, power, bits, extremes .

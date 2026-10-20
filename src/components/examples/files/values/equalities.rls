@@ -1,16 +1,17 @@
 %! Two kinds of equality.
 %!
-%! `=` and `!=` compare terms: two terms are equal when they are the
-%! same term. This is the equality joins use, and it holds or fails for
-%! any two values. `==` and `!==` compare values, as SPARQL does:
-%! numbers of different kinds, or dateTimes in different timezones,
-%! are equal when they denote the same value. A number and a string
-%! cannot be compared by value, so `==` derives nothing for them.
+%! Nemo has two kinds of equality. `=` and `!=` check whether two terms
+%! are the same. Joins use this equality, too, and it applies to any two
+%! values. `==` and `!==` compare values, as `=` does in SPARQL: numbers
+%! of different types, or dateTimes in different timezones, are equal if
+%! they have the same value. A number and a string cannot be compared by
+%! value, so `==` derives nothing for them, and Nemo warns about it.
 %!
 %! The example shows:
-%! - how 1, 1.0d and 1f are three terms but one number,
-%! - how two dateTimes can be the same instant but different terms,
-%! - how NaN is the same term as itself but no number equal to itself.
+%! - how 1, 1.0d and 1f are three different terms but the same number,
+%! - how two dateTimes can be the same point in time but different terms,
+%! - how NaN is the same term as itself, but not equal to itself as a
+%!   number.
 
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 

@@ -131,7 +131,7 @@ export const exampleGroups: ExampleGroup[] = [
         program: "structures/collections.rls",
       },
       {
-        name: "Patterns that do not match",
+        name: "Values of different shapes",
         program: "structures/nonMatches.rls",
       },
     ],
@@ -195,7 +195,7 @@ export const exampleGroups: ExampleGroup[] = [
     isNew: true,
     examples: [
       {
-        name: "What an aggregate counts",
+        name: "Which values an aggregate counts",
         program: "aggregates/scopes.rls",
       },
       {
@@ -247,12 +247,24 @@ export const exampleGroups: ExampleGroup[] = [
     isNew: true,
     examples: [
       {
+        name: "Number functions: rounding, casts and powers",
+        program: "builtins/numbers.rls",
+      },
+      {
+        name: "String functions",
+        program: "builtins/strings.rls",
+      },
+      {
         name: "Regular expressions",
         program: "builtins/regex.rls",
       },
       {
-        name: "Strings: trimming, hashing and language tags",
-        program: "builtins/strings.rls",
+        name: "Datatypes, language tags and type checks",
+        program: "builtins/terms.rls",
+      },
+      {
+        name: "Random values and the current time",
+        program: "builtins/random.rls",
       },
     ],
   },

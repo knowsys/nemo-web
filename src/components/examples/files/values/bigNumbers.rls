@@ -1,9 +1,9 @@
 %! Exact arithmetic beyond 64 bits.
 %!
-%! Integers are not limited to 64 bits: where a result does not fit,
-%! arithmetic continues with larger numbers instead of overflowing.
-%! Comparisons, division and aggregates work on them like on any
-%! other number.
+%! Integers are not limited to 64 bits. If the result of an operation does
+%! not fit into 64 bits, Nemo continues with a larger representation
+%! instead of overflowing. Comparison, division and aggregates work on
+%! such numbers as on any other.
 %!
 %! The example shows:
 %! - how factorials grow past 64 bits,

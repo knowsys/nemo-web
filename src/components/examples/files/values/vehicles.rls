@@ -1,8 +1,8 @@
 %! Part of an ontology: every motorbike has some motor as a part.
 %!
-%! This file is a module: a program uses it with `@use vehicles` and
-%! reads its output `axiom`. Its class without a name is the blank node
-%! _:r, which belongs to this file, whatever other files call theirs.
+%! This file is a module. A program uses it with `@use vehicles` and
+%! reads the output `axiom`. The unnamed class is the blank node _:r. It
+%! is local to this file, so it differs from a _:r in any other file.
 
 axiom(motorbike, subClassOf, _:r) .
 axiom(_:r, onProperty, hasPart) .
