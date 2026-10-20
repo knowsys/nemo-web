@@ -33,6 +33,11 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
       },
+      output: {
+        // Vite's default `[name]-[hash].[ext]` leaves a trailing dot on files without an
+        // extension (the license files of the extension), which Windows cannot check out
+        assetFileNames: "assets/[name]-[hash][extname]",
+      },
     },
   },
   optimizeDeps: {
