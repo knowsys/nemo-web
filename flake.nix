@@ -8,17 +8,13 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # also provides the editor extension
     nemo = {
-      url = "github:knowsys/nemo";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nemo-vscode-extension = {
-      url = "github:knowsys/nemo-vscode-extension";
+      url = "github:knowsys/nemo/lazer";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         dream2nix.follows = "dream2nix";
-        nemo.follows = "nemo";
+        nemo-web.follows = "";
       };
     };
 
@@ -33,7 +29,6 @@ rec {
       self,
       nixpkgs,
       nemo,
-      nemo-vscode-extension,
       dream2nix,
       ...
     }:
@@ -53,10 +48,7 @@ rec {
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = [
-              nemo.overlays.default
-              nemo-vscode-extension.overlays.default
-            ];
+            overlays = [ nemo.overlays.default ];
           };
           npmMeta = builtins.fromJSON (builtins.readFile ./package.json);
           inherit (npmMeta) version;
@@ -125,9 +117,7 @@ rec {
                         inherit (nixpkgs) stdenv nodejs;
                         nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
                         nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
-                        nemo-vscode-extension-vsix =
-                          lib.mkDefault
-                            nemo-vscode-extension.packages.${system}.nemo-vscode-extension-vsix;
+                        nemo-vscode-extension-vsix = lib.mkDefault nemo.packages.${system}.nemo-vscode-extension-vsix;
                         nev = lib.mkDefault self.packages.${system}.nev;
                       }
                       {
@@ -136,7 +126,7 @@ rec {
                     ];
 
                   nodejs-package-lock-v3 = {
-                    packageLockFile = "${config.mkDerivation.src}/package-lock.json";
+                    packageLockFile = ./package-lock.json;
                   };
 
                   nodejs-granular-v3 = {
@@ -295,9 +285,7 @@ rec {
                         inherit (nixpkgs) stdenv;
                         nemo-wasm-web = lib.mkDefault nemo.packages.${system}.nemo-wasm-web;
                         nemo-wasm-bundler = lib.mkDefault nemo.packages.${system}.nemo-wasm-bundler;
-                        nemo-vscode-extension-vsix =
-                          lib.mkDefault
-                            nemo-vscode-extension.packages.${system}.nemo-vscode-extension-vsix;
+                        nemo-vscode-extension-vsix = lib.mkDefault nemo.packages.${system}.nemo-vscode-extension-vsix;
                         nev = lib.mkDefault self.packages.${system}.nev;
                       }
                       {
@@ -322,7 +310,6 @@ rec {
             inherit (self.packages.${final.stdenv.hostPlatform.system}) nemo-web;
           };
           nemo = nemo.overlays.default;
-          nemo-vscode-extension = nemo-vscode-extension.overlays.default;
         };
       };
 

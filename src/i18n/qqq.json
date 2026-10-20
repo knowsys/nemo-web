@@ -20,7 +20,10 @@
 	},
 	"examples": {
 		"introduction": "This is the introductory paragraph shown before the list of example programs in the example selection modal.",
-		"title": "This is the title of the example selection modal."
+		"title": "This is the title of the example selection modal.",
+		"newBadge": "This is a badge next to the name of a group of examples in the example selection modal, marking features that are new in this version of Nemo.",
+		"program": "This is the label of the tab that shows the program of an example in the example selection modal. The other tabs are labeled with the names of the example's input files.",
+		"inputFilesNote": "This is a note above the files of an example in the example selection modal, shown for examples that come with input files. “Input files” refers to the input files panel next to the editor."
 	},
 	"footer": {
 		"thirdPartyLicenses": "This is a link in the footer, linking to a file with the collected licenses of all components used in Nemo-web."

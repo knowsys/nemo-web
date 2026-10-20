@@ -1,9 +1,8 @@
 import {
-  getNemoVersion,
+  nemoVersion,
+  NemoCursor,
   NemoEngine,
-  NemoResultRow,
-  NemoResults,
-  setAllocErrorHook,
+  NemoProgram,
   setPanicHook,
 } from "./nemoWASM";
 import { Timer } from "../Timer";
@@ -17,29 +16,20 @@ import {
   TreeForTableResponse,
   TreeForTableResponseFromJSON,
 } from "./models";
+import { moduleNameOf } from "../moduleNameOf";
 
 setPanicHook();
-setAllocErrorHook();
 
-class NemoResultsIterable {
-  public constructor(private iterator: NemoResults) {}
-
-  public [Symbol.iterator]() {
-    return this.iterator;
-  }
-}
-
-function* take<T>(iterable: Iterable<T>, count: number) {
-  if (count === 0) {
-    return;
-  }
-  for (const value of iterable) {
-    yield value;
-    count--;
-    if (count === 0) {
-      break;
-    }
-  }
+/**
+ * A row of a predicate's results
+ *
+ * `values` are the engine's tagged values, `terms` the same values in Nemo's term syntax.
+ * `entryId` is the id with which the explanation viewer (nev) selects the row.
+ */
+export interface NemoRow {
+  entryId: number;
+  values: any[];
+  terms: string[];
 }
 
 export type FactCounts = Awaited<ReturnType<NemoRunner["getCounts"]>>;
@@ -58,22 +48,36 @@ export type FactCounts = Awaited<ReturnType<NemoRunner["getCounts"]>>;
  */
 export class NemoRunner {
   private engine?: NemoEngine;
-  private nextResultIterableID = 1;
-  private resultsIterables: { [id: number]: NemoResultsIterable } = {};
+  private nextCursorID = 1;
+  private cursors: { [id: number]: NemoCursor } = {};
 
   public async setupNemoEngine(
     programText: string,
     resourceBlobs: { [resource: string]: Blob },
   ) {
-    console.info("[NemoRunner] Parsing program");
+    console.info("[NemoRunner] Loading program");
 
     const timer = new Timer("parse");
 
-    this.engine = await NemoEngine.new(programText, resourceBlobs);
+    const program = NemoProgram.parse(programText);
+    const engine = new NemoEngine();
+    // nemo-web offers a trace for every predicate, and tracing needs imports kept whole
+    engine.retainImports();
+    for (const [resource, blob] of Object.entries(resourceBlobs)) {
+      // An `.rls` file is a module, read by `@use`; any other file is read by imports
+      const moduleName = moduleNameOf(resource);
+      if (moduleName !== undefined) {
+        engine.addModule(moduleName, await blob.text());
+      } else {
+        engine.addResource(resource, new Uint8Array(await blob.arrayBuffer()));
+      }
+    }
+    // Remote imports are fetched with the worker's `fetch`
+    await engine.loadAsync(program);
+    this.engine = engine;
 
     return {
-      edbPredicates: this.engine.getEDBPredicates(),
-      outputPredicates: this.engine.getOutputPredicates(),
+      outputPredicates: engine.outputPredicates() as string[],
       parsingDuration: timer.getDuration(),
     };
   }
@@ -82,7 +86,7 @@ export class NemoRunner {
     console.info("[NemoRunner] Reasoning");
 
     const reasoningTimer = new Timer("reason");
-    await this.engine!.reason();
+    await this.engine!.reasonAsync();
 
     return {
       reasoningDuration: reasoningTimer.getDuration(),
@@ -90,96 +94,109 @@ export class NemoRunner {
   }
 
   public async getCounts() {
-    const outputPredicateCounts = Object.fromEntries(
-      await Promise.all(
-        this.engine!.getOutputPredicates().map((predicate) => [
-          predicate,
-          this.engine!.countFactsInMemoryForPredicate(predicate),
-        ]),
-      ),
-    );
-    const edbPredicateCounts = Object.fromEntries(
-      await Promise.all(
-        [...this.engine!.getEDBPredicates()].map((predicate) => [
-          predicate,
-          this.engine!.countFactsInMemoryForPredicate(predicate),
-        ]),
-      ),
-    );
+    const engine = this.engine!;
     return {
-      factsOfDerivedPredicates:
-        this.engine!.countFactsInMemoryForDerivedPredicates(),
-      outputPredicates: outputPredicateCounts,
-      edbPredicates: edbPredicateCounts,
+      loadedFacts: engine.loadedFacts,
+      derivedFacts: engine.derivedFacts,
+      outputPredicates: Object.fromEntries(
+        (engine.outputPredicates() as string[]).map((predicate) => [
+          predicate,
+          engine.count(predicate),
+        ]),
+      ) as { [predicate: string]: number },
     };
   }
 
-  public async initializeResultsIterable(predicate: string): Promise<number> {
-    const id = this.nextResultIterableID;
-    this.nextResultIterableID++;
-
-    this.resultsIterables[id] = new NemoResultsIterable(
-      await this.engine!.getResult(predicate),
+  /**
+   * Returns the warnings the engine reported so far, rendered as text
+   */
+  public async getWarnings(): Promise<string[]> {
+    if (this.engine === undefined) {
+      return [];
+    }
+    return (this.engine.reports() as { rendered: string }[]).map(
+      (report) => report.rendered,
     );
+  }
+
+  public async initializeResultsIterable(predicate: string): Promise<number> {
+    const id = this.nextCursorID;
+    this.nextCursorID++;
+
+    this.cursors[id] = this.engine!.cursor(predicate);
 
     return id;
   }
 
-  public async loadNextRowsOfResultsIterable(id: number, maxCount: number) {
-    if (!(id in this.resultsIterables)) {
+  public async loadNextRowsOfResultsIterable(
+    id: number,
+    maxCount: number,
+  ): Promise<NemoRow[]> {
+    if (!(id in this.cursors)) {
       throw new Error();
     }
-    // Fetch next rows from web worker
-    // Cast are safe as the row is only undefined after iteration finished.
-    return Array.from(take(this.resultsIterables[id], maxCount), (row) => ({
-      values: (row as NemoResultRow).values,
-      id: (row as NemoResultRow).id,
-    }));
+    const cursor = this.cursors[id];
+    // A chunk may hold fewer rows than asked for, even before the cursor is done
+    const rows: NemoRow[] = [];
+    while (rows.length < maxCount && !cursor.done) {
+      const chunk = this.engine!.readChunk(
+        cursor,
+        maxCount - rows.length,
+      ) as NemoRow[];
+      if (chunk.length === 0) {
+        break;
+      }
+      rows.push(...chunk);
+    }
+    return rows;
   }
 
   public async deleteResultsIterable(id: number) {
-    if (!(id in this.resultsIterables)) {
+    if (!(id in this.cursors)) {
       throw new Error();
     }
-    delete this.resultsIterables[id];
+    this.cursors[id].free();
+    delete this.cursors[id];
   }
 
-  public async writeResultsToFileHandle(
+  /**
+   * Returns a predicate's facts as CSV bytes
+   */
+  public async exportPredicate(
     predicate: string,
-    fileHandle: FileSystemFileHandle,
-  ) {
-    const syncAccessHandle = await (fileHandle as any).createSyncAccessHandle();
-    await this.engine!.savePredicate(predicate, syncAccessHandle);
+  ): Promise<Uint8Array<ArrayBuffer>> {
+    // The bytes are copied out of the module's memory into a fresh buffer
+    return this.engine!.exportPredicate(predicate) as Uint8Array<ArrayBuffer>;
   }
 
   public async getNemoVersion() {
-    return getNemoVersion();
+    return nemoVersion();
   }
 
   public async getOutputPredicates() {
-    return this.engine!.getOutputPredicates();
+    return this.engine!.outputPredicates() as string[];
   }
 
-  public async getLineNumberFromRuleId(ruleId: number) {
-    return this.engine!.getLineNumberFromRuleId(ruleId);
+  public async getLineNumberFromRuleId(
+    ruleId: number,
+  ): Promise<number | undefined> {
+    return this.engine!.rule(ruleId)?.source?.line;
   }
 
   public async traceTreeForTable(
     tree_for_table_query: TreeForTableQuery,
   ): Promise<TreeForTableResponse> {
     return TreeForTableResponseFromJSON(
-      await this.engine!.traceTreeForTable(
-        TreeForTableQueryToJSON(tree_for_table_query),
-      ),
+      this.engine!.treeForTable(TreeForTableQueryToJSON(tree_for_table_query)),
     );
   }
 
   public async traceTableEntriesForTreeNodes(
     table_entries_for_tree_nodes: TableEntriesForTreeNodesQuery,
   ): Promise<TableEntriesForTreeNodesResponseInner[]> {
-    const response = await this.engine!.traceTableEntriesForTreeNodes(
+    const response = this.engine!.tableEntriesForTreeNodes(
       TableEntriesForTreeNodesQueryToJSON(table_entries_for_tree_nodes),
-    );
+    ) as any[];
     return response.map(TableEntriesForTreeNodesResponseInnerFromJSON);
   }
 

@@ -3,17 +3,20 @@ import { Button, Modal, Nav } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../store";
 import { programInfoSlice } from "../../store/programInfo";
-import { Examples } from "../examples/Examples";
+import { Examples, LoadedExample } from "../examples/Examples";
 import { Icon } from "../Icon";
+import { useInputFiles } from "../../InputFilesContext/InputFilesContext";
 
 export function ShowExamplesButton() {
   const { t } = useTranslation("editor");
 
   const dispatch = useAppDispatch();
+  const { setInputs } = useInputFiles();
 
   const [isModalShown, setIsModalShown] = useState(false);
-  const [currentExampleProgramText, setCurrentExampleProgramText] =
-    useState("");
+  const [currentExample, setCurrentExample] = useState<
+    LoadedExample | undefined
+  >(undefined);
 
   const hideModal = () => setIsModalShown(false);
 
@@ -28,15 +31,22 @@ export function ShowExamplesButton() {
           <Modal.Title>{t("examples:title")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Examples onProgramTextChange={setCurrentExampleProgramText} />
+          <Examples onExampleChange={setCurrentExample} />
         </Modal.Body>
         <Modal.Footer>
           <Button
             variant="primary"
+            disabled={currentExample === undefined}
             onClick={() => {
+              if (currentExample === undefined) {
+                return;
+              }
+              // An example replaces the input files, too. They are set first, so that the
+              // editor knows the modules among them when the program arrives.
+              setInputs(currentExample.inputs);
               dispatch(
                 programInfoSlice.actions.setProgramText(
-                  currentExampleProgramText,
+                  currentExample.programText,
                 ),
               );
               hideModal();

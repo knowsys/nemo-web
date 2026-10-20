@@ -27,6 +27,8 @@ dist-ssr
 
 /nemoWASM
 /nemoVSIX
+/nemoWASMBundler
+/public/ev
 
 /.direnv
 /result

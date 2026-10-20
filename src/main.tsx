@@ -10,6 +10,7 @@ import { programInfoSlice } from "./store/programInfo";
 import { selectProgramText } from "./store/programInfo/selectors/selectProgramText";
 import { NemoSessionIdContext } from "./nemoSessionIdContext";
 import { NemoWorkerProvider } from "./NemoWorkerContext/NemoWorkerContextProvider";
+import { InputFilesProvider } from "./InputFilesContext/InputFilesContextProvider";
 import "./i18n/i18n";
 
 const store = createStore();
@@ -44,9 +45,11 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <NemoSessionIdContext.Provider value={nemoSessionId}>
       <NemoWorkerProvider>
-        <Provider store={store}>
-          <App />
-        </Provider>
+        <InputFilesProvider>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </InputFilesProvider>
       </NemoWorkerProvider>
     </NemoSessionIdContext.Provider>
   </React.StrictMode>,

@@ -59,7 +59,7 @@ window.MonacoEnvironment = {
   },
 };
 
-let servicesInitialized = false;
+let servicesInitialized: Promise<void> | undefined;
 
 export async function changeTheme(dark: boolean) {
   await updateUserConfiguration(
@@ -69,36 +69,70 @@ export async function changeTheme(dark: boolean) {
   );
 }
 
-export async function createEditor(
+/**
+ * Initializes the editor services, once for all editors
+ */
+export function initializeServices(container: HTMLElement, darkMode: boolean) {
+  servicesInitialized ??= initializeServicesOnce(container, darkMode);
+  return servicesInitialized;
+}
+
+async function initializeServicesOnce(
   container: HTMLElement,
   darkMode: boolean,
-  programText: string,
+) {
+  await initUserConfiguration(
+    JSON.stringify({
+      "workbench.colorTheme": darkMode ? "Dark Modern" : "Light Modern",
+    }),
+  );
+
+  await initialize(
+    {
+      ...getConfigurationServiceOverride(),
+      ...getExtensionServiceOverride({ enableWorkerExtensionHost: true }),
+      ...getLanguagesServiceOverride(),
+      ...getThemeServiceOverride(),
+      ...getTextMateServiceOverride(),
+    },
+    container,
+  );
+}
+
+/**
+ * A text the language server sees under a URI
+ *
+ * A `file:` URI gives a Nemo program a directory, against which the language server
+ * resolves its `@use` directives: to the other open models in that directory.
+ */
+export interface ModelText {
+  uri: string;
+  text: string;
+  language: string;
+}
+
+/**
+ * Returns the model of a text, created or, if it exists, updated to the text
+ */
+export function openModel({ uri, text, language }: ModelText) {
+  const parsedUri = monaco.Uri.parse(uri);
+  const existing = monaco.editor.getModel(parsedUri);
+  if (existing === null) {
+    return monaco.editor.createModel(text, language, parsedUri);
+  }
+  if (existing.getValue() !== text) {
+    existing.setValue(text);
+  }
+  return existing;
+}
+
+export function createEditor(
+  container: HTMLElement,
+  model: monaco.editor.ITextModel,
   additionalMonacoOptions?: monaco.editor.IStandaloneEditorConstructionOptions,
 ) {
-  if (!servicesInitialized) {
-    servicesInitialized = true;
-
-    await initUserConfiguration(
-      JSON.stringify({
-        "workbench.colorTheme": darkMode ? "Dark Modern" : "Light Modern",
-      }),
-    );
-
-    await initialize(
-      {
-        ...getConfigurationServiceOverride(),
-        ...getExtensionServiceOverride({ enableWorkerExtensionHost: true }),
-        ...getLanguagesServiceOverride(),
-        ...getThemeServiceOverride(),
-        ...getTextMateServiceOverride(),
-      },
-      container,
-    );
-  }
-
   return monaco.editor.create(container, {
-    value: programText,
-    language: "nemo",
+    model,
     ...additionalMonacoOptions,
   });
 }

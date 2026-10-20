@@ -17,7 +17,10 @@
   },
   "examples": {
     "introduction": "The following examples illustrate how Nemo can be used:",
-    "title": "Example programs"
+    "title": "Example programs",
+    "newBadge": "new",
+    "program": "Program",
+    "inputFilesNote": "Copying this example to the editor also adds its files to the input files."
   },
   "footer": {
     "thirdPartyLicenses": "Open source licenses"

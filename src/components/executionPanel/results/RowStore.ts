@@ -1,8 +1,9 @@
 import { NemoWorker } from "../../../nemoWorker/NemoWorker";
+import { NemoRow } from "../../../nemoWorker/NemoRunner";
 
 export class RowStore {
   private iterableID: number | undefined;
-  private rows: { values: any[]; id: number }[] = [];
+  private rows: NemoRow[] = [];
   private currentlyLoadingUpToIndex = 0;
   private shouldLoadUpToIndex = 0;
   private waitingPromises: {
@@ -13,7 +14,7 @@ export class RowStore {
   public constructor(
     private predicate: string,
     private nemoWorker: NemoWorker,
-    private onRowsChange: (rows: { values: any[]; id: number }[]) => void,
+    private onRowsChange: (rows: NemoRow[]) => void,
   ) {}
 
   public async initialize() {

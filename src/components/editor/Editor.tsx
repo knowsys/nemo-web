@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
 import "./Editor.css";
 import { programInfoSlice } from "../../store/programInfo";
@@ -12,6 +12,13 @@ import {
 } from "../../NevBroadcastChannel";
 import { useNemoWorkerRef } from "../../NemoWorkerContext/NemoWorkerContext";
 import { MonacoWrapperImperativeHandle } from "./MonacoWrapper";
+import type { ModelText } from "./createMonacoEditor";
+import { useInputFiles } from "../../InputFilesContext/InputFilesContext";
+
+/**
+ * The directory of the program in the editor, in which its module input files lie
+ */
+const PROGRAM_DIRECTORY = "file:///";
 
 export function Editor() {
   const dispatch = useAppDispatch();
@@ -20,6 +27,20 @@ export function Editor() {
   const programText = useAppSelector(selectProgramText);
 
   const workerRef = useNemoWorkerRef();
+
+  // The modules among the input files, so that the language server resolves `@use` to them
+  const { inputs } = useInputFiles();
+  const modules: ModelText[] = useMemo(
+    () =>
+      inputs
+        .filter((input) => input.moduleText !== undefined)
+        .map((input) => ({
+          uri: PROGRAM_DIRECTORY + input.resource,
+          text: input.moduleText!,
+          language: "nemo",
+        })),
+    [inputs],
+  );
 
   const editorRef = useRef<MonacoWrapperImperativeHandle>(null);
 
@@ -78,7 +99,9 @@ export function Editor() {
       <LazyMonacoWrapper
         ref={editorRef}
         darkMode={darkMode}
+        uri={PROGRAM_DIRECTORY + "program.rls"}
         programText={programText}
+        companions={modules}
         onProgramTextChange={(programText: string) => {
           dispatch(programInfoSlice.actions.setProgramText(programText));
         }}

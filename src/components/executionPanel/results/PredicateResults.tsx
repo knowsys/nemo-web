@@ -6,6 +6,23 @@ import { Icon } from "../../Icon";
 import { Link } from "../../link/Link";
 import { NemoSessionIdContext } from "../../../nemoSessionIdContext";
 import { useNemoWorkerRef } from "../../../NemoWorkerContext/NemoWorkerContext";
+import { NemoRow } from "../../../nemoWorker/NemoRunner";
+
+/**
+ * Returns the address of an IRI value that a browser can open, if it is one
+ *
+ * The link shows the address without the angle brackets of term syntax.
+ */
+function webLink(value: any): string | undefined {
+  if (
+    typeof value === "object" &&
+    value?.kind === "iri" &&
+    /^https?:\/\//.test(value.value)
+  ) {
+    return value.value;
+  }
+  return undefined;
+}
 
 export interface PredicateResultsProps {
   predicate: string;
@@ -19,7 +36,7 @@ export function PredicateResults({
   const nemoSessionId = useContext(NemoSessionIdContext);
   const workerRef = useNemoWorkerRef();
   const rowStoreRef = useRef<RowStore | undefined>(undefined);
-  const [rows, setRows] = useState<{ values: any[]; id: number }[]>([]);
+  const [rows, setRows] = useState<NemoRow[]>([]);
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(100);
   const numberOfPages =
@@ -75,26 +92,28 @@ export function PredicateResults({
         <Table striped bordered>
           <tbody>
             {currentRows.map((row) => (
-              <tr key={`row-${row.id}`}>
-                {row.values.map((value, index) => (
-                  <td
-                    key={`row-${row.id}-column-${index}`}
-                    style={{ whiteSpace: "pre-wrap" }}
-                  >
-                    {value.toString().startsWith("http://") ||
-                    value.toString().startsWith("https://") ? (
-                      <Link href={value.toString()}>{value.toString()}</Link>
-                    ) : (
-                      value.toString()
-                    )}
-                  </td>
-                ))}
-                <td key={`row-${row.id}-trace-button`} width={32}>
+              <tr key={`row-${row.entryId}`}>
+                {row.terms.map((term, index) => {
+                  const link = webLink(row.values[index]);
+                  return (
+                    <td
+                      key={`row-${row.entryId}-column-${index}`}
+                      style={{ whiteSpace: "pre-wrap" }}
+                    >
+                      {link !== undefined ? (
+                        <Link href={link}>{link}</Link>
+                      ) : (
+                        term
+                      )}
+                    </td>
+                  );
+                })}
+                <td key={`row-${row.entryId}-trace-button`} width={32}>
                   <a
                     title="Explain this inference"
                     onClick={() => {
                       window.open(
-                        `./ev/?predicate=${predicate}&query=[${row.id}]&nemoId=${nemoSessionId}`,
+                        `./ev/index.html?predicate=${predicate}&query=[${row.entryId}]&nemoId=${nemoSessionId}`,
                       );
                     }}
                     style={{ color: "inherit" }}

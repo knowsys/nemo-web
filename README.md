@@ -14,15 +14,20 @@ This project uses:
 
 ## Development
 
-After building the [Nemo WASM library](https://github.com/knowsys/nemo/tree/main/nemo-wasm), start a development server:
+The web app needs three build products that are not part of this repository:
+
+- `nemoWASMBundler/`: the Nemo WebAssembly library. In a checkout of [Nemo](https://github.com/knowsys/nemo), run
+  `wasm-pack build --release --target bundler --out-dir $PATH_TO_NEMO_WEB/nemoWASMBundler nemo-wasm`.
+- `nemoVSIX/nemo.vsix`: the Nemo editor extension, which provides the language features of the editor.
+  Package it in Nemo's `nemo-vscode` directory (see its README) and copy the `.vsix` to `nemoVSIX/nemo.vsix`.
+- `public/ev/`: the proof explorer [nev](https://github.com/imldresden/nev).
+  In a checkout of nev at the revision pinned in `flake.lock`, run `npm ci && npm run build` and copy `dist/` to `public/ev`.
+
+With [Nix](https://nixos.org), `nix build .#nemo-web` builds all three and the web app.
+
+Then start a development server:
 
 ```bash
-# Copy nemo VSIX extension to the correct location
-mkdir nemoVSIX
-cp $PATH_TO_NEMO_VSIX/nemo-X.X.X.vsix nemoVSIX/nemo.vsix
-# Copy nemo-wasm library to the correct location
-cp -r $PATH_TO_NEMO_WASM/nemoWASMBundler ./nemoWASMBundler
-
 npm ci
 npm run dev
 ```
@@ -45,22 +50,16 @@ npm run lint
 
 Useful starting points for hacking on the code:
 
-- Implementation of the program execution panel: [src/components/rightPanel/executionPanel/ExecutionPanel.tsx](src/components/rightPanel/executionPanel/ExecutionPanel.tsx)
+- Implementation of the program execution panel: [src/components/executionPanel/ExecutionPanel.tsx](src/components/executionPanel/ExecutionPanel.tsx)
 - Interaction with the Nemo web assembly API: [src/nemoWorker/NemoRunner.ts](src/nemoWorker/NemoRunner.ts)
 - Example Nemo programs: [src/components/examples/files/listOfExamples.ts](src/components/examples/files/listOfExamples.ts)
-- Nemo Syntax highlighting and other language features: [src/components/leftPanel/editor/monacoLangaugeNemo.ts](src/components/leftPanel/editor/monacoLangaugeNemo.ts)
+- Nemo syntax highlighting and other language features come from the Nemo editor extension, loaded in [src/components/editor/createMonacoEditor.ts](src/components/editor/createMonacoEditor.ts)
 
 ## Production build
 
-After building the [Nemo WASM library](https://github.com/knowsys/nemo/tree/main/nemo-wasm), create a production build in the `dist` folder that can be served by a static web server:
+With the three build products from [Development](#development) in place, create a production build in the `dist` folder that can be served by a static web server:
 
 ```bash
-# Copy nemo VSIX extension to the correct location
-mkdir nemoVSIX
-cp $PATH_TO_NEMO_VSIX/nemo-X.X.X.vsix nemoVSIX/nemo.vsix
-# Copy nemo-wasm library to the correct location
-cp -r $PATH_TO_NEMO_WASM/nemoWASMBundler ./nemoWASMBundler
-
 npm ci
 NODE_OPTIONS=--max_old_space_size=4096 npm run build
 
